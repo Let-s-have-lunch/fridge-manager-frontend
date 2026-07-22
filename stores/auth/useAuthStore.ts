@@ -5,6 +5,8 @@ import { Platform } from "react-native";
 import { User } from "@/types/user";
 
 type AuthState = {
+    isInitialized: boolean;
+    setInitialized: (status: boolean) => void;
     isLoggedIn: boolean;
     token: string | null;
     user: User | null;
@@ -21,15 +23,27 @@ const storage =
 export const useAuthStore = create<AuthState>()(
     persist(
         set => ({
+            isInitialized: false,
+            setInitialized: status => set({ isInitialized: status }),
             isLoggedIn: false,
             token: null,
             user: null,
             login: (user, token) => set({ isLoggedIn: true, token, user }),
-            logout: () => set({ isLoggedIn: false, token: null, user: null }),
+            logout: () => {
+                set({ isLoggedIn: false, token: null, user: null });
+            },
         }),
         {
-            name: "auth-storage",
-            storage, // 환경에 맞는 저장소 매칭
+            name: "pet-health-app-auth-storage",
+            storage,
+            onRehydrateStorage: () => state => {
+                state?.setInitialized(true);
+            },
+            partialize: state => ({
+                isLoggedIn: state.isLoggedIn,
+                token: state.token,
+                user: state.user,
+            }),
         },
     ),
 );
