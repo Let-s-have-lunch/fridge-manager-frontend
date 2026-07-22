@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* ===========================
+           Background
+        =========================== */
+        --bg-default: #FFF8F1;
+        --bg-paper: #FFFFFF;
+        --bg-light: #F7EEE4;
+
+        /* ===========================
+           Text
+        =========================== */
+        --text-default: #444444;
+        --text-secondary: #777777;
+
+        /* ===========================
+           Border
+        =========================== */
+        --divider: #ECE6DF;
+
+        /* ===========================
+           Primary (Cozy Coral)
+        =========================== */
+        --primary-main: #F79C79;
+        --primary-contrast: #FFFFFF;
+        --primary-light: #FAD6C6;
+
+        /* ===========================
+           Secondary (Fresh Blue)
+        =========================== */
+        --secondary-main: #7FAFD8;
+        --secondary-contrast: #FFFFFF;
+        --secondary-point: #5D97C7;
+
+        /* ===========================
+           Success
+        =========================== */
+        --success-main: #A8C9A2;
+        --success-contrast: #2C2C2C;
+        --success-point: #6FAF70;
+
+        /* ===========================
+           Error
+        =========================== */
+        --error-main: #F7B8AE;
+        --error-contrast: #FFFFFF;
+        --error-point: #EF7D6D;
+
+        /* ===========================
+           Warning
+        =========================== */
+        --warning-main: #F7D88A;
+        --warning-contrast: #2C2C2C;
+
+        /* ===========================
+           Info
+        =========================== */
+        --info-main: #DCEAF6;
+        --info-contrast: #2C2C2C;
+    }
+
+    .dark {
+        /* ===========================
+           Background
+        =========================== */
+        --bg-default: #2F2B29;
+        --bg-paper: #3A3532;
+        --bg-light: #4A4440;
+
+        /* ===========================
+           Text
+        =========================== */
+        --text-default: #F8F5F1;
+        --text-secondary: #C9C1BA;
+
+        /* ===========================
+           Border
+        =========================== */
+        --divider: #5B534E;
+
+        /* ===========================
+           Primary
+        =========================== */
+        --primary-main: #F79C79;
+        --primary-contrast: #FFFFFF;
+        --primary-light: #F5B79F;
+
+        /* ===========================
+           Secondary
+        =========================== */
+        --secondary-main: #6D9FC9;
+        --secondary-contrast: #FFFFFF;
+        --secondary-point: #8FC3EE;
+
+        /* ===========================
+           Success
+        =========================== */
+        --success-main: #7DAE79;
+        --success-contrast: #FFFFFF;
+        --success-point: #98D792;
+
+        /* ===========================
+           Error
+        =========================== */
+        --error-main: #D86D61;
+        --error-contrast: #FFFFFF;
+        --error-point: #F18B81;
+
+        /* ===========================
+           Warning
+        =========================== */
+        --warning-main: #D9B86A;
+        --warning-contrast: #2C2C2C;
+
+        /* ===========================
+           Info
+        =========================== */
+        --info-main: #6C9EC5;
+        --info-contrast: #FFFFFF;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-default: #2F2B29;
+            --bg-paper: #3A3532;
+            --bg-light: #4A4440;
+
+            --text-default: #F8F5F1;
+            --text-secondary: #C9C1BA;
+
+            --divider: #5B534E;
+
+            --primary-main: #F79C79;
+            --primary-contrast: #FFFFFF;
+            --primary-light: #F5B79F;
+
+            --secondary-main: #6D9FC9;
+            --secondary-contrast: #FFFFFF;
+            --secondary-point: #8FC3EE;
+
+            --success-main: #7DAE79;
+            --success-contrast: #FFFFFF;
+            --success-point: #98D792;
+
+            --error-main: #D86D61;
+            --error-contrast: #FFFFFF;
+            --error-point: #F18B81;
+
+            --warning-main: #D9B86A;
+            --warning-contrast: #2C2C2C;
+
+            --info-main: #6C9EC5;
+            --info-contrast: #FFFFFF;
+        }
+    }
+
+    input:focus,
+    textarea:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
