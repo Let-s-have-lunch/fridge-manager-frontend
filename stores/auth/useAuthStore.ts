@@ -34,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
             },
         }),
         {
-            name: "pet-health-app-auth-storage",
+            name: "fridge-manager-storage",
             storage,
             onRehydrateStorage: () => state => {
                 state?.setInitialized(true);
