@@ -1,4 +1,4 @@
-import { ShoppingItem, ShoppingListInputType } from "../types/shoppingList";
+import { ShoppingItem, ShoppingListInputType, ShoppingStatsSummary } from "../types/shoppingList";
 
 const BASE_URL = "https://api.example.com"; // 실제 API 서버 주소로 변경
 
@@ -12,7 +12,7 @@ export const getShoppingItems = async (
     return await response.json();
 };
 
-// 🌟 2. [신규 확장] 달력 연동 대비: 시작일~종료일 기간별 목록 조회 (pet-health-app 참고!)
+// 2. 달력 연동 대비: 시작일~종료일 기간별 목록 조회
 export const getShoppingItemsByRange = async (
     userId: number,
     startDate: string,
@@ -25,7 +25,7 @@ export const getShoppingItemsByRange = async (
     return await response.json();
 };
 
-// 3. 새로운 장보기 아이템 생성
+// 3. 새로운 장보기 아이템 생성 (name, quantity, memo 데이터 완벽 전송)
 export const createShoppingItem = async (
     userId: number,
     itemData: ShoppingListInputType,
@@ -39,7 +39,7 @@ export const createShoppingItem = async (
     return await response.json();
 };
 
-// 🌟 4. [신규 확장] 기존 장보기 아이템 내용 수정 (오타 수정 등)
+// 4. 기존 장보기 아이템 내용 수정
 export const updateShoppingItem = async (
     userId: number,
     itemId: number,
@@ -59,7 +59,7 @@ export const deleteShoppingItem = async (userId: number, itemId: number): Promis
     const response = await fetch(`${BASE_URL}/shopping-list/${itemId}?userId=${userId}`, {
         method: "DELETE",
     });
-    if (!response.ok) throw new Error("NOT_FOUND_ITEM");
+    if (!response.ok) throw new Error("아이템을 삭제하는데 실패했습니다.");
 };
 
 // 6. 체크 상태 토글 (완료/미완료 뒤집기)
@@ -69,6 +69,18 @@ export const toggleShoppingTodo = async (userId: number, itemId: number): Promis
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),
     });
-    if (!response.ok) throw new Error("NOT_FOUND_ITEM");
+    if (!response.ok) throw new Error("상태 변경에 실패했습니다.");
+    return await response.json();
+};
+
+// 🌟 7. [신규 확장] 하단 '통계' 탭 연동용 요약 데이터 조회 API
+export const getShoppingStats = async (
+    userId: number,
+    targetDate: string,
+): Promise<ShoppingStatsSummary> => {
+    const response = await fetch(
+        `${BASE_URL}/shopping-list/stats?userId=${userId}&date=${targetDate}`,
+    );
+    if (!response.ok) throw new Error("통계 데이터를 불러오는데 실패했습니다.");
     return await response.json();
 };
