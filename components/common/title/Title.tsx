@@ -1,7 +1,7 @@
 import { View, TouchableOpacity } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Feather } from "@expo/vector-icons";
-import TextComponent from "@/components/common/text/Text";
+import TextComponent from "@/components/common/text/TextComponent";
 
 interface Props {
     title: string;

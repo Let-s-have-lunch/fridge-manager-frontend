@@ -2,6 +2,7 @@ import { View, TouchableOpacity } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Feather } from "@expo/vector-icons";
 import { useRouter, usePathname } from "expo-router";
+import { tabs } from "@/constants/menu";
 
 interface Props {
     className?: string;
@@ -10,14 +11,6 @@ interface Props {
 export default function MainFooter({ className }: Props) {
     const router = useRouter();
     const pathname = usePathname();
-
-    // 탭바에 들어갈 메뉴 정보 배열 (피그마 디자인 순서: 홈, 목록, 통계, 설정)
-    const tabs = [
-        { name: "홈", path: "/", icon: "home" as const },
-        { name: "목록", path: "/list", icon: "calendar" as const }, // 프로젝트 경로에 맞게 수정 가능
-        { name: "통계", path: "/stats", icon: "pie-chart" as const },
-        { name: "설정", path: "/settings", icon: "settings" as const },
-    ];
 
     return (
         <View
