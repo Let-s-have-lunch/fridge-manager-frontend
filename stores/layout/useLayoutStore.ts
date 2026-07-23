@@ -1,0 +1,14 @@
+import { create } from "zustand";
+
+interface LayoutState {
+    showMainHeader: boolean;
+    showMainFooter: boolean;
+    setLayout: (config: Partial<Omit<LayoutState, "setLayout">>) => void;
+}
+
+export const useLayoutStore = create<LayoutState>(set => ({
+    showMainHeader: true, // 기본적으로 홈 화면 헤더 노출
+    showMainFooter: true, // 기본적으로 푸터 노출
+
+    setLayout: config => set(state => ({ ...state, ...config })),
+}));

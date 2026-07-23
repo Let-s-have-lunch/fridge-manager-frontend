@@ -6,9 +6,13 @@ import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import AuthProvider from "@/components/domain/auth/AuthProvider";
+import { View } from "react-native";
+
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();
+    const { user } = useAuthStore();
     const { setColorScheme } = useColorScheme();
 
     useEffect(() => {
@@ -18,9 +22,11 @@ export default function RootLayout() {
     return (
         <SafeAreaProvider>
             <StatusBar style={theme === "dark" ? "light" : "dark"} />
-            <SafeAreaView className={"flex-1 "}>
+            <SafeAreaView className="flex-1 ">
                 <AuthProvider>
-                    <Slot />
+                    <View className="flex-1">
+                        <Slot />
+                    </View>
                 </AuthProvider>
             </SafeAreaView>
         </SafeAreaProvider>
