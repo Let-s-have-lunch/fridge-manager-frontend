@@ -3,7 +3,7 @@ import { Slot } from "expo-router";
 import { useLayoutStore } from "@/stores/layout/useLayoutStore";
 import MainHeader from "@/components/layout/main/MainHeader";
 import ContentContainer from "@/components/layout/common/ContentContainer";
-import MainFooter from "@/components/layout/main/MainFooter"; // 푸터 만들면 주석 해제!
+import MainFooter from "@/components/layout/main/MainFooter";
 
 export default function MainLayout() {
     const { showMainHeader, showMainFooter } = useLayoutStore();
@@ -18,9 +18,7 @@ export default function MainLayout() {
                 </ContentContainer>
             </ScrollView>
 
-            {showMainFooter &&
-                <MainFooter />
-                }
+            {showMainFooter && <MainFooter />}
         </View>
     );
 }
