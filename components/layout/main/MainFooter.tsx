@@ -20,7 +20,8 @@ export default function MainFooter({ className }: Props) {
             )}>
             <View className="w-full max-w-7xl flex-row items-center justify-around">
                 {tabs.map(tab => {
-                    const isActive = pathname === tab.path;
+                    const isActive =
+                        tab.path === "/" ? pathname === "/" : pathname.startsWith(tab.path);
 
                     return (
                         <TouchableOpacity
