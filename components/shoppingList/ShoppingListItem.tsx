@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ShoppingItem } from "../../types/shoppingList";
 
 interface Props {
@@ -9,69 +9,62 @@ interface Props {
 }
 
 export const ShoppingListItem: React.FC<Props> = ({ item, onToggle, onDelete }) => {
-    // 메모 내용을 이름과 수량으로 자연스럽게 분리 (예: "무 1개" -> ["무", "1개"])
-    const parts = item.memo.split(" ");
-    const name = parts[0] || item.memo;
-    const count = parts.slice(1).join(" ") || "";
+    const parts = item.memo ? item.memo.split(" ") : [];
+    const name = item.name || parts[0] || item.memo || "";
+    const count = item.quantity || parts.slice(1).join(" ") || "";
+
+    const handleLongPress = () => {
+        Alert.alert("항목 삭제", `'${name}'을(를) 리스트에서 삭제하시겠습니까?`, [
+            { text: "취소", style: "cancel" },
+            { text: "삭제", style: "destructive", onPress: () => onDelete(item.id) },
+        ]);
+    };
 
     return (
-        <View className="flex-row items-center justify-between py-3.5 border-b border-divider">
-            {/* 왼쪽: 체크박스 + 식재료 이름 */}
+        /* 🌟 사진처럼 은은하고 연한 구분선(border-[#EFECE6]) 적용 */
+        <View className="flex-row items-center justify-between py-4 border-b border-[#EFECE6]">
             <TouchableOpacity
                 onPress={() => onToggle(item.id)}
+                onLongPress={handleLongPress}
                 activeOpacity={0.7}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: item.isChecked }}
-                className="flex-row items-center flex-1 mr-2"
+                className="flex-row items-center flex-1"
             >
+                {/* 🌟 border-2로 선 굵기 2배 강화, rounded-[5px]로 사진 속 네모 모양 일치 */}
                 <View
-                    className={`w-5 h-5 rounded border items-center justify-center shrink-0 ${
+                    className={`w-5 h-5 rounded-[5px] border-2 items-center justify-center shrink-0 ${
                         item.isChecked
-                            ? "bg-primary-main border-primary-main"
-                            : "border-divider bg-bg-paper"
+                            ? "bg-[#2B2623] border-[#2B2623]"
+                            : "border-[#2B2623] bg-transparent"
                     }`}
                 >
                     {item.isChecked && (
-                        <Text className="text-primary-contrast font-bold text-xs">✓</Text>
+                        <Text className="text-white font-black text-xs leading-none">✓</Text>
                     )}
                 </View>
 
-                {/* 🌟 글자가 너무 길면 말줄임표(...)로 처리하여 레이아웃 방어 */}
+                {/* 🌟 ml-4로 체크박스와 글자 사이에 16px 여백을 강제 적용해 절대 붙지 않음 */}
                 <Text
-                    className={`text-base ml-3 flex-1 ${
+                    className={`text-base ml-4 flex-1 ${
                         item.isChecked
-                            ? "line-through text-text-secondary font-normal"
-                            : "text-text font-medium"
+                            ? "line-through text-[#A69F98] font-normal"
+                            : "text-[#2B2623] font-bold"
                     }`}
                     numberOfLines={1}
-                    ellipsizeMode="tail"
                 >
                     {name}
                 </Text>
             </TouchableOpacity>
 
-            {/* 오른쪽: 수량 정보 + 삭제 버튼 */}
-            <View className="flex-row items-center shrink-0">
-                {count ? (
-                    <Text
-                        className={`text-base mr-4 ${
-                            item.isChecked ? "text-text-secondary opacity-60" : "text-text-secondary"
-                        }`}
-                    >
-                        {count}
-                    </Text>
-                ) : null}
-
-                <TouchableOpacity
-                    onPress={() => onDelete(item.id)}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    accessibilityRole="button"
-                    accessibilityLabel="삭제"
-                    className="p-1"
+            {/* 오른쪽 끝에 수량('1개') 깔끔하게 정렬 */}
+            {count ? (
+                <Text
+                    className={`text-base font-bold ml-2 ${
+                        item.isChecked ? "text-[#A69F98] line-through font-normal" : "text-[#2B2623]"
+                    }`}
                 >
-                    <Text className="text-text-secondary font-bold text-sm">✕</Text>
-                </TouchableOpacity>
-            </View>
+                    {count}
+                </Text>
+            ) : null}
         </View>
     );
 };
