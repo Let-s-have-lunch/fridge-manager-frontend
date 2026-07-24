@@ -15,7 +15,7 @@ export default function MainFooter({ className }: Props) {
     return (
         <View
             className={twMerge(
-                "w-full h-[84px] bg-bg-default justify-center items-center px-[20px]",
+                "w-full h-[84px] bg-bg-light justify-center items-center px-[20px]",
                 className,
             )}>
             <View className="w-full max-w-7xl flex-row items-center justify-around">

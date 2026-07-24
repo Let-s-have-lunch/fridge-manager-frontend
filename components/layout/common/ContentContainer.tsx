@@ -16,7 +16,7 @@ function ContentContainer({ children, className }: ContentContainerProps) {
                 "max-w-7xl",
                 "p-[20px]",
                 "self-center",
-                "bg-background-default",
+                "bg-bg-default",
                 className,
             ])}>
             {children}
