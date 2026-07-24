@@ -1,6 +1,7 @@
 import { View, ViewProps } from "react-native";
 import { shadows } from "@/styles/shadows";
 import { twMerge } from "tailwind-merge";
+import React from "react";
 
 type ShadowSize = "none" | "sm" | "md" | "lg";
 
