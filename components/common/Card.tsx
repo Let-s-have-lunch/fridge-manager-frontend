@@ -14,7 +14,12 @@ export default function Card({ children, shadow = "sm", style, className, ...pro
     return (
         <View
             style={[shadows[shadow], style]}
-            className={twMerge("rounded-[36px] bg-bg-paper", className)}
+            className={twMerge(
+                ["px-25px", "py-20px", "mb-14px"],
+                ["rounded-[36px]"],
+                ["bg-bg-paper"],
+                className,
+            )}
             {...props}>
             {children}
         </View>
