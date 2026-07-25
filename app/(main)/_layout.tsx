@@ -9,7 +9,7 @@ export default function MainLayout() {
     const { showMainHeader, showMainFooter } = useLayoutStore();
 
     return (
-        <View className="flex-1 bg-bg-light">
+        <View className="flex-1 bg-bg-default">
             {showMainHeader && <MainHeader />}
 
             <ScrollView showsVerticalScrollIndicator={false}>
