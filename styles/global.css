@@ -7,120 +7,185 @@
         /* ===========================
            Background
         =========================== */
-        --bg-default: #F9F4EE;
-        --bg-paper: #FFFFFF;
-        --bg-light: #F4EADF;
+        --bg-default: #F9F4EE; /* 앱 전체 기본 배경 */
+        --bg-paper: #FFFFFF; /* 카드, 입력창 */
+        --bg-subtle: #F8EAD9; /* 푸터, 섹션, 강조 배경 */
 
         /* ===========================
            Text
         =========================== */
-        --text-default: #444444;
-        --text-secondary: #777777;
+        --text-default: #444444; /* 기본 본문 */
+        --text-secondary: #777777; /* 보조 텍스트 */
+        --text-light: #BDBDBD; /* Placeholder, 비활성 */
 
         /* ===========================
            Border
         =========================== */
-        --divider: #ECE6DF;
+        --divider: #ECE6DF; /* 구분선, Input Border */
 
         /* ===========================
            Primary (Cozy Coral)
         =========================== */
-        --primary-main: #F79C79;
-        --primary-contrast: #FFFFFF;
-        --primary-light: #FAD6C6;
+        --primary-main: #F79C79; /* 기본 버튼, 활성 상태 */
+        --primary-contrast: #FFE7E2; /* 연한 배경, 태그 */
+        --primary-point: #EF7D6D; /* 선택, 강조 */
 
         /* ===========================
            Secondary (Fresh Blue)
         =========================== */
-        --secondary-main: #7FAFD8;
-        --secondary-contrast: #FFFFFF;
-        --secondary-point: #5D97C7;
+        --secondary-main: #7FAFD8; /* 보조 버튼 */
+        --secondary-contrast: #DCEAF6; /* 연한 배경 */
+        --secondary-point: #5D97C7; /* 강조 */
 
         /* ===========================
            Success
         =========================== */
-        --success-main: #A8C9A2;
-        --success-contrast:  #FFFFFF;
-        --success-point: #6FAF70;
+        --success-main: #A8C9A2; /* 성공 상태 */
+        --success-contrast: #2C2C2C; /* 텍스트 */
+        --success-point: #6FAF70; /* 성공 강조 */
 
         /* ===========================
            Error
         =========================== */
-        --error-main: #F7B8AE;
-        --error-contrast: #FFFFFF;
-        --error-point: #EF7D6D;
+        --error-main: #F7B8AE; /* 오류 상태 */
+        --error-contrast: #FFFFFF; /* 텍스트 */
+        --error-point: #EF7D6D; /* 오류 강조 */
 
         /* ===========================
            Warning
         =========================== */
-        --warning-main: #F7D88A;
-        --warning-contrast: #2C2C2C;
+        --warning-main: #F7D88A; /* 경고 상태 */
+        --warning-contrast: #2C2C2C; /* 텍스트 */
 
         /* ===========================
            Info
         =========================== */
-        --info-main: #DCEAF6;
-        --info-contrast: #2C2C2C;
+        --info-main: #DCEAF6; /* 정보 상태 */
+        --info-contrast: #2C2C2C; /* 텍스트 */
     }
 
     .dark {
         /* ===========================
            Background
         =========================== */
-        --bg-default: #2F2B29;
-        --bg-paper: #3A3532;
-        --bg-light: #4A4440;
+        --bg-default: #2F2B29; /* 앱 전체 기본 배경 */
+        --bg-paper: #3A3532; /* 카드, 입력창 */
+        --bg-subtle: #4A4440; /* 푸터, 섹션, 강조 배경 */
 
         /* ===========================
            Text
         =========================== */
-        --text-default: #F8F5F1;
-        --text-secondary: #C9C1BA;
+        --text-default: #F8F5F1; /* 기본 본문 */
+        --text-secondary: #C9C1BA; /* 보조 텍스트 */
+        --text-light: #9C948E; /* Placeholder, 비활성 */
 
         /* ===========================
            Border
         =========================== */
-        --divider: #5B534E;
+        --divider: #5B534E; /* 구분선, Input Border */
 
         /* ===========================
            Primary
         =========================== */
-        --primary-main: #F79C79;
-        --primary-contrast: #FFFFFF;
-        --primary-light: #F5B79F;
+        --primary-main: #F79C79; /* 기본 버튼, 활성 상태 */
+        --primary-contrast: #FFFFFF; /* 텍스트 */
+        --primary-point: #F5B79F; /* 강조 */
 
         /* ===========================
            Secondary
         =========================== */
-        --secondary-main: #6D9FC9;
-        --secondary-contrast: #FFFFFF;
-        --secondary-point: #8FC3EE;
+        --secondary-main: #6D9FC9; /* 보조 버튼 */
+        --secondary-contrast: #FFFFFF; /* 텍스트 */
+        --secondary-point: #8FC3EE; /* 강조 */
 
         /* ===========================
            Success
         =========================== */
-        --success-main: #7DAE79;
-        --success-contrast: #FFFFFF;
-        --success-point: #98D792;
+        --success-main: #7DAE79; /* 성공 상태 */
+        --success-contrast: #FFFFFF; /* 텍스트 */
+        --success-point: #98D792; /* 성공 강조 */
 
         /* ===========================
            Error
         =========================== */
-        --error-main: #D86D61;
-        --error-contrast: #FFFFFF;
-        --error-point: #F18B81;
+        --error-main: #D86D61; /* 오류 상태 */
+        --error-contrast: #FFFFFF; /* 텍스트 */
+        --error-point: #F18B81; /* 오류 강조 */
 
         /* ===========================
            Warning
         =========================== */
-        --warning-main: #D9B86A;
-        --warning-contrast: #2C2C2C;
+        --warning-main: #D9B86A; /* 경고 상태 */
+        --warning-contrast: #2C2C2C; /* 텍스트 */
 
         /* ===========================
            Info
         =========================== */
-        --info-main: #6C9EC5;
-        --info-contrast: #FFFFFF;
+        --info-main: #6C9EC5; /* 정보 상태 */
+        --info-contrast: #FFFFFF; /* 텍스트 */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            /* ===========================
+               Background
+            =========================== */
+            --bg-default: #2F2B29;
+            --bg-paper: #3A3532;
+            --bg-subtle: #4A4440;
+
+            /* ===========================
+               Text
+            =========================== */
+            --text-default: #F8F5F1;
+            --text-secondary: #C9C1BA;
+            --text-light: #9C948E;
+
+            /* ===========================
+               Border
+            =========================== */
+            --divider: #5B534E;
+
+            /* ===========================
+               Primary
+            =========================== */
+            --primary-main: #F79C79;
+            --primary-contrast: #FFFFFF;
+            --primary-point: #F5B79F;
+
+            /* ===========================
+               Secondary
+            =========================== */
+            --secondary-main: #6D9FC9;
+            --secondary-contrast: #FFFFFF;
+            --secondary-point: #8FC3EE;
+
+            /* ===========================
+               Success
+            =========================== */
+            --success-main: #7DAE79;
+            --success-contrast: #FFFFFF;
+            --success-point: #98D792;
+
+            /* ===========================
+               Error
+            =========================== */
+            --error-main: #D86D61;
+            --error-contrast: #FFFFFF;
+            --error-point: #F18B81;
+
+            /* ===========================
+               Warning
+            =========================== */
+            --warning-main: #D9B86A;
+            --warning-contrast: #2C2C2C;
+
+            /* ===========================
+               Info
+            =========================== */
+            --info-main: #6C9EC5;
+            --info-contrast: #FFFFFF;
+        }
     }
 
     @media (prefers-color-scheme: dark) {

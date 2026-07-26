@@ -12,7 +12,6 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();
-    const { user } = useAuthStore();
     const { setColorScheme } = useColorScheme();
 
     useEffect(() => {
