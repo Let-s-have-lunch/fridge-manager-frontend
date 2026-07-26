@@ -9,7 +9,7 @@ interface InputProps extends TextInputProps {
 
 function Input({
     hasError,
-    size = "medium",
+    size = "small",
     className,
     placeholderClassName,
     ...props
@@ -19,10 +19,10 @@ function Input({
             className={twMerge(
                 "w-full bg-background-paper rounded-[18px] border border-divider text-text-default",
                 INPUT_SIZE_STYLE[size],
-                hasError ? "border-error-main" : "border-primary-main focus:border-primary-main",
+                hasError ? "border-error-point" : "border-divider focus:border-primary-main",
                 className,
             )}
-            placeholderClassName={twMerge("text-text-secondary", placeholderClassName)}
+            placeholderClassName={twMerge("text-text-light", placeholderClassName)}
             {...props}></TextInput>
     );
 }

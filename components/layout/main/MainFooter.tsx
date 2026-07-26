@@ -40,7 +40,7 @@ export default function MainFooter({ className }: Props) {
                             onPress={() => router.push(tab.path as Href)}
                             activeOpacity={0.7}
                             className="items-center justify-center py-2 px-3 gap-1 flex-1">
-                            <IconComponent name={iconName as any} size={30} color={color} />
+                            <IconComponent name={iconName as any} size={35} color={color} />
                             <Text
                                 style={{
                                     color: color,
