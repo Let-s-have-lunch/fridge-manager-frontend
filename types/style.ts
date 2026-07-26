@@ -1,5 +1,5 @@
 export type StyleColorType = "primary" | "secondary" | "success" | "error" | "warning" | "info" | "text";
-export type StyleVariantType = "contained" | "outlined" | "text" | "icon";
+export type StyleVariantType = "contained-square" | "contained-circle";
 export type StyleSizeType = "mini" | "small" | "medium" | "large";
 
 export const INPUT_SIZE_STYLE = {
