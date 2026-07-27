@@ -5,13 +5,11 @@ import CategoryTab from "@/components/home/CategoryTab";
 
 export default function HomeScreen(){
     return (
-        <SafeAreaView className={"flex-1 bg-bg-subtle"}>
-            <MainHeader />
-            <CategoryTab />
-            <View className={"flex-1"}>
-                {/*<FoodList/>*/}
-            </View>
-
-        </SafeAreaView>
+        <></>
+            // <MainHeader />
+            // <CategoryTab />
+            // <View className={"flex-1"}>
+            //     {/*<FoodList/>*/}
+            // </View>
     );
 }
