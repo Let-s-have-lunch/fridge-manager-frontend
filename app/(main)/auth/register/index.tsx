@@ -24,6 +24,10 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 export default function AuthRegisterPage() {
     const router = useRouter();
 
+    // 비밀번호 표시 여부를 관리하는 상태
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const {
         control,
         handleSubmit,
@@ -84,7 +88,6 @@ export default function AuthRegisterPage() {
                     }}
                     showsVerticalScrollIndicator={false}>
                     <View className="flex-1 w-full px-6 pb-10" style={{ maxWidth: 480 }}>
-                        {/* 백버튼을 제거하고 타이틀을 중앙에 깔끔하게 배치 */}
                         <View className="items-center py-4 mt-2">
                             <Title
                                 title="회원가입"
@@ -317,35 +320,38 @@ export default function AuthRegisterPage() {
                                 )}
                             />
 
+                            {/* 기타 Root 에러 메시지 */}
                             {errors.root?.message && (
-                                <TextComponent className="text-error-main text-center text-sm mt-2">
+                                <TextComponent className="text-error-main text-sm text-center mb-4">
                                     {errors.root.message}
                                 </TextComponent>
                             )}
 
+                            {/* 가입하기 버튼 */}
                             <TouchableOpacity
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}
-                                className={`mt-4 rounded-full py-4 items-center justify-center ${isSubmitting ? "bg-primary-light" : "bg-primary-main"}`}>
+                                className={`w-full py-4 mt-2 rounded-full items-center ${isSubmitting ? "bg-primary-main/60" : "bg-primary-main"}`}>
                                 {isSubmitting ? (
-                                    <LoadingIndicator />
+                                    <LoadingIndicator color="#ffffff" />
                                 ) : (
-                                    <TextComponent className="text-primary-contrast font-bold text-lg">
-                                        회원가입
+                                    <TextComponent className="text-base font-bold text-white">
+                                        가입하기
                                     </TextComponent>
                                 )}
                             </TouchableOpacity>
-                        </View>
 
-                        <View className="flex-row justify-center items-center mt-auto pt-10">
-                            <TextComponent className="text-text-secondary text-sm mr-2">
-                                이미 계정이 있으신가요?
-                            </TextComponent>
-                            <TouchableOpacity onPress={() => router.replace("/auth/login")}>
-                                <TextComponent className="text-primary-main font-bold text-sm">
-                                    로그인
+                            {/* 💡 복구된 부분: 로그인으로 돌아가기 */}
+                            <View className="flex-row justify-center mt-6">
+                                <TextComponent className="text-text-subtle text-sm">
+                                    이미 계정이 있으신가요?
                                 </TextComponent>
-                            </TouchableOpacity>
+                                <TouchableOpacity onPress={() => router.replace("/auth/login")}>
+                                    <TextComponent className="text-primary-main text-sm font-bold ml-2">
+                                        로그인
+                                    </TextComponent>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
