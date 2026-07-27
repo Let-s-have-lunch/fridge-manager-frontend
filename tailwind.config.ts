@@ -68,7 +68,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|light|point)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle)/,
         },
     ],
 
