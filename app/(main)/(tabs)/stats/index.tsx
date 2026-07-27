@@ -10,11 +10,24 @@ import statsApi from "@/api/user/statsApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import HalfDonutChart from "@/components/domain/chart/HalfDonutChart";
 import Card from "@/components/common/card/Card";
+import ExpirationDetailModal from "@/components/domain/stats/ExpirationDetailModal";
+
+type ModalType = "expiringSoon" | "expired";
+
+interface ModalConfigState {
+    visible: boolean;
+    type: ModalType;
+}
 
 function StatsPage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [statsData, setStatsData] = useState<GetStatisticsResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [modalConfig, setModalConfig] = useState<ModalConfigState>({
+        visible: false,
+        type: "expiringSoon",
+    });
 
     const year = String(selectedDate.getFullYear());
     const month = String(selectedDate.getMonth() + 1);
@@ -49,6 +62,18 @@ function StatsPage() {
 
     const handleNextMonth = () => {
         setSelectedDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    };
+
+    const openExpiringSoonModal = () => {
+        setModalConfig({ visible: true, type: 'expiringSoon' });
+    };
+
+    const openExpiredModal = () => {
+        setModalConfig({ visible: true, type: 'expired' });
+    };
+
+    const closeModal = () => {
+        setModalConfig(prev => ({ ...prev, visible: false }));
     };
 
     return (
@@ -168,32 +193,49 @@ function StatsPage() {
                     </Card>
                     {/* 4. 임박 / 지난 알림 요약 카드 */}
                     <Card className="flex-row mb-6 gap-3">
-                        <View className="flex-1 bg-[#FFF5F4] border border-[#FCE1DE] rounded-[20px] py-4 items-center justify-center gap-1">
-                            <View className="flex-row items-baseline gap-3">
-                                <Feather name="clock" size={20} className="text-error-point" />
-                                <TextComponent className="text-xl font-bold text-text-secondary">
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={openExpiringSoonModal}
+                            className="flex-1 bg-[#FFF5F4] border border-[#FCE1DE] rounded-[20px] py-4 items-center justify-center gap-1">
+                            <View className="flex-row items-center gap-1">
+                                <Feather name="clock" size={18} className="text-error-point" />
+                                <TextComponent className="text-xl font-bold text-text-secondary ml-2">
                                     임박
                                 </TextComponent>
+                                <MaterialCommunityIcons
+                                    name="information-outline"
+                                    size={18}
+                                    className="text-error-point opacity-60 ml-0.5"
+                                />
                             </View>
-                            <TextComponent className="text-3xl font-bold text-error-point">
+
+                            <TextComponent className="text-3xl font-bold text-error-point mt-1">
                                 {statsData.dashboardData.expirationCards.expiringSoon}개
                             </TextComponent>
-                        </View>
-                        <View className="flex-1 bg-[#FFFBF3] border border-[#FBEAC1] rounded-[20px] py-4 items-center justify-center gap-1">
-                            <View className="flex-row items-baseline gap-3">
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={openExpiredModal}
+                            className="flex-1 bg-[#FFFBF3] border border-[#FBEAC1] rounded-[20px] py-4 items-center justify-center gap-1">
+                            <View className="flex-row items-center gap-1">
                                 <Feather
                                     name="alert-triangle"
-                                    size={20}
+                                    size={18}
                                     className="text-warning-main"
                                 />
-                                <TextComponent className="text-xl font-bold text-text-secondary">
+                                <TextComponent className="text-xl font-bold text-text-secondary ml-2">
                                     지난
                                 </TextComponent>
+                                <MaterialCommunityIcons
+                                    name="information-outline"
+                                    size={18}
+                                    className="text-warning-main opacity-60 ml-0.5"
+                                />
                             </View>
-                            <TextComponent className="text-3xl font-bold text-warning-main">
+                            <TextComponent className="text-3xl font-bold text-warning-main mt-1">
                                 {statsData.dashboardData.expirationCards.expired}개
                             </TextComponent>
-                        </View>
+                        </TouchableOpacity>
                     </Card>
                     {/* 5. 가장 많이 소비한 TOP 3 리스트 */}
                     <Card>
@@ -251,7 +293,20 @@ function StatsPage() {
                         ))}
                     </Card>
                 </ScrollView>
+
+
             )}
+
+            <ExpirationDetailModal
+                visible={modalConfig.visible}
+                type={modalConfig.type as 'expiringSoon' | 'expired'}
+                onClose={closeModal}
+                data={
+                    modalConfig.type === 'expiringSoon'
+                        ? statsData?.dashboardData.expirationCards.expiringSoonList || []
+                        : statsData?.dashboardData.expirationCards.expiredList || []
+                }
+            />
         </View>
     );
 }
