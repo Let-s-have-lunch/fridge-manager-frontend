@@ -1,8 +1,8 @@
-import { PropsWithChildren, useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import * as SplashScreen from "expo-splash-screen";
 import api from "@/api/axiosInstance";
 import { useRouter } from "expo-router";
+import { PropsWithChildren, useEffect, useState } from "react";
 
 void SplashScreen.preventAutoHideAsync();
 
