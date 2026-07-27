@@ -22,7 +22,7 @@ function Input({
                 hasError ? "border-error-point" : "border-divider focus:border-primary-main",
                 className,
             )}
-            placeholderClassName={twMerge("text-text-light", placeholderClassName)}
+            placeholderClassName={twMerge("text-text-subtle", placeholderClassName)}
             {...props}></TextInput>
     );
 }

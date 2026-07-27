@@ -5,11 +5,11 @@ import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import { router } from "expo-router";
-import Card from "@/components/common/card/Card";
 import { GetStatisticsResponse } from "@/types/statistic";
 import statsApi from "@/api/user/statsApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import HalfDonutChart from "@/components/domain/chart/HalfDonutChart";
+import Card from "@/components/common/Card/Card";
 
 function StatsPage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -212,7 +212,7 @@ function StatsPage() {
                                 )}>
                                 <View className="flex-row items-center gap-4">
                                     <View className="relative">
-                                        <View className="w-12 h-12 bg-bg-light rounded-xl items-center justify-center">
+                                        <View className="w-12 h-12 bg-bg-subtle rounded-xl items-center justify-center">
                                             {/* 2. Feather를 MaterialCommunityIcons로 변경! */}
                                             <MaterialCommunityIcons
                                                 name={product.icon as any}
