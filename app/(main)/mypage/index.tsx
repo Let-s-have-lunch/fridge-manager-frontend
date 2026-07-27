@@ -7,7 +7,6 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
-import theme from "tailwindcss/defaultTheme";
 
 const ANIMAL_ICONS = [
     require("../../../assets/images/dog.png"),
@@ -28,6 +27,9 @@ const getAnimalIcon = (id?: number): ImageSourcePropType => {
 export default function MyPageScreen() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
+
+    // 💡 날아갔던 부분 복구: 스토어에서 theme 상태와 변경 함수를 가져옵니다.
+    const { theme, onChangeTheme } = useThemeStore();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -53,12 +55,14 @@ export default function MyPageScreen() {
 
     // ✅ 테마 변경
     const handleToggleTheme = () => {
-        onChangeTheme();
+        if (onChangeTheme) {
+            onChangeTheme();
+        }
         console.log("현재 테마 :", theme);
     };
 
     return (
-        <View className="flex-1 bg-bg-default px-6 pt-6 pb-8 relative">
+        <ScrollView className="flex-1 bg-bg-default px-6 pt-6 pb-8 relative">
             <View>
                 {/* 1. 프로필 영역 */}
                 <View className="mb-5">
