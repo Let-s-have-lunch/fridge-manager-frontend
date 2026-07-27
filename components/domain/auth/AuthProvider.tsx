@@ -21,7 +21,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
             }
 
             try {
-                const response = await api.get("/user/me");
+                const response = await api.get("/users/me");
                 const latestUser = response.data.data;
 
                 useAuthStore.setState({ user: latestUser });

@@ -16,7 +16,7 @@ export default function MainLayout() {
                 className={twMerge([
                     "flex-1",
                     "w-full",
-                    "max-w-7xl",
+                    "max-w-6xl",
                     "p-5",
                     "self-center",
                     "bg-bg-default",
