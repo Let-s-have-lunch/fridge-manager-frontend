@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Image, ImageSourcePropType } from "react-native";
+import { View, TouchableOpacity, Image, ImageSourcePropType, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { User } from "@/types/user";
@@ -7,6 +7,7 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import theme from "tailwindcss/defaultTheme";
 
 const ANIMAL_ICONS = [
     require("../../../assets/images/dog.png"),
@@ -27,10 +28,6 @@ const getAnimalIcon = (id?: number): ImageSourcePropType => {
 export default function MyPageScreen() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
-
-    // ✅ Zustand Store
-    const theme = useThemeStore(state => state.theme);
-    const onChangeTheme = useThemeStore(state => state.onChangeTheme);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -162,6 +159,6 @@ export default function MyPageScreen() {
                     color={theme === "light" ? "#333333" : "#FFD700"}
                 />
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 }
