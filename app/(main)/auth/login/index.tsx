@@ -207,7 +207,7 @@ export default function AuthLoginPage() {
                         <TouchableOpacity
                             onPress={handleSubmit(onSubmit)}
                             disabled={isSubmitting}
-                            className={`rounded-full py-4 items-center justify-center ${isSubmitting ? "bg-primary-light" : "bg-primary-main"}`}>
+                            className={`rounded-full py-4 items-center justify-center ${isSubmitting ? "bg-primary-subtle" : "bg-primary-main"}`}>
                             <Text className="text-primary-contrast font-bold text-lg">로그인</Text>
                         </TouchableOpacity>
                     </View>

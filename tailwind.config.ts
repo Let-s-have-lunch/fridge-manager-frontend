@@ -12,25 +12,26 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Background
+
                 bg: {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
                     subtle: "var(--bg-subtle)",
                 },
-                // Text
+
                 text: {
                     DEFAULT: "var(--text-default)",
                     secondary: "var(--text-secondary)",
+                    subtle: "var(--text-subtle)",
                 },
-                // Border / Divider
+
                 divider: "var(--divider)",
 
                 // Primary (Cozy Coral)
                 primary: {
                     main: "var(--primary-main)",
                     contrast: "var(--primary-contrast)",
-                    light: "var(--primary-light)",
+                    point: "var(--primary-point)",
                 },
                 // Secondary (Fresh Blue)
                 secondary: {
@@ -38,24 +39,24 @@ export default {
                     contrast: "var(--secondary-contrast)",
                     point: "var(--secondary-point)",
                 },
-                // Success
+
                 success: {
                     main: "var(--success-main)",
                     contrast: "var(--success-contrast)",
                     point: "var(--success-point)",
                 },
-                // Error
+
                 error: {
                     main: "var(--error-main)",
                     contrast: "var(--error-contrast)",
                     point: "var(--error-point)",
                 },
-                // Warning
+
                 warning: {
                     main: "var(--warning-main)",
                     contrast: "var(--warning-contrast)",
                 },
-                // Info
+
                 info: {
                     main: "var(--info-main)",
                     contrast: "var(--info-contrast)",
@@ -67,7 +68,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|light|point|subtle)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|point|subtle)/,
         },
     ],
 

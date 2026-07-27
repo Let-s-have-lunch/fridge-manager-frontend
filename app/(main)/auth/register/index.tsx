@@ -375,7 +375,7 @@ export default function AuthRegisterPage() {
                         <TouchableOpacity
                             onPress={handleSubmit(onSubmit)}
                             disabled={isSubmitting}
-                            className={`mt-4 rounded-full py-4 items-center justify-center ${isSubmitting ? "bg-primary-light" : "bg-primary-main"}`}>
+                            className={`mt-4 rounded-full py-4 items-center justify-center ${isSubmitting ? "bg-primary-subtle" : "bg-primary-main"}`}>
                             <Text className="text-primary-contrast font-bold text-lg">
                                 회원가입
                             </Text>

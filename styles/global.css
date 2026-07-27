@@ -16,7 +16,7 @@
         =========================== */
         --text-default: #444444; /* 기본 본문 */
         --text-secondary: #777777; /* 보조 텍스트 */
-        --text-light: #BDBDBD; /* Placeholder, 비활성 */
+        --text-subtle: #BDBDBD; /* Placeholder, 비활성 */
 
         /* ===========================
            Border
@@ -77,7 +77,7 @@
         =========================== */
         --text-default: #F8F5F1; /* 기본 본문 */
         --text-secondary: #C9C1BA; /* 보조 텍스트 */
-        --text-light: #9C948E; /* Placeholder, 비활성 */
+        --text-subtle: #9C948E; /* Placeholder, 비활성 */
 
         /* ===========================
            Border
@@ -139,7 +139,7 @@
             =========================== */
             --text-default: #F8F5F1;
             --text-secondary: #C9C1BA;
-            --text-light: #9C948E;
+            --text-subtle: #9C948E;
 
             /* ===========================
                Border
@@ -188,40 +188,6 @@
         }
     }
 
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-default: #2F2B29;
-            --bg-paper: #3A3532;
-            --bg-light: #4A4440;
-
-            --text-default: #F8F5F1;
-            --text-secondary: #C9C1BA;
-
-            --divider: #5B534E;
-
-            --primary-main: #F79C79;
-            --primary-contrast: #FFFFFF;
-            --primary-light: #F5B79F;
-
-            --secondary-main: #6D9FC9;
-            --secondary-contrast: #FFFFFF;
-            --secondary-point: #8FC3EE;
-
-            --success-main: #7DAE79;
-            --success-contrast: #FFFFFF;
-            --success-point: #98D792;
-
-            --error-main: #D86D61;
-            --error-contrast: #FFFFFF;
-            --error-point: #F18B81;
-
-            --warning-main: #D9B86A;
-            --warning-contrast: #2C2C2C;
-
-            --info-main: #6C9EC5;
-            --info-contrast: #FFFFFF;
-        }
-    }
 
     input:focus,
     textarea:focus {
