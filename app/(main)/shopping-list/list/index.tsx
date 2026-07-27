@@ -98,7 +98,8 @@ export default function ShoppingTodoListScreen() {
     // 위쪽 플러스 버튼이나 엔터 입력 시 실행될 핵심 등록 함수
     const handleAddItem = async (memoText?: string) => {
         // 인자로 값이 넘어오면 그걸 쓰고, 없으면 현재 입력창 상태(inputMemo)를 씀
-        const textToRegister = (memoText !== undefined && typeof memoText === 'string') ? memoText : inputMemo;
+        const textToRegister =
+            memoText !== undefined && typeof memoText === "string" ? memoText : inputMemo;
 
         if (!textToRegister || !textToRegister.trim()) return;
 
@@ -112,7 +113,12 @@ export default function ShoppingTodoListScreen() {
         } catch (error) {
             setItems(prev => [
                 ...prev,
-                { id: Date.now(), memo: textToRegister.trim(), date: selectedDate, isChecked: false },
+                {
+                    id: Date.now(),
+                    memo: textToRegister.trim(),
+                    date: selectedDate,
+                    isChecked: false,
+                },
             ]);
             setInputMemo("");
         }
