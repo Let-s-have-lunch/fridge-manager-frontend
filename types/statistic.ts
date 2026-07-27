@@ -14,6 +14,8 @@ export interface DashboardResponse {
     expirationCards: {
         expired: number;
         expiringSoon: number;
+        expiredList: ExpirationListItem[];
+        expiringSoonList: ExpirationListItem[];
     };
     top3Products: Top3ProductItem[];
 }
@@ -26,6 +28,13 @@ export interface ModalResponse {
         isPositive: boolean;
         percentage: string;
     };
+}
+
+export interface ExpirationListItem {
+    id: number;
+    name: string;
+    expirationDate: string;
+    icon: string;
 }
 
 export interface Top3ProductItem {
