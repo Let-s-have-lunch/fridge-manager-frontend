@@ -54,6 +54,9 @@ export default function ShoppingTodoListScreen() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
+    // 입력창 텍스트 상태
+    const [inputMemo, setInputMemo] = useState<string>("");
+
     const fetchItems = useCallback(async (dateString: string, isRefresh = false) => {
         try {
             if (!isRefresh) setIsLoading(true);
@@ -92,15 +95,26 @@ export default function ShoppingTodoListScreen() {
         }
     };
 
-    const handleAddItem = async (memo: string) => {
+    // 위쪽 플러스 버튼이나 엔터 입력 시 실행될 핵심 등록 함수
+    const handleAddItem = async (memoText?: string) => {
+        // 인자로 값이 넘어오면 그걸 쓰고, 없으면 현재 입력창 상태(inputMemo)를 씀
+        const textToRegister = (memoText !== undefined && typeof memoText === 'string') ? memoText : inputMemo;
+
+        if (!textToRegister || !textToRegister.trim()) return;
+
         try {
-            const newItem = await api.createShoppingItem(USER_ID, { memo, date: selectedDate });
+            const newItem = await api.createShoppingItem(USER_ID, {
+                memo: textToRegister.trim(),
+                date: selectedDate,
+            });
             setItems(prev => [...prev, newItem]);
+            setInputMemo(""); // 등록 성공 시 입력창 비우기
         } catch (error) {
             setItems(prev => [
                 ...prev,
-                { id: Date.now(), memo, date: selectedDate, isChecked: false },
+                { id: Date.now(), memo: textToRegister.trim(), date: selectedDate, isChecked: false },
             ]);
+            setInputMemo("");
         }
     };
 
@@ -150,9 +164,18 @@ export default function ShoppingTodoListScreen() {
                     <MaskingTape />
 
                     <View className="bg-[#FFFDF9] rounded-[32px] px-6 py-8 shadow-sm border border-[#EBE5DD] mb-10">
-                        <Text className="text-2xl font-black text-[#2B2623] text-center mb-6 tracking-tight">
-                            할일 등록
-                        </Text>
+                        {/* 상단 제목과 우측 플러스 버튼 (입력창의 inputMemo 값을 바로 등록하도록 확실히 연결) */}
+                        <View className="flex-row justify-between items-center mb-6">
+                            <Text className="text-2xl font-black text-[#2B2623] tracking-tight">
+                                할일 등록
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => handleAddItem(inputMemo)}
+                                activeOpacity={0.8}
+                                className="w-10 h-10 bg-[#FF5C46] rounded-full items-center justify-center shadow-sm">
+                                <AntDesign name="plus" size={20} color="white" />
+                            </TouchableOpacity>
+                        </View>
 
                         {isLoading && !isRefreshing ? (
                             <View className="py-12 items-center justify-center">
@@ -170,7 +193,12 @@ export default function ShoppingTodoListScreen() {
                                     />
                                 ))}
 
-                                <AddShoppingItem onAdd={handleAddItem} />
+                                {/* 아래쪽 입력창과 상태 연결 */}
+                                <AddShoppingItem
+                                    onAdd={handleAddItem}
+                                    value={inputMemo}
+                                    onChangeText={setInputMemo}
+                                />
                             </View>
                         )}
                     </View>
