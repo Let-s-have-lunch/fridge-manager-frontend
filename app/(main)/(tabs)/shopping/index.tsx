@@ -62,27 +62,27 @@ export default function ShoppingCalendarScreen() {
         {
             label: "mon",
             textClass: "text-text-default",
-            bgClass: "bg-background-paper border-divider",
+            bgClass: "bg-bg-paper border-divider",
         },
         {
             label: "tue",
             textClass: "text-text-default",
-            bgClass: "bg-background-paper border-divider",
+            bgClass: "bg-bg-paper border-divider",
         },
         {
             label: "wed",
             textClass: "text-text-default",
-            bgClass: "bg-background-paper border-divider",
+            bgClass: "bg-bg-paper border-divider",
         },
         {
             label: "thu",
             textClass: "text-text-default",
-            bgClass: "bg-background-paper border-divider",
+            bgClass: "bg-bg-paper border-divider",
         },
         {
             label: "fri",
             textClass: "text-text-default",
-            bgClass: "bg-background-paper border-divider",
+            bgClass: "bg-bg-paper border-divider",
         },
         {
             label: "sat",
@@ -92,7 +92,7 @@ export default function ShoppingCalendarScreen() {
     ];
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false} className="flex-1 bg-white pt-6">
+        <ScrollView showsVerticalScrollIndicator={false} className="flex-1 bg-bg-default pt-6">
             {/* 1. 달력 상단: 연/월 표시 및 이동 버튼 */}
             <View className="flex-row justify-center items-center mb-6">
                 <TouchableOpacity onPress={handlePrevMonth} className="p-2" activeOpacity={0.7}>
@@ -115,11 +115,11 @@ export default function ShoppingCalendarScreen() {
             </View>
 
             {/* 2. 달력 헤더: 요일 표시 */}
-            <View className="flex-row justify-between mb-3 px-4">
+            <View className="flex-row justify-between mb-3">
                 {WEEKDAYS.map((day, idx) => (
                     <View
                         key={idx}
-                        className={`w-[13%] py-1.5 items-center justify-center rounded-lg border ${day.bgClass}`}>
+                        className={`w-[13%] py-1.5 items-center justify-center rounded-lg border border-divider ${day.bgClass}`}>
                         <TextComponent className={`text-xs font-bold ${day.textClass}`}>
                             {day.label}
                         </TextComponent>
@@ -128,7 +128,7 @@ export default function ShoppingCalendarScreen() {
             </View>
 
             {/* 3. 달력 그리드: 날짜 버튼들 */}
-            <View className="flex-row flex-wrap justify-between gap-y-2 px-4 mb-10">
+            <View className="flex-row flex-wrap justify-between gap-y-2 mb-10">
                 {calendarGrid.map((day, idx) => {
                     const isCurrentMonth = day.getMonth() === month;
                     const isSunday = day.getDay() === 0;
@@ -156,7 +156,7 @@ export default function ShoppingCalendarScreen() {
                             onPress={() => {
                                 setSelectedDate(day);
                                 // 💡 날짜를 클릭하면 쿼리스트링과 함께 리스트 페이지로 이동!
-                                // router.push(`/shopping/list?date=${dateStr}`);
+                                router.push(`/shopping/list?date=${dateStr}`);
                             }}
                             activeOpacity={0.7}
                             className={`w-[13%] aspect-[1/1.2] rounded-[10px] items-center justify-center ${
@@ -165,7 +165,7 @@ export default function ShoppingCalendarScreen() {
                                     : isToday
                                       ? "bg-primary-light" // 오늘 날짜 배경
                                       : isCurrentMonth
-                                        ? "bg-background-paper"
+                                        ? "bg-bg-subtle"
                                         : "bg-transparent"
                             }`}>
                             <TextComponent className={`text-[15px] ${dayTextClass}`}>

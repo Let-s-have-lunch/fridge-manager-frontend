@@ -9,13 +9,13 @@ import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 
 const ANIMAL_ICONS = [
-    require("../../../assets/images/dog.png"),
-    require("../../../assets/images/cat.png"),
-    require("../../../assets/images/rabbit.png"),
-    require("../../../assets/images/bear.png"),
-    require("../../../assets/images/hamster.png"),
-    require("../../../assets/images/fox.png"),
-    require("../../../assets/images/tiger.png"),
+    require("../../../../assets/images/dog.png"),
+    require("../../../../assets/images/cat.png"),
+    require("../../../../assets/images/rabbit.png"),
+    require("../../../../assets/images/bear.png"),
+    require("../../../../assets/images/hamster.png"),
+    require("../../../../assets/images/fox.png"),
+    require("../../../../assets/images/tiger.png"),
 ];
 
 const getAnimalIcon = (id?: number): ImageSourcePropType => {
