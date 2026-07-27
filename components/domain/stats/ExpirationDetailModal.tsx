@@ -1,5 +1,12 @@
 import React from "react";
-import { Modal, View, TouchableOpacity, TouchableWithoutFeedback, FlatList } from "react-native";
+import {
+    Modal,
+    View,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    FlatList,
+    useWindowDimensions, // 💡 수정된 부분: 반응형 체크를 위해 추가
+} from "react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import { ExpirationListItem } from "@/types/statistic";
@@ -12,15 +19,15 @@ interface Props {
 }
 
 export default function ExpirationDetailModal({ visible, type, onClose, data }: Props) {
+    const { width } = useWindowDimensions();
+    const isMd = width >= 768;
+
     const isExpiring = type === "expiringSoon";
 
-    // 타입에 따라 타이틀과 테마 색상을 자동으로 변경합니다.
     const title = isExpiring ? "유통기한 임박 상품" : "유통기한 지난 상품";
-    const textColor = isExpiring ? "text-error-point" : "text-warning-main";
-
-    // 리스트 아이템 배경색 (StatsPage의 카드 색상과 깔맞춤)
-    const itemBgColor = isExpiring ? "bg-[#FFF5F4]" : "bg-[#FFFBF3]";
-    const itemBorderColor = isExpiring ? "border-[#FCE1DE]" : "border-[#FBEAC1]";
+    const textColor = isExpiring ? "text-warning-main" : "text-error-point";
+    const itemBgColor = isExpiring ? "bg-[#FFFBF3]" : "bg-[#FFF5F4]";
+    const itemBorderColor = isExpiring ? "border-[#FBEAC1]" : "border-[#FCE1DE]";
 
     // 1. 리스트 아이템 렌더링 함수
     const renderItem = ({ item }: { item: ExpirationListItem }) => (
@@ -38,7 +45,6 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                     {item.name}
                 </TextComponent>
                 <TextComponent className="text-[15px] text-text-secondary">
-                    {/* 날짜를 보기 좋게 포맷팅 (예: 2024-05-20) */}
                     {new Date(item.expirationDate).toISOString().split("T")[0]} 까지
                 </TextComponent>
             </View>
@@ -49,15 +55,15 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
         <Modal
             visible={visible}
             transparent={true}
-            animationType="slide"
+            animationType={isMd ? "fade" : "slide"}
             onRequestClose={onClose} // 안드로이드 물리 뒤로가기 버튼 처리
         >
             {/* 1. 반투명 배경 (누르면 모달 닫힘) */}
             <TouchableWithoutFeedback onPress={onClose}>
-                <View className="flex-1 bg-black/50 justify-end">
+                <View className="flex-1 bg-black/50 justify-end md:justify-center md:items-center">
                     {/* 2. 바텀 시트 컨테이너 (이 영역은 눌러도 안 닫히게 e.stopPropagation 처리) */}
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
-                        <View className="bg-bg-default rounded-t-[36px] px-6 pt-8 pb-10 min-h-[50%] max-h-[85%]">
+                        <View className="bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0">
                             {/* 헤더: 타이틀과 닫기 버튼 */}
                             <View className="flex-row justify-between items-center mb-6">
                                 <View className="flex-row items-center gap-2">
