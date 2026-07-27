@@ -24,9 +24,6 @@ import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 export default function AuthRegisterPage() {
     const router = useRouter();
 
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
     const {
         control,
         handleSubmit,

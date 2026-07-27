@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
                     showsVerticalScrollIndicator={false}>
                     {/* 타이틀 및 아이콘 */}
                     <View className="items-center mb-8">
-                        <View className="w-16 h-16 mb-4 bg-bg-light rounded-full items-center justify-center">
+                        <View className="w-16 h-16 mb-4 bg-bg-subtle rounded-full items-center justify-center">
                             <Text className="text-2xl">🔑</Text>
                         </View>
                         <Text className="text-text-default text-xl font-bold mb-2">
