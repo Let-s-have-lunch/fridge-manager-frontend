@@ -16,7 +16,7 @@ export default {
                 bg: {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
-                    light: "var(--bg-light)",
+                    subtle: "var(--bg-subtle)",
                 },
                 // Text
                 text: {
@@ -67,7 +67,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|light|point)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|light|point|subtle)/,
         },
     ],
 
