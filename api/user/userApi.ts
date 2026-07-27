@@ -2,6 +2,8 @@ import axiosInstance from "@/api/axiosInstance";
 import { RegisterUserInputType } from "@/schemas/user/registerUserSchema";
 import { LoginUserInputType } from "@/schemas/user/loginUserSchema";
 import { User } from "@/types/user";
+import { UpdateUserInputType } from "@/schemas/user/updateUserSchema";
+import { ChangePasswordInputType } from "@/schemas/user/changePasswordSchema";
 
 const registerUser = async (
     data: Omit<RegisterUserInputType, "confirmPassword">,
@@ -20,4 +22,36 @@ const resetPassword = async (data: { email: string; newPassword: string }) => {
     return response.data;
 };
 
-export default { registerUser, login, resetPassword };
+// 4. 내 프로필 조회 (마이페이지)
+const getMyProfile = async (): Promise<User> => {
+    const response = await axiosInstance.get("/users/me");
+    return response.data.data;
+};
+
+// 5. 회원정보 수정 (마이페이지)
+const updateUser = async (data: UpdateUserInputType): Promise<User> => {
+    const response = await axiosInstance.patch("/users/me", data);
+    return response.data.data;
+};
+
+// 6. 비밀번호 변경 (마이페이지 내)
+const changePassword = async (data: ChangePasswordInputType) => {
+    const response = await axiosInstance.post("/users/change-password", data);
+    return response.data;
+};
+
+// 7. 로그아웃
+const logout = async () => {
+    const response = await axiosInstance.post("/users/logout");
+    return response.data;
+};
+
+export default {
+    registerUser,
+    login,
+    resetPassword,
+    getMyProfile,
+    updateUser,
+    changePassword,
+    logout,
+};

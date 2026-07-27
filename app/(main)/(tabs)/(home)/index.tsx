@@ -9,7 +9,7 @@ export default function HomeScreen(){
             <MainHeader />
             <CategoryTab />
             <View className={"flex-1"}>
-                <FoodList/>
+                {/*<FoodList/>*/}
             </View>
 
         </SafeAreaView>

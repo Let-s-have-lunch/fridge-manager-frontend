@@ -23,7 +23,7 @@ export const tabs = [
     },
     {
         name: "마이페이지",
-        path: "/settings",
+        path: "/mypage",
         iconComponent: Feather,
         iconName: "user",
     },
