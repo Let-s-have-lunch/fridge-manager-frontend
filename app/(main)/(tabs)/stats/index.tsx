@@ -13,6 +13,7 @@ import ConsumptionStatusCard from "@/components/domain/stats/ConsumptionStatusCa
 import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCard";
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
+import Input from "@/components/common/input/Input";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 

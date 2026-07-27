@@ -11,7 +11,7 @@ export const tabs = [
     },
     {
         name: "목록",
-        path: "/list",
+        path: "/shopping",
         iconComponent: Feather,
         iconName: "calendar",
     },
