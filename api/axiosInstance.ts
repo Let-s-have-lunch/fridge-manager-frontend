@@ -7,7 +7,7 @@ const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
 const api = create({
     baseURL: BASE_URL,
-    timeout: 3000,
+    timeout: 7000,
     withCredentials: true,
 });
 
