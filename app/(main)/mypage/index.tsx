@@ -7,7 +7,7 @@ import { User } from "@/types/user";
 import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Title from "@/components/common/title/Title";
-import Card from "@/components/common/Card";
+import Card from "@/components/common/card/Card";
 
 export default function MyPageScreen() {
     const router = useRouter();
