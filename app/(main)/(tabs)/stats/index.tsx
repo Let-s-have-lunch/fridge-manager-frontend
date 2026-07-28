@@ -72,18 +72,16 @@ function StatsPage() {
     };
 
     const openExpiringSoonModal = () => {
-        setModalConfig({ visible: true, type: 'expiringSoon' });
+        setModalConfig({ visible: true, type: "expiringSoon" });
     };
 
     const openExpiredModal = () => {
-        setModalConfig({ visible: true, type: 'expired' });
+        setModalConfig({ visible: true, type: "expired" });
     };
 
     const closeModal = () => {
         setModalConfig(prev => ({ ...prev, visible: false }));
     };
-
-    useSetupLayout({ showMainHeader: true});
 
     return (
         <View className="flex-1 bg-bg-default">
@@ -128,8 +126,7 @@ function StatsPage() {
                     />
 
                     {/* 5. 가장 많이 소비한 TOP 3 리스트 */}
-                    <TopConsumptionCard products={statsData.dashboardData.top3Products}/>
-
+                    <TopConsumptionCard products={statsData.dashboardData.top3Products} />
                 </ScrollView>
             )}
 
