@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, TouchableOpacity, useWindowDimensions } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
@@ -8,12 +8,12 @@ import formattingUtil from "@/utils/formattingUtil";
 export default function ShoppingCalendarScreen() {
     const router = useRouter();
 
-    const { height } = useWindowDimensions();
-
     // 달력 상단에 보여줄 현재 기준 월
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
     // 달력에서 클릭한 날짜
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+    const [calendarHeight, setCalendarHeight] = useState(0);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -49,6 +49,11 @@ export default function ShoppingCalendarScreen() {
 
     const calendarGrid = getDaysInMonthGrid(year, month);
     const selectedDateStr = formattingUtil.formatDateString(selectedDate);
+
+    const ROW_GAP = 8;
+
+    // 6줄 + 줄 사이 간격 5개
+    const cellHeight = calendarHeight > 0 ? (calendarHeight - ROW_GAP * 5) / 6 : 80;
 
     // 💡 월 이동 핸들러
     const handlePrevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
@@ -92,6 +97,7 @@ export default function ShoppingCalendarScreen() {
         },
     ];
 
+
     return (
         <View className="flex-1 bg-bg-default pt-5">
             {/* 1. 달력 상단: 연/월 표시 및 이동 버튼 */}
@@ -128,13 +134,20 @@ export default function ShoppingCalendarScreen() {
                 ))}
             </View>
 
-            <View className={"flex-1 pt-2"}>
+            <View
+                className="flex-1 pt-2"
+                onLayout={e => {
+                    setCalendarHeight(e.nativeEvent.layout.height);
+                }}>
                 {/* 3. 달력 그리드: 날짜 버튼들 */}
-                <View className="flex-row flex-wrap justify-between h-full gap-y-2">
+                <View className="flex-row flex-wrap justify-between h-full">
                     {calendarGrid.map((day, idx) => {
                         const isCurrentMonth = day.getMonth() === month;
                         const isSunday = day.getDay() === 0;
                         const isSaturday = day.getDay() === 6;
+                        const totalRows = Math.ceil(calendarGrid.length / 7);
+                        const row = Math.floor(idx / 7);
+                        const isLastRow = row === totalRows - 1;
 
                         const dateStr = formattingUtil.formatDateString(day);
                         const isSelected = dateStr === selectedDateStr;
@@ -161,7 +174,8 @@ export default function ShoppingCalendarScreen() {
                                 }}
                                 activeOpacity={0.7}
                                 style={{
-                                    height: "16%",
+                                    height: cellHeight,
+                                    marginBottom: isLastRow ? 0 : ROW_GAP,
                                 }}
                                 className={`w-[13%] rounded-[10px] items-start justify-start p-2 ${
                                     isSelected
