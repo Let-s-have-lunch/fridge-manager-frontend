@@ -12,6 +12,8 @@ import MonthSelector from "@/components/domain/stats/MonthSelector";
 import ConsumptionStatusCard from "@/components/domain/stats/ConsumptionStatusCard";
 import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCard";
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
+import Input from "@/components/common/input/Input";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 
@@ -80,6 +82,8 @@ function StatsPage() {
     const closeModal = () => {
         setModalConfig(prev => ({ ...prev, visible: false }));
     };
+
+    useSetupLayout({ showMainHeader: true});
 
     return (
         <View className="flex-1 bg-bg-default">
