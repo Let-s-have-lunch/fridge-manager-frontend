@@ -7,23 +7,7 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
-import { useSetupLayout } from "@/hooks/useSetupLayout";
-
-const ANIMAL_ICONS = [
-    require("../../../../assets/images/dog.png"),
-    require("../../../../assets/images/cat.png"),
-    require("../../../../assets/images/rabbit.png"),
-    require("../../../../assets/images/bear.png"),
-    require("../../../../assets/images/hamster.png"),
-    require("../../../../assets/images/fox.png"),
-    require("../../../../assets/images/tiger.png"),
-];
-
-const getAnimalIcon = (id?: number): ImageSourcePropType => {
-    if (!id) return ANIMAL_ICONS[0];
-    const index = id % ANIMAL_ICONS.length;
-    return ANIMAL_ICONS[index];
-};
+import { getAnimalIcon } from "@/components/utils/profile";
 
 export default function MyPageScreen() {
     const router = useRouter();
@@ -142,7 +126,7 @@ export default function MyPageScreen() {
                 <View className="mt-[20px]">
                     <TouchableOpacity
                         onPress={handleLogout}
-                        className="w-full py-4 bg-[#F2EFE8] active:opacity-80 rounded-2xl items-center">
+                        className="w-full py-4 bg-bg-subtle active:opacity-80 rounded-2xl items-center">
                         <TextComponent className="text-[15px] font-medium text-text-default">
                             로그아웃
                         </TextComponent>
@@ -162,7 +146,7 @@ export default function MyPageScreen() {
                 <Feather
                     name={theme === "light" ? "moon" : "sun"}
                     size={20}
-                    color={theme === "light" ? "#333333" : "#FFD700"}
+                    color={"#444444"}
                 />
             </TouchableOpacity>
         </ScrollView>
