@@ -12,8 +12,9 @@ import {
     TouchableOpacity,
     ScrollView,
     Alert,
+    Image,
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -96,77 +97,17 @@ export default function AuthRegisterPage() {
                         </View>
 
                         <View className="items-center mt-2 mb-8">
-                            <View
-                                className="relative items-center justify-center"
-                                style={{ width: "92%", height: 270 }}>
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: 225,
-                                        borderRadius: 55,
-                                        backgroundColor: "#F3FCF6",
-                                    }}
-                                />
-                                <View
-                                    style={{
-                                        width: 120,
-                                        height: 120,
-                                        borderRadius: 30,
-                                        backgroundColor: "#ECFDF5",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        shadowColor: "#000",
-                                        shadowOpacity: 0.18,
-                                        shadowRadius: 12,
-                                        shadowOffset: { width: 0, height: 6 },
-                                        elevation: 8,
-                                    }}>
-                                    <MaterialCommunityIcons
-                                        name="fridge-outline"
-                                        size={64}
-                                        color="#10B981"
-                                    />
-                                </View>
-                                <MaterialCommunityIcons
-                                    name="food-apple"
-                                    size={34}
-                                    color="#EF4444"
-                                    style={{ position: "absolute", left: 45, top: 72 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="egg"
-                                    size={32}
-                                    color="#FBBF24"
-                                    style={{ position: "absolute", right: 45, top: 66 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="carrot"
-                                    size={32}
-                                    color="#F97316"
-                                    style={{ position: "absolute", left: 82, bottom: 48 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="fish"
-                                    size={36}
-                                    color="#3B82F6"
-                                    style={{ position: "absolute", right: 72, bottom: 44 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="leaf"
-                                    size={18}
-                                    color="#78C98D"
-                                    style={{ position: "absolute", top: 38, left: "47%" }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="leaf"
-                                    size={16}
-                                    color="#78C98D"
-                                    style={{ position: "absolute", bottom: 22, right: "33%" }}
-                                />
-                            </View>
+                            <Image
+                                source={require("@/assets/images/fridge.png")}
+                                style={{
+                                    width: 250,
+                                    height: 250,
+                                    resizeMode: "contain",
+                                }}
+                            />
+
                             <TextComponent
-                                className="text-center mt-3 text-[15px] leading-7 font-medium"
+                                className="text-center mt-4 text-[15px] leading-7 font-medium"
                                 style={{ color: "#666" }}>
                                 냉장고와 함께 더 건강한 식생활을{"\n"}시작해보세요!
                             </TextComponent>
@@ -331,11 +272,11 @@ export default function AuthRegisterPage() {
                             <TouchableOpacity
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}
-                                className={`w-full py-4 mt-2 rounded-full items-center ${isSubmitting ? "bg-primary-main/60" : "bg-primary-main"}`}>
+                                className={`w-full py-4 mt-2 rounded-[15px] items-center ${isSubmitting ? "bg-primary-main/60" : "bg-primary-main"}`}>
                                 {isSubmitting ? (
                                     <LoadingIndicator color="#ffffff" />
                                 ) : (
-                                    <TextComponent className="text-base font-bold text-white">
+                                    <TextComponent className="text-[18px] font-bold text-white">
                                         가입하기
                                     </TextComponent>
                                 )}

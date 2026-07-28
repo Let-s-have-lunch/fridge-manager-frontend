@@ -21,8 +21,8 @@ export default function MainFooter({ className }: Props) {
             )}
 
             style={{
-                paddingBottom: Platform.OS === "ios" ? Math.max(insets.bottom, 16) : 16,
-                paddingTop: 12,
+                paddingBottom: Platform.OS === "ios" ? Math.max(insets.bottom, 10) : 10,
+                paddingTop: 8,
             }}>
             <View className="w-full max-w-7xl flex-row items-center justify-around">
                 {tabs.map(tab => {
@@ -39,14 +39,17 @@ export default function MainFooter({ className }: Props) {
                             // as any를 빼고 안전한 타입캐스팅 적용
                             onPress={() => router.push(tab.path as Href)}
                             activeOpacity={0.7}
-                            className="items-center justify-center py-2 px-3 gap-1 flex-1">
-                            <IconComponent name={iconName as any} size={35} color={color} />
+                            className="items-center justify-center py-1 gap-1 flex-1">
+                            <IconComponent name={iconName as any} size={26} color={color} />
                             <Text
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                                minimumFontScale={0.8}
                                 style={{
                                     color: color,
-                                    fontSize: 14,
+                                    fontSize: 11,
                                     fontWeight: isActive ? "700" : "500",
-                                    marginTop: 4,
+                                    marginTop: 2,
                                 }}>
                                 {tab.name}
                             </Text>
