@@ -4,7 +4,6 @@ import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import formattingUtil from "@/utils/formattingUtil";
-import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 
 export default function ShoppingCalendarScreen() {

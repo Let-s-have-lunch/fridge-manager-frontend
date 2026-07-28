@@ -8,7 +8,7 @@ export const useSetupLayout = ({
 }: {
     showMainHeader?: boolean;
     showMainFooter?: boolean;
-} = {}) => {
+}) => {
     const currentHeader = useLayoutStore(state => state.showMainHeader);
     const currentFooter = useLayoutStore(state => state.showMainFooter);
     const setLayout = useLayoutStore(state => state.setLayout);
@@ -20,6 +20,14 @@ export const useSetupLayout = ({
                 showMainHeader: showMainHeader ?? currentHeader,
                 showMainFooter: showMainFooter ?? currentFooter,
             });
+
+            // 💡 화면에서 나갈 때(Clean-up): 앱의 원래 기본값으로 원상복구!
+            return () => {
+                setLayout({
+                    showMainHeader: false,
+                    showMainFooter: true,
+                });
+            };
         }, [showMainHeader, showMainFooter, currentHeader, currentFooter, setLayout]),
     );
 };
