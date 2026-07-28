@@ -40,7 +40,7 @@ export default function MainHeader({ userId, userName, onSearch, onSortToggle }:
     };
 
     return (
-        <View className="bg-bg-subtle px-6 pt-7 pb-5">
+        <View className="bg-bg-subtle px-6 pt-5 pb-4">
             <View className="flex-row justify-between">
                 <View className="flex-row flex-1">
                     <Pressable
