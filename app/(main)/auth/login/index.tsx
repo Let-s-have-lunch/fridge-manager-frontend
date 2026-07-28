@@ -110,7 +110,7 @@ export default function AuthLoginPage() {
                                     elevation: 2,
                                 }}>
                                 <Image
-                                    source={require("@/assets/images/fridge.png")}
+                                    source={require("@/assets/images/logo.png")}
                                     style={{
                                         width: 210,
                                         height: 210,
