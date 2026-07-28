@@ -83,8 +83,6 @@ function StatsPage() {
         setModalConfig(prev => ({ ...prev, visible: false }));
     };
 
-    useSetupLayout({ showMainHeader: true});
-
     return (
         <View className="flex-1 bg-bg-default">
             {/* 1. 타이틀 헤더 */}
