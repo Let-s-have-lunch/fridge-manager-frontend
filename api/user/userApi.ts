@@ -30,19 +30,25 @@ const getMyProfile = async (): Promise<User> => {
 
 // 5. 회원정보 수정 (마이페이지)
 const updateUser = async (data: UpdateUserInputType): Promise<User> => {
-    const response = await axiosInstance.patch("/users/me", data);
+    const response = await axiosInstance.patch("/users/update", data);
     return response.data.data;
 };
 
 // 6. 비밀번호 변경 (마이페이지 내)
 const changePassword = async (data: ChangePasswordInputType) => {
-    const response = await axiosInstance.post("/users/change-password", data);
+    const response = await axiosInstance.patch("/users/password", data);
     return response.data;
 };
 
 // 7. 로그아웃
 const logout = async () => {
     const response = await axiosInstance.post("/users/logout");
+    return response.data;
+};
+
+// 8. 회원탈퇴
+const withdrawUser = async (data: { password: string }) => {
+    const response = await axiosInstance.patch("/users/withdraw", data);
     return response.data;
 };
 
@@ -54,4 +60,5 @@ export default {
     updateUser,
     changePassword,
     logout,
+    withdrawUser,
 };

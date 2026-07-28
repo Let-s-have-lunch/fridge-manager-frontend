@@ -28,7 +28,6 @@ export default function MyPageScreen() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
 
-    // 💡 날아갔던 부분 복구: 스토어에서 theme 상태와 변경 함수를 가져옵니다.
     const { theme, onChangeTheme } = useThemeStore();
 
     useEffect(() => {
@@ -96,7 +95,7 @@ export default function MyPageScreen() {
 
                     <View>
                         <TouchableOpacity
-                            onPress={() => router.push("/(main)/mypage/edit-profile")}
+                            onPress={() => router.push(`/(main)/mypage/edit-profile`)}
                             className="flex-row items-center justify-between py-3.5 border-b border-divider">
                             <TextComponent className="text-base text-text-default">
                                 회원정보 수정
@@ -104,7 +103,9 @@ export default function MyPageScreen() {
                             <Feather name="chevron-right" size={20} color="#BDBDBD" />
                         </TouchableOpacity>
 
-                        <TouchableOpacity className="flex-row items-center justify-between py-3.5 border-b border-divider">
+                        <TouchableOpacity
+                            onPress={() => router.push("/mypage/change-password")}
+                            className="flex-row items-center justify-between py-3.5 border-b border-divider">
                             <TextComponent className="text-base text-text-default">
                                 비밀번호 수정
                             </TextComponent>
