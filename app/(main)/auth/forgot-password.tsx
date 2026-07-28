@@ -7,13 +7,14 @@ import {
     Platform,
     View,
     Text,
-    TextInput,
     TouchableOpacity,
     ScrollView,
     Alert,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
+import Input from "@/components/common/input/Input"; // 경로 확인
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
@@ -61,6 +62,7 @@ export default function ForgotPasswordPage() {
         }
     };
 
+    useSetupLayout({ showMainFooter: false });
     return (
         <SafeAreaView className="flex-1 bg-bg-default">
             <KeyboardAvoidingView
@@ -103,25 +105,22 @@ export default function ForgotPasswordPage() {
                             name="email"
                             rules={{ required: "이메일을 입력해주세요." }}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <View className="mb-4">
-                                    <View className="flex-row items-center border border-divider rounded-full px-5 py-4 bg-transparent">
-                                        <Feather
-                                            name="mail"
-                                            size={20}
-                                            color="#777777"
-                                            className="mr-3"
-                                        />
-                                        <TextInput
-                                            className="flex-1 text-text-default text-base p-0"
-                                            placeholder="이메일을 입력해주세요"
-                                            placeholderTextColor="#777777"
-                                            keyboardType="email-address"
-                                            autoCapitalize="none"
-                                            onBlur={onBlur}
-                                            onChangeText={onChange}
-                                            value={value}
-                                        />
+                                <View className="mb-4 relative justify-center">
+                                    {/* 아이콘을 absolute로 인풋 위에 띄움 */}
+                                    <View className="absolute left-4 z-10">
+                                        <Feather name="mail" size={20} color="#777777" />
                                     </View>
+                                    <Input
+                                        // pl-12: 아이콘과 텍스트 사이 여백 확보 / h-14: 인풋 높이 키움
+                                        className="pl-12 h-14 text-base"
+                                        placeholder="이메일을 입력해주세요"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        hasError={!!errors.email}
+                                    />
                                 </View>
                             )}
                         />
@@ -132,24 +131,19 @@ export default function ForgotPasswordPage() {
                             name="newPassword"
                             rules={{ required: "새 비밀번호를 입력해주세요." }}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <View className="mb-4">
-                                    <View className="flex-row items-center border border-divider rounded-full px-5 py-4 bg-transparent">
-                                        <Feather
-                                            name="lock"
-                                            size={20}
-                                            color="#777777"
-                                            className="mr-3"
-                                        />
-                                        <TextInput
-                                            className="flex-1 text-text-default text-base p-0"
-                                            placeholder="새 비밀번호 (6자 이상)"
-                                            placeholderTextColor="#777777"
-                                            secureTextEntry={true}
-                                            onBlur={onBlur}
-                                            onChangeText={onChange}
-                                            value={value}
-                                        />
+                                <View className="mb-4 relative justify-center">
+                                    <View className="absolute left-4 z-10">
+                                        <Feather name="lock" size={20} color="#777777" />
                                     </View>
+                                    <Input
+                                        className="pl-12 h-14 text-base"
+                                        placeholder="새 비밀번호 (6자 이상)"
+                                        secureTextEntry={true}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        hasError={!!errors.newPassword}
+                                    />
                                 </View>
                             )}
                         />
@@ -161,21 +155,18 @@ export default function ForgotPasswordPage() {
                             rules={{ required: "비밀번호 확인을 입력해주세요." }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <View className="mb-4">
-                                    <View className="flex-row items-center border border-divider rounded-full px-5 py-4 bg-transparent">
-                                        <Feather
-                                            name="lock"
-                                            size={20}
-                                            color="#777777"
-                                            className="mr-3"
-                                        />
-                                        <TextInput
-                                            className="flex-1 text-text-default text-base p-0"
+                                    <View className="relative justify-center">
+                                        <View className="absolute left-4 z-10">
+                                            <Feather name="lock" size={20} color="#777777" />
+                                        </View>
+                                        <Input
+                                            className="pl-12 h-14 text-base"
                                             placeholder="새 비밀번호 확인"
-                                            placeholderTextColor="#777777"
                                             secureTextEntry={true}
                                             onBlur={onBlur}
                                             onChangeText={onChange}
                                             value={value}
+                                            hasError={!!errors.confirmPassword}
                                         />
                                     </View>
                                     {errors.confirmPassword?.message && (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { Alert, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import Title from "@/components/common/title/Title";
@@ -8,6 +8,7 @@ import InputGroup from "@/components/common/input/InputGroup";
 import Input from "@/components/common/input/Input";
 import Label from "@/components/common/label/Label";
 import userApi from "@/api/user/userApi";
+import { updatePasswordSchema } from "@/schemas/user/changePasswordSchema";
 
 export default function ChangePasswordPage() {
     const [prevPassword, setPrevPassword] = useState("");
@@ -23,51 +24,85 @@ export default function ChangePasswordPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleSave = async () => {
-        let isValid = true;
+        // 기존 에러 초기화
+        setPrevPasswordError(undefined);
+        setPasswordError(undefined);
+        setConfirmPasswordError(undefined);
 
-        if (!prevPassword.trim()) {
-            setPrevPasswordError("현재 비밀번호를 입력해주세요.");
-            isValid = false;
-        } else {
-            setPrevPasswordError(undefined);
+        // 프론트엔드 Zod 스키마 검증
+        const result = updatePasswordSchema.safeParse({
+            prevPassword,
+            password,
+            confirmPassword,
+        });
+
+        if (!result.success) {
+            const fieldErrors = result.error.format();
+            setPrevPasswordError(fieldErrors.prevPassword?._errors[0]);
+            setPasswordError(fieldErrors.password?._errors[0]);
+            setConfirmPasswordError(fieldErrors.confirmPassword?._errors[0]);
+            return;
         }
-
-        if (!password.trim()) {
-            setPasswordError("새 비밀번호를 입력해주세요.");
-            isValid = false;
-        } else if (password.length < 6) {
-            setPasswordError("비밀번호는 6글자 이상이어야 합니다.");
-            isValid = false;
-        } else {
-            setPasswordError(undefined);
-        }
-
-        // 3. 새 비밀번호 확인 검사
-        if (!confirmPassword.trim()) {
-            setConfirmPasswordError("비밀번호 확인은 6글자 이상이어야 합니다.");
-            isValid = false;
-        } else if (password !== confirmPassword) {
-            setConfirmPasswordError("비밀번호 확인이 일치하지 않습니다.");
-            isValid = false;
-        } else {
-            setConfirmPasswordError(undefined);
-        }
-
-        if (!isValid) return;
 
         try {
-            // 💡 백엔드 스키마가 요구하는 정확한 키값으로 전송
-            await userApi.changePassword({
-                prevPassword,
-                password,
-                confirmPassword,
-            });
+            await userApi.changePassword(result.data);
 
-            Alert.alert("알림", "비밀번호가 성공적으로 변경되었습니다.");
-            router.back();
-        } catch (error) {
-            console.error(error);
-            Alert.alert("오류", "비밀번호 변경에 실패했습니다. 현재 비밀번호를 확인해주세요.");
+            // ✅ 성공 시에만 상태창(알림창) 띄우고 이동
+            const successMessage = "비밀번호가 성공적으로 변경되었습니다.";
+            const handleSuccessMove = () => {
+                if (router.canGoBack()) {
+                    router.back();
+                } else {
+                    router.replace("/(tabs)/mypage");
+                }
+            };
+
+            if (Platform.OS === "web") {
+                window.alert(successMessage);
+                handleSuccessMove();
+            } else {
+                Alert.alert(
+                    "성공",
+                    successMessage,
+                    [
+                        {
+                            text: "확인",
+                            onPress: handleSuccessMove,
+                        },
+                    ],
+                    { cancelable: false },
+                );
+            }
+        } catch (error: any) {
+            console.error("비밀번호 변경 실패:", error);
+            const errorResponse = error?.response?.data;
+
+            // ❌ 실패 시에는 알림창 없이 인풋 아래에 빨간 글로 표시
+            if (errorResponse?.errors && Array.isArray(errorResponse.errors)) {
+                errorResponse.errors.forEach((err: { field: string; message: string }) => {
+                    if (err.field === "prevPassword") {
+                        setPrevPasswordError(err.message);
+                    } else if (err.field === "password") {
+                        setPasswordError(err.message);
+                    } else if (err.field === "confirmPassword") {
+                        setConfirmPasswordError(err.message);
+                    }
+                });
+            } else if (errorResponse?.message) {
+                const msg = errorResponse.message;
+                if (
+                    msg.includes("비밀번호") ||
+                    msg.includes("현재") ||
+                    msg.includes("일치") ||
+                    msg.includes("틀렸")
+                ) {
+                    setPrevPasswordError(msg);
+                } else {
+                    setPasswordError(msg);
+                }
+            } else {
+                setPrevPasswordError("비밀번호 변경에 실패했습니다. 다시 확인해주세요.");
+            }
         }
     };
 
