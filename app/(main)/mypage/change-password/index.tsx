@@ -11,17 +11,14 @@ import Label from "@/components/common/label/Label";
 import userApi from "@/api/user/userApi";
 
 export default function ChangePasswordPage() {
-    // 💡 백엔드 스키마와 필드명 완벽 일치
     const [prevPassword, setPrevPassword] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    // 에러 상태 관리
     const [prevPasswordError, setPrevPasswordError] = useState<string | undefined>(undefined);
     const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
     const [confirmPasswordError, setConfirmPasswordError] = useState<string | undefined>(undefined);
 
-    // 비밀번호 표시/숨김 상태
     const [showPrevPassword, setShowPrevPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -29,7 +26,6 @@ export default function ChangePasswordPage() {
     const handleSave = async () => {
         let isValid = true;
 
-        // 1. 현재 비밀번호 검사
         if (!prevPassword.trim()) {
             setPrevPasswordError("현재 비밀번호를 입력해주세요.");
             isValid = false;
@@ -37,7 +33,6 @@ export default function ChangePasswordPage() {
             setPrevPasswordError(undefined);
         }
 
-        // 2. 새 비밀번호 검사 (6자 이상)
         if (!password.trim()) {
             setPasswordError("새 비밀번호를 입력해주세요.");
             isValid = false;
