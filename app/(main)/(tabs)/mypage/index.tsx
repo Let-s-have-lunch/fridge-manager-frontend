@@ -7,6 +7,7 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 const ANIMAL_ICONS = [
     require("../../../../assets/images/dog.png"),

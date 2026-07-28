@@ -20,7 +20,7 @@ export default {
                 },
 
                 text: {
-                    DEFAULT: "var(--text-default)",
+                    default: "var(--text-default)",
                     secondary: "var(--text-secondary)",
                     subtle: "var(--text-subtle)",
                 },

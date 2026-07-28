@@ -1,10 +1,13 @@
-import { TextInput, TextInputProps } from "react-native";
+import { TextInput, TextInputProps, View } from "react-native";
 import { INPUT_SIZE_STYLE, StyleSizeType } from "@/types/style";
 import { twMerge } from "tailwind-merge";
+import { ReactNode } from "react";
 
 interface InputProps extends TextInputProps {
     hasError?: boolean;
     size?: StyleSizeType;
+    searchIcon?: ReactNode;
+    hideBorder?: boolean;
 }
 
 function Input({
@@ -12,18 +15,31 @@ function Input({
     size = "small",
     className,
     placeholderClassName,
+    searchIcon,
+    hideBorder,
     ...props
 }: InputProps) {
     return (
-        <TextInput
+        <View
             className={twMerge(
-                "w-full bg-bg-paper rounded-[18px] border border-divider text-text-default",
-                INPUT_SIZE_STYLE[size],
+                ["w-full", "flex-row"],
+                ["items-center"],
+                ["rounded-[18px]"],
+                ["bg-bg-paper"],
+                !hideBorder && "border border-divider",
                 hasError ? "border-error-point" : "border-divider focus:border-primary-main",
-                className,
-            )}
-            placeholderClassName={twMerge("text-text-subtle", placeholderClassName)}
-            {...props}></TextInput>
+            )}>
+            {searchIcon && <View className={"pl-4"}>{searchIcon}</View>}
+            <TextInput
+                className={twMerge(
+                    ["flex-1", "text-text-default"],
+                    INPUT_SIZE_STYLE[size],
+                    className,
+                )}
+                placeholderClassName={twMerge("text-text-subtle", placeholderClassName)}
+                {...props}
+            />
+        </View>
     );
 }
 
