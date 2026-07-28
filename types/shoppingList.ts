@@ -8,7 +8,4 @@ export interface ShoppingItem {
     updatedAt?: string;
 }
 
-export interface ShoppingListInputType {
-    memo: string;
-    date: string;
-}
+export type ShoppingItemPayload = Pick<ShoppingItem, "memo" | "date">;

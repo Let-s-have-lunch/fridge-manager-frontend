@@ -36,6 +36,7 @@ function Button({
     const getSizeClasses = () => {
         if (variant === "contained-square") return SQUARE_SIZE_STYLE[size];
         if (variant === "contained-circle") return CIRCLE_SIZE_STYLE[size];
+        if (variant === "icon-only") return "rounded-full bg-transparent p-2";
         return "";
     };
 
