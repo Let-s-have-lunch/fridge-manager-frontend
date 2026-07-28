@@ -7,14 +7,15 @@ import TextComponent from "@/components/common/text/TextComponent";
 import InputGroup from "@/components/common/input/InputGroup";
 import Input from "@/components/common/input/Input";
 import userApi from "@/api/user/userApi";
+import Label from "@/components/common/label/Label";
 
 export default function EditProfilePage() {
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [birthdate, setBirthdate] = useState("");
 
-    // 에러 상태 관리 (이미지의 빨간색 에러 UI를 닉네임에 적용해보기 위한 예시)
-    const [nicknameError, setNicknameError] = useState("");
+    // 💡 초기값을 undefined로 설정하여 텍스트 노드 에러 방지
+    const [nicknameError, setNicknameError] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -35,7 +36,6 @@ export default function EditProfilePage() {
     }, []);
 
     const handleSave = async () => {
-        // 유효성 검사 예시 (닉네임이 비어있으면 에러 띄우기)
         if (!nickname.trim()) {
             setNicknameError("닉네임을 입력해주세요.");
             return;
@@ -58,7 +58,7 @@ export default function EditProfilePage() {
 
     return (
         <View className="flex-1 bg-bg-default">
-            {/* 작성해주신 Title 컴포넌트 완벽하게 적용됨 */}
+            {/* 상단 타이틀 영역 */}
             <View className="px-2 pt-4 pb-2">
                 <Title title="회원정보 수정" showBackButton onBackPress={() => router.back()} />
             </View>
@@ -67,39 +67,58 @@ export default function EditProfilePage() {
                 className="flex-1 px-6 pt-4"
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}>
-                {/* 닉네임 (에러 상태 처리 포함) */}
-                <InputGroup label="닉네임" errorMessage={nicknameError}>
-                    <Input
-                        value={nickname}
-                        onChangeText={text => {
-                            setNickname(text);
-                            if (text) setNicknameError(""); // 입력하면 에러 메시지 사라짐
-                        }}
-                        placeholder="닉네임을 입력해주세요."
-                        hasError={!!nicknameError} // 에러 시 빨간 테두리
-                    />
-                </InputGroup>
+                {/* 닉네임 */}
+                <View className="mb-5">
+                    <Label size="small">닉네임</Label>
+                    <InputGroup errorMessage={nicknameError}>
+                        <Input
+                            value={nickname}
+                            onChangeText={text => {
+                                setNickname(text);
+                                if (text) setNicknameError(undefined);
+                            }}
+                            placeholder="닉네임을 입력해주세요."
+                            hasError={!!nicknameError}
+                            // 💡 좌우 여백(px-5), 상하 여백(py-4), 글꼴 크기 및 굵기 추가
+                            className="px-5 py-4 text-base font-medium rounded-2xl"
+                        />
+                    </InputGroup>
+                </View>
 
                 {/* 이메일 */}
-                <InputGroup label="이메일">
-                    <Input
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        placeholder="이메일을 입력해주세요."
-                    />
-                </InputGroup>
+                <View className="mb-5">
+                    <Label size="small">이메일</Label>
+                    <InputGroup>
+                        <Input
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            placeholder="이메일을 입력해주세요."
+                            // 💡 스타일 동일하게 적용
+                            className="px-5 py-4 text-base font-medium rounded-2xl"
+                        />
+                    </InputGroup>
+                </View>
 
                 {/* 생년월일 */}
-                <InputGroup label="생년월일">
-                    <Input value={birthdate} onChangeText={setBirthdate} placeholder="YYYY-MM-DD" />
-                </InputGroup>
+                <View className="mb-5">
+                    <Label size="small">생년월일</Label>
+                    <InputGroup>
+                        <Input
+                            value={birthdate}
+                            onChangeText={setBirthdate}
+                            placeholder="YYYY-MM-DD"
+                            // 💡 스타일 동일하게 적용
+                            className="px-5 py-4 text-base font-medium rounded-2xl"
+                        />
+                    </InputGroup>
+                </View>
 
                 {/* 저장 버튼 */}
                 <TouchableOpacity
                     onPress={handleSave}
                     className="mt-8 w-full py-4 rounded-2xl bg-primary-main items-center">
-                    <TextComponent className="text-base font-semibold text-white">
+                    <TextComponent className="text-base font-bold text-white tracking-wide">
                         저장하기
                     </TextComponent>
                 </TouchableOpacity>

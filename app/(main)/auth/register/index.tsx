@@ -8,23 +8,24 @@ import {
     KeyboardAvoidingView,
     Platform,
     View,
-    TextInput,
     TouchableOpacity,
     ScrollView,
     Alert,
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import TextComponent from "@/components/common/text/TextComponent";
 import Title from "@/components/common/title/Title";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import InputGroup from "@/components/common/input/InputGroup";
+import Input from "@/components/common/input/Input";
+import Label from "@/components/common/label/Label";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 export default function AuthRegisterPage() {
     const router = useRouter();
-
-    // 비밀번호 표시 여부를 관리하는 상태
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -76,6 +77,8 @@ export default function AuthRegisterPage() {
         }
     };
 
+    useSetupLayout({ showMainFooter: false });
+
     return (
         <SafeAreaView className="flex-1 bg-bg-default">
             <KeyboardAvoidingView
@@ -88,237 +91,170 @@ export default function AuthRegisterPage() {
                     }}
                     showsVerticalScrollIndicator={false}>
                     <View className="flex-1 w-full px-6 pb-10" style={{ maxWidth: 480 }}>
-                        <View className="items-center py-4 mt-2">
+                        {/* 상단 타이틀 영역 */}
+                        <View className="items-center py-4 mt-2 mb-2">
                             <Title
                                 title="회원가입"
                                 className="text-text-default text-lg font-bold"
                             />
                         </View>
 
-                        <View className="items-center mt-2 mb-8">
-                            <View
-                                className="relative items-center justify-center"
-                                style={{ width: "92%", height: 270 }}>
-                                <View
-                                    style={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: 225,
-                                        borderRadius: 55,
-                                        backgroundColor: "#F3FCF6",
-                                    }}
-                                />
-                                <View
-                                    style={{
-                                        width: 120,
-                                        height: 120,
-                                        borderRadius: 30,
-                                        backgroundColor: "#ECFDF5",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        shadowColor: "#000",
-                                        shadowOpacity: 0.18,
-                                        shadowRadius: 12,
-                                        shadowOffset: { width: 0, height: 6 },
-                                        elevation: 8,
-                                    }}>
-                                    <MaterialCommunityIcons
-                                        name="fridge-outline"
-                                        size={64}
-                                        color="#10B981"
-                                    />
-                                </View>
-                                <MaterialCommunityIcons
-                                    name="food-apple"
-                                    size={34}
-                                    color="#EF4444"
-                                    style={{ position: "absolute", left: 45, top: 72 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="egg"
-                                    size={32}
-                                    color="#FBBF24"
-                                    style={{ position: "absolute", right: 45, top: 66 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="carrot"
-                                    size={32}
-                                    color="#F97316"
-                                    style={{ position: "absolute", left: 82, bottom: 48 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="fish"
-                                    size={36}
-                                    color="#3B82F6"
-                                    style={{ position: "absolute", right: 72, bottom: 44 }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="leaf"
-                                    size={18}
-                                    color="#78C98D"
-                                    style={{ position: "absolute", top: 38, left: "47%" }}
-                                />
-                                <MaterialCommunityIcons
-                                    name="leaf"
-                                    size={16}
-                                    color="#78C98D"
-                                    style={{ position: "absolute", bottom: 22, right: "33%" }}
+                        {/* 입력 영역 */}
+                        <View className="w-full">
+                            {/* 1. 이름 */}
+                            <View className="mb-2">
+                                <Label size="small">이름</Label>
+                                <Controller
+                                    control={control}
+                                    name={"nickname"}
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup errorMessage={errors.nickname?.message}>
+                                            <View className="relative justify-center">
+                                                <Input
+                                                    hasError={!!errors.nickname}
+                                                    placeholder="이름을 입력해주세요"
+                                                    autoCapitalize="none"
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                    className={`rounded-[18px] pl-12 py-4 text-base ${!errors.nickname ? "border-primary-main" : ""}`}
+                                                />
+                                                <View
+                                                    className="absolute left-5 z-10"
+                                                    pointerEvents="none">
+                                                    <Feather
+                                                        name="user"
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </View>
+                                            </View>
+                                        </InputGroup>
+                                    )}
                                 />
                             </View>
-                            <TextComponent
-                                className="text-center mt-3 text-[15px] leading-7 font-medium"
-                                style={{ color: "#666" }}>
-                                냉장고와 함께 더 건강한 식생활을{"\n"}시작해보세요!
-                            </TextComponent>
-                        </View>
 
-                        <View className="w-full">
-                            <Controller
-                                control={control}
-                                name={"nickname"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View className="mb-4">
-                                        <View
-                                            className={`flex-row items-center border ${errors.nickname ? "border-error-main" : "border-divider"} rounded-full px-5 py-4 bg-transparent`}>
-                                            <Feather
-                                                name="user"
-                                                size={20}
-                                                color="#777777"
-                                                className="mr-3"
-                                            />
-                                            <TextInput
-                                                className="flex-1 text-text-default text-base p-0 outline-none"
-                                                placeholder="이름을 입력해주세요"
-                                                placeholderTextColor="#777777"
-                                                autoCapitalize="none"
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                        </View>
-                                        {errors.nickname?.message && (
-                                            <TextComponent className="text-error-main text-sm mt-1 ml-4">
-                                                {errors.nickname.message}
-                                            </TextComponent>
-                                        )}
-                                    </View>
-                                )}
-                            />
-
-                            <Controller
-                                control={control}
-                                name={"email"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View className="mb-4">
-                                        <View
-                                            className={`flex-row items-center border ${errors.email ? "border-error-main" : "border-divider"} rounded-full px-5 py-4 bg-transparent`}>
-                                            <Feather
-                                                name="mail"
-                                                size={20}
-                                                color="#777777"
-                                                className="mr-3"
-                                            />
-                                            <TextInput
-                                                className="flex-1 text-text-default text-base p-0 outline-none"
-                                                placeholder="이메일을 입력해주세요"
-                                                placeholderTextColor="#777777"
-                                                keyboardType="email-address"
-                                                autoCapitalize="none"
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                        </View>
-                                        {errors.email?.message && (
-                                            <TextComponent className="text-error-main text-sm mt-1 ml-4">
-                                                {errors.email.message}
-                                            </TextComponent>
-                                        )}
-                                    </View>
-                                )}
-                            />
-
-                            <Controller
-                                control={control}
-                                name={"password"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View className="mb-4">
-                                        <View
-                                            className={`flex-row items-center border ${errors.password ? "border-error-main" : "border-divider"} rounded-full px-5 py-4 bg-transparent`}>
-                                            <Feather
-                                                name="lock"
-                                                size={20}
-                                                color="#777777"
-                                                className="mr-3"
-                                            />
-                                            <TextInput
-                                                className="flex-1 text-text-default text-base p-0 outline-none"
-                                                placeholder="비밀번호를 입력해주세요"
-                                                placeholderTextColor="#777777"
-                                                secureTextEntry={!showPassword}
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                            <TouchableOpacity
-                                                onPress={() => setShowPassword(!showPassword)}>
-                                                <Feather
-                                                    name={showPassword ? "eye" : "eye-off"}
-                                                    size={20}
-                                                    color="#777777"
+                            {/* 2. 이메일 */}
+                            <View className="mb-2">
+                                <Label size="small">이메일</Label>
+                                <Controller
+                                    control={control}
+                                    name={"email"}
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup errorMessage={errors.email?.message}>
+                                            <View className="relative justify-center">
+                                                <Input
+                                                    hasError={!!errors.email}
+                                                    placeholder="이메일을 입력해주세요"
+                                                    keyboardType="email-address"
+                                                    autoCapitalize="none"
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                    className={`rounded-[18px] pl-12 py-4 text-base ${!errors.email ? "border-primary-main" : ""}`}
                                                 />
-                                            </TouchableOpacity>
-                                        </View>
-                                        {errors.password?.message && (
-                                            <TextComponent className="text-error-main text-sm mt-1 ml-4">
-                                                {errors.password.message}
-                                            </TextComponent>
-                                        )}
-                                    </View>
-                                )}
-                            />
+                                                <View
+                                                    className="absolute left-5 z-10"
+                                                    pointerEvents="none">
+                                                    <Feather
+                                                        name="mail"
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </View>
+                                            </View>
+                                        </InputGroup>
+                                    )}
+                                />
+                            </View>
 
-                            <Controller
-                                control={control}
-                                name={"confirmPassword"}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View className="mb-4">
-                                        <View
-                                            className={`flex-row items-center border ${errors.confirmPassword ? "border-error-main" : "border-divider"} rounded-full px-5 py-4 bg-transparent`}>
-                                            <Feather
-                                                name="lock"
-                                                size={20}
-                                                color="#777777"
-                                                className="mr-3"
-                                            />
-                                            <TextInput
-                                                className="flex-1 text-text-default text-base p-0 outline-none"
-                                                placeholder="비밀번호를 다시 입력해주세요"
-                                                placeholderTextColor="#777777"
-                                                secureTextEntry={!showConfirmPassword}
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                            <TouchableOpacity
-                                                onPress={() =>
-                                                    setShowConfirmPassword(!showConfirmPassword)
-                                                }>
-                                                <Feather
-                                                    name={showConfirmPassword ? "eye" : "eye-off"}
-                                                    size={20}
-                                                    color="#777777"
+                            {/* 3. 비밀번호 */}
+                            <View className="mb-2">
+                                <Label size="small">비밀번호</Label>
+                                <Controller
+                                    control={control}
+                                    name={"password"}
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup errorMessage={errors.password?.message}>
+                                            <View className="relative justify-center">
+                                                <Input
+                                                    hasError={!!errors.password}
+                                                    placeholder="비밀번호를 입력해주세요"
+                                                    secureTextEntry={!showPassword}
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                    className={`rounded-[18px] pl-12 pr-12 py-4 text-base ${!errors.password ? "border-primary-main" : ""}`}
                                                 />
-                                            </TouchableOpacity>
-                                        </View>
-                                        {errors.confirmPassword?.message && (
-                                            <TextComponent className="text-error-main text-sm mt-1 ml-4">
-                                                {errors.confirmPassword.message}
-                                            </TextComponent>
-                                        )}
-                                    </View>
-                                )}
-                            />
+                                                <View
+                                                    className="absolute left-5 z-10"
+                                                    pointerEvents="none">
+                                                    <Feather
+                                                        name="lock"
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </View>
+                                                <TouchableOpacity
+                                                    className="absolute right-5 z-10"
+                                                    onPress={() => setShowPassword(!showPassword)}>
+                                                    <Feather
+                                                        name={showPassword ? "eye" : "eye-off"}
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </InputGroup>
+                                    )}
+                                />
+                            </View>
+
+                            {/* 4. 비밀번호 확인 */}
+                            <View className="mb-4">
+                                <Label size="small">비밀번호 확인</Label>
+                                <Controller
+                                    control={control}
+                                    name={"confirmPassword"}
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup errorMessage={errors.confirmPassword?.message}>
+                                            <View className="relative justify-center">
+                                                <Input
+                                                    hasError={!!errors.confirmPassword}
+                                                    placeholder="비밀번호를 다시 입력해주세요"
+                                                    secureTextEntry={!showConfirmPassword}
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                    className={`rounded-[18px] pl-12 pr-12 py-4 text-base ${!errors.confirmPassword ? "border-primary-main" : ""}`}
+                                                />
+                                                <View
+                                                    className="absolute left-5 z-10"
+                                                    pointerEvents="none">
+                                                    <Feather
+                                                        name="lock"
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </View>
+                                                <TouchableOpacity
+                                                    className="absolute right-5 z-10"
+                                                    onPress={() =>
+                                                        setShowConfirmPassword(!showConfirmPassword)
+                                                    }>
+                                                    <Feather
+                                                        name={
+                                                            showConfirmPassword ? "eye" : "eye-off"
+                                                        }
+                                                        size={20}
+                                                        color="#BDBDBD"
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </InputGroup>
+                                    )}
+                                />
+                            </View>
 
                             {/* 기타 Root 에러 메시지 */}
                             {errors.root?.message && (
@@ -331,23 +267,23 @@ export default function AuthRegisterPage() {
                             <TouchableOpacity
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}
-                                className={`w-full py-4 mt-2 rounded-full items-center ${isSubmitting ? "bg-primary-main/60" : "bg-primary-main"}`}>
+                                className={`rounded-xl py-4 items-center justify-center mt-2 ${isSubmitting ? "bg-primary-main/70" : "bg-primary-main"}`}>
                                 {isSubmitting ? (
-                                    <LoadingIndicator color="#ffffff" />
+                                    <LoadingIndicator />
                                 ) : (
-                                    <TextComponent className="text-base font-bold text-white">
+                                    <TextComponent className="text-bg-paper font-bold text-lg tracking-wide">
                                         가입하기
                                     </TextComponent>
                                 )}
                             </TouchableOpacity>
 
-                            {/* 💡 복구된 부분: 로그인으로 돌아가기 */}
-                            <View className="flex-row justify-center mt-6">
-                                <TextComponent className="text-text-subtle text-sm">
+                            {/* 로그인으로 돌아가기 */}
+                            <View className="flex-row justify-center items-center mt-8">
+                                <TextComponent className="text-text-subtle text-[15px] mr-2">
                                     이미 계정이 있으신가요?
                                 </TextComponent>
                                 <TouchableOpacity onPress={() => router.replace("/auth/login")}>
-                                    <TextComponent className="text-primary-main text-sm font-bold ml-2">
+                                    <TextComponent className="text-primary-point font-bold text-[15px]">
                                         로그인
                                     </TextComponent>
                                 </TouchableOpacity>
