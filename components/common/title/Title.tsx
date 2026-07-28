@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 
 interface Props {
-    title: string;
+    title?: string;
     showBackButton?: boolean;
     onBackPress?: () => void;
     description?: string;

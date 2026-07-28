@@ -5,14 +5,17 @@ export default {
     darkMode: "class",
 
     // Tailwind CSS가 클래스를 구성할 때 참고할 파일들의 경로
-    content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+    content: [
+        "./app/**/*.{js,jsx,ts,tsx}",
+        "./components/**/*.{js,jsx,ts,tsx}",
+        "./types/**/*.{js,jsx,ts,tsx}",
+    ],
 
     presets: [require("nativewind/preset")],
 
     theme: {
         extend: {
             colors: {
-
                 bg: {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
