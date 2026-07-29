@@ -150,12 +150,9 @@ export default function MyPageScreen() {
                 </View>
             </View>
             <View
-                // 🔄 inset-0 대신 top-0 h-full을 사용하여 충돌 방지
-                // 🔄 justify-end (아래로 정렬), items-end (우측으로 정렬), pb-6 pr-6 (여백 24px)
                 className="absolute top-0 h-full w-full max-w-[600px] pointer-events-none justify-end items-end pb-6 pr-6">
                 <Button
                     variant="contained-circle"
-                    // 🔄 Button 자체의 absolute right-6 bottom-6을 제거 (부모 컨테이너가 위치를 잡아주므로 불필요)
                     className="bg-bg-paper border border-divider shadow-sm elevation-3 z-50 pointer-events-auto"
                     onPress={handleToggleTheme}>
                     <Feather
