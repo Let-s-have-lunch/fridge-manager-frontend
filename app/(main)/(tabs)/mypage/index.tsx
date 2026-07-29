@@ -13,6 +13,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 import Button from "@/components/common/button/Button";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const ANIMAL_ICONS = [
     require("../../../../assets/images/dog.png"),
@@ -33,6 +34,7 @@ const getAnimalIcon = (id?: number): ImageSourcePropType => {
 export default function MyPageScreen() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
+    const { logout } = useAuthStore();
 
     const { theme, onChangeTheme } = useThemeStore();
 
@@ -52,6 +54,7 @@ export default function MyPageScreen() {
     const handleLogout = async () => {
         try {
             await userApi.logout();
+            logout();
             router.replace("/auth/login");
         } catch (error) {
             console.error("로그아웃 실패:", error);
