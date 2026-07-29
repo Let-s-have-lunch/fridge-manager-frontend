@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import Svg, { G, Circle } from "react-native-svg";
 import TextComponent from "@/components/common/text/TextComponent";
+import { twMerge } from "tailwind-merge";
 
 export interface CategoryChartItem {
     name: string;
@@ -26,7 +27,10 @@ export default function CategoryDonutChart({ data, totalPrice, colors }: Props) 
 
     return (
         <View
-            className="relative items-center justify-center"
+            className={twMerge(
+                ["relative"],
+                ["items-center justify-center"],
+            )}
             style={{ width: size, height: size }}>
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                 <G rotation="-90" origin={`${center}, ${center}`}>
@@ -69,9 +73,24 @@ export default function CategoryDonutChart({ data, totalPrice, colors }: Props) 
             </Svg>
 
             {/* 원 중앙 중앙 텍스트 */}
-            <View className="absolute items-center justify-center">
-                <TextComponent className="text-[11px] text-text-secondary">총 소비</TextComponent>
-                <TextComponent className="text-sm font-bold text-text-default mt-0.5">
+            <View
+                className={twMerge(
+                    ["absolute"],
+                    ["items-center justify-center"],
+                )}>
+                <TextComponent
+                    className={twMerge(
+                        ["text-[11px]"],
+                        ["text-text-secondary"],
+                    )}>
+                    총 소비
+                </TextComponent>
+                <TextComponent
+                    className={twMerge(
+                        ["text-sm font-bold"],
+                        ["text-text-default"],
+                        ["mt-0.5"],
+                    )}>
                     {totalPrice.toLocaleString()}원
                 </TextComponent>
             </View>

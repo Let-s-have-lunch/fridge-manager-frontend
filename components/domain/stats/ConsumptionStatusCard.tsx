@@ -15,23 +15,23 @@ interface Props {
     onPress: () => void;
 }
 
-export default function ConsumptionStatusCard({totalPrice, rates, onPress}: Props) {
+export default function ConsumptionStatusCard({ totalPrice, rates, onPress }: Props) {
     return (
-        <Card className={"mb-6"}>
+        <Card className="mb-6">
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
                 className="flex-row justify-between items-center mb-6">
                 <View className="flex-row items-center gap-2">
                     <Feather name="shopping-cart" size={18} className="text-text-default" />
-                    <TextComponent className="font-bold text-xl text-text-default">
+                    <TextComponent className="text-xl font-bold text-text-default">
                         이번 달 소비/폐기 현황
                     </TextComponent>
                 </View>
                 <Feather name="chevron-right" size={20} className="text-text-secondary" />
             </TouchableOpacity>
 
-            <View className="items-center justify-center py-6 relative">
+            <View className="relative items-center justify-center py-6">
                 {/* 반원 차트 렌더링 */}
                 <HalfDonutChart
                     consumed={rates.consumed}
@@ -51,7 +51,7 @@ export default function ConsumptionStatusCard({totalPrice, rates, onPress}: Prop
             </View>
 
             {/* 범례 (Legend) */}
-            <View className="flex-row justify-between mt-2 px-4">
+            <View className="flex-row justify-between px-4 mt-2">
                 <View className="items-center">
                     <TextComponent className="text-2xl font-bold text-secondary-main">
                         {rates.consumed}%

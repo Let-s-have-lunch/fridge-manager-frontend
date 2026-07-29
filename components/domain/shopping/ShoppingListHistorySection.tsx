@@ -35,27 +35,46 @@ export default function ShoppingListHistorySection({
     }, [targetDate]);
 
     return (
-        <View className={"flex-1 w-full max-w-[600px] self-center relative"}>
+        <View
+            className={twMerge(
+                ["flex-1 w-full max-w-[600px]"],
+                ["self-center"],
+                ["relative"],
+            )}>
             <Title
                 title={`${formattedDate}`}
                 showBackButton={true}
                 onBackPress={() => router.back()}
             />
-            <ScrollView className={"relative mt-4"} showsVerticalScrollIndicator={false}>
-                <Card className={"relative mt-6"}>
+            <ScrollView
+                className={twMerge(["relative"], ["mt-4"])}
+                showsVerticalScrollIndicator={false}>
+                <Card className={twMerge(["relative"], ["mt-6"])}>
                     {/* 🎀 상단 마스킹 테이프 장식 (CSS 연출) */}
                     <View
-                        className="absolute -top-3 self-center w-16 h-7 -rotate-12 opacity-90 shadow-sm"
+                        className={twMerge(
+                            ["absolute -top-3 self-center z-10"],
+                            ["w-16 h-7"],
+                            ["-rotate-12 opacity-90 shadow-sm"],
+                        )}
                         style={{ backgroundColor: "#F4E3C5", borderRadius: 2 }}
                     />
                     {/* 타이틀 영역 */}
-                    <View className="flex-row items-center justify-center relative w-full mb-8 mt-3">
-                        <TextComponent className="text-2xl font-bold tracking-wide">
+                    <View
+                        className={twMerge(
+                            ["flex-row items-center justify-center w-full"],
+                            ["relative"],
+                            ["mt-3 mb-8"],
+                        )}>
+                        <TextComponent
+                            className={twMerge(
+                                ["text-2xl font-bold tracking-wide"],
+                            )}>
                             장보기 리스트
                         </TextComponent>
                     </View>
                     {/* 3. 리스트 영역 */}
-                    <View className={twMerge("gap-3", "pt-2")}>
+                    <View className={twMerge(["gap-3"], ["pt-2"])}>
                         {shoppingList.length > 0 ? (
                             shoppingList.map(shoppingItem => {
                                 const isChecked = shoppingItem.isChecked;
@@ -64,7 +83,9 @@ export default function ShoppingListHistorySection({
                                     <Card
                                         key={shoppingItem.id}
                                         className={twMerge(
-                                            "elevation-1 flex-row items-center p-4 gap-4",
+                                            ["flex-row items-center"],
+                                            ["p-4 gap-4"],
+                                            ["elevation-1"],
                                         )}>
                                         <Button
                                             variant={"icon-only"}
@@ -84,16 +105,21 @@ export default function ShoppingListHistorySection({
                                         <View className="flex-1">
                                             <TextComponent
                                                 className={twMerge(
-                                                    "font-semibold text-[15px] mb-1",
+                                                    ["font-semibold text-[15px]"],
+                                                    ["mb-1"],
                                                     isChecked
-                                                        ? "text-text-secondary line-through"
-                                                        : "text-text-default",
+                                                        ? ["text-text-secondary line-through"]
+                                                        : ["text-text-default"],
                                                 )}>
                                                 {shoppingItem.memo}
                                             </TextComponent>
                                         </View>
 
-                                        <View className={twMerge("flex-row items-center ml-2")}>
+                                        <View
+                                            className={twMerge(
+                                                ["flex-row items-center"],
+                                                ["ml-2"],
+                                            )}>
                                             {!isChecked && (
                                                 <Button
                                                     variant={"icon-only"}
@@ -117,7 +143,10 @@ export default function ShoppingListHistorySection({
                             })
                         ) : (
                             <Card
-                                className={twMerge("text-center text-text-secondary py-6 text-sm")}>
+                                className={twMerge(
+                                    ["py-6"],
+                                    ["text-center text-sm text-text-secondary"],
+                                )}>
                                 <TextComponent>등록된 일정이 없습니다.</TextComponent>
                             </Card>
                         )}
@@ -128,7 +157,11 @@ export default function ShoppingListHistorySection({
             <Button
                 variant={"contained-circle"}
                 onPress={onAddPress}
-                className="absolute right-6 md:right-0 bottom-6 md:bottom-10 elevation-4 z-50">
+                className={twMerge(
+                    ["absolute z-50"],
+                    ["right-6 bottom-6", "md:right-8 md:bottom-8"],
+                    ["elevation-4"],
+                )}>
                 <Feather name={"plus"} size={24} color="#FFFFFF" />
             </Button>
         </View>

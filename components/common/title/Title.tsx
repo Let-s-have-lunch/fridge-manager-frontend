@@ -9,6 +9,7 @@ interface Props {
     onBackPress?: () => void;
     description?: string;
     className?: string;
+    textClassName?: string;
 }
 
 function Title({
@@ -17,6 +18,7 @@ function Title({
     onBackPress,
     description,
     className,
+    textClassName,
 }: Props) {
     return (
         <View
@@ -31,7 +33,8 @@ function Title({
                     className={twMerge(
                         "text-text-default",
                         "font-bold",
-                        "text-[18px]", // 이미지 비율에 맞는 적당한 텍스트 크기
+                        "text-[18px]",
+                        textClassName,
                     )}
                     numberOfLines={1}>
                     {title}

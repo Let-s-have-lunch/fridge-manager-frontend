@@ -5,11 +5,12 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     FlatList,
-    useWindowDimensions, // 💡 수정된 부분: 반응형 체크를 위해 추가
+    useWindowDimensions, Pressable, // 💡 수정된 부분: 반응형 체크를 위해 추가
 } from "react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import { ExpirationListItem } from "@/types/statistic";
+import { useSwipeDown } from "@/hooks/useSwipeDown";
 
 interface Props {
     visible: boolean;
@@ -23,6 +24,8 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
     const isMd = width >= 768;
 
     const isExpiring = type === "expiringSoon";
+
+    const swipeDownHandlers = useSwipeDown(onClose);
 
     const title = isExpiring ? "유통기한 임박 상품" : "유통기한 지난 상품";
     const textColor = isExpiring ? "text-warning-main" : "text-error-point";
@@ -61,10 +64,20 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
             {/* 1. 반투명 배경 (누르면 모달 닫힘) */}
             <TouchableWithoutFeedback onPress={onClose}>
                 <View className="flex-1 bg-black/50 justify-end md:justify-center md:items-center">
-                    {/* 2. 바텀 시트 컨테이너 (이 영역은 눌러도 안 닫히게 e.stopPropagation 처리) */}
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                         <View className="bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0">
                             {/* 헤더: 타이틀과 닫기 버튼 */}
+                            {!isMd && (
+                                <View
+                                    {...swipeDownHandlers}
+                                    className="w-full items-center pb-6 -mt-2">
+                                    <Pressable
+                                        onPress={onClose}
+                                        className="w-full items-center py-2 cursor-pointer">
+                                        <View className="w-12 h-1.5 rounded-full bg-gray-400" />
+                                    </Pressable>
+                                </View>
+                            )}
                             <View className="flex-row justify-between items-center mb-6">
                                 <View className="flex-row items-center gap-2">
                                     <Feather
