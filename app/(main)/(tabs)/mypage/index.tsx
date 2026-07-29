@@ -4,8 +4,6 @@ import {
     TouchableOpacity,
     Image,
     ImageSourcePropType,
-    Platform,
-    ViewStyle,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
@@ -14,6 +12,7 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import Button from "@/components/common/button/Button";
 
 const ANIMAL_ICONS = [
     require("../../../../assets/images/dog.png"),
@@ -65,35 +64,10 @@ export default function MyPageScreen() {
         }
     };
 
-    const themeButtonStyle: ViewStyle = {
-        position: "absolute",
-        right: 0, // ⬅️ 콘텐츠 패딩(px-6)과 우측 라인을 일치시킴
-        bottom: 0, // ⬅️ 붕 뜨지 않도록 아래쪽으로 바짝 내림
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: "#ffffff",
-        borderWidth: 1,
-        borderColor: "#E0E0E0",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 9999,
-        ...Platform.select({
-            ios: {
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-            },
-            android: { elevation: 8 },
-            web: { boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.12)" },
-        }),
-    };
-
     return (
-        <View className="flex-1 bg-bg-default relative">
+        <View className="flex-1 bg-bg-default relative md:justify-center md:items-center">
             {/* 콘텐츠 영역 */}
-            <View className="px-6 pt-10 flex-1">
+            <View className="relative px-6 pt-10 w-full md:max-w-[600px] flex-1 md:flex-none md:pt-0 md:pb-16">
                 {/* 프로필 영역 */}
                 <View className="mb-8">
                     <Card className="px-[20px] py-[20px]">
@@ -165,7 +139,7 @@ export default function MyPageScreen() {
                 </View>
 
                 {/* 로그아웃 버튼 */}
-                <View className="mt-2 mb-16">
+                <View className="mt-2 md:mt-12 mb-16">
                     <TouchableOpacity
                         onPress={handleLogout}
                         className="w-full py-4 bg-bg-subtle active:opacity-80 rounded-2xl items-center">
@@ -174,19 +148,18 @@ export default function MyPageScreen() {
                         </TextComponent>
                     </TouchableOpacity>
                 </View>
-            </View>
 
-            {/* 🌙 테마 변경 버튼 */}
-            <TouchableOpacity
-                onPress={handleToggleTheme}
-                style={themeButtonStyle}
-                activeOpacity={0.8}>
-                <Feather
-                    name={theme === "light" ? "moon" : "sun"}
-                    size={20}
-                    color={theme === "light" ? "#333333" : "#FFD700"}
-                />
-            </TouchableOpacity>
+                <Button
+                    variant="contained-circle"
+                    className="absolute right-6 bottom-0 md:-bottom-2 bg-bg-paper border border-divider shadow-sm elevation-3 z-50"
+                    onPress={handleToggleTheme}>
+                    <Feather
+                        name={theme === "light" ? "moon" : "sun"}
+                        size={20}
+                        color={theme === "light" ? "#333333" : "#FFD700"}
+                    />
+                </Button>
+            </View>
         </View>
     );
 }

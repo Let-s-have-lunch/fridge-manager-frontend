@@ -131,8 +131,8 @@ export default function ShoppingListHistorySection({
                 className={"w-14 h-14"}
                 style={{
                     position: "absolute",
-                    right: 24,
-                    bottom: 25,
+                    right: 0,
+                    bottom: 0,
                     zIndex: 50,
                 }}>
                 <Feather name={"plus"} size={24} color="#FFFFFF" />
