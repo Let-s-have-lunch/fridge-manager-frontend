@@ -50,7 +50,22 @@ export default function AuthRegisterPage() {
     const onSubmit = async (data: RegisterUserInputType) => {
         try {
             const { confirmPassword, ...registerData } = data;
-            await userApi.registerUser(registerData);
+
+            const formattedDate =
+                data.birthdate && data.birthdate !== ""
+                    ? data.birthdate.slice(0, 4) +
+                      "-" +
+                      data.birthdate.slice(4, 6) +
+                      "-" +
+                      data.birthdate.slice(6, 8)
+                    : undefined;
+
+            const payload = {
+                ...registerData,
+                birthdate: formattedDate,
+            };
+            
+            await userApi.registerUser(payload);
 
             const successMessage = "회원가입에 성공했습니다! 로그인해 주세요.";
             const handleSuccessMove = () => router.replace("/auth/login");
