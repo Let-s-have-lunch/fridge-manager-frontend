@@ -1,17 +1,22 @@
 import { z } from "zod";
 
 export const RoleType = ["USER", "ADMIN"] as const;
-
-export const adminUpdateUserSchema = z.object({
-    nickname: z
-        .string()
-        .min(2, "닉네임은 2자 이상이어야 합니다.")
-        .max(10, "닉네임은 10자 이내여야 합니다."),
-    password: z.string().min(6, "비밀번호는 6자 이상이어야 합니다.").optional().or(z.literal("")),
-    email: z.string().email("유효한 이메일 형식이 아닙니다."),
-    birthdate: z.string().optional(),
-    role: z.enum(RoleType), // ✅ 하드코딩 제거, RoleType 변수 사용
-});
+export const adminUpdateUserSchema = z
+    .object({
+        nickname: z
+            .string()
+            .min(2, "닉네임은 2자 이상이어야 합니다.")
+            .max(10, "닉네임은 10자 이내여야 합니다."),
+        password: z
+            .string()
+            .min(6, "비밀번호는 6자 이상이어야 합니다.")
+            .optional()
+            .or(z.literal("")),
+        email: z.string().email("유효한 이메일 형식이 아닙니다."),
+        birthdate: z.string().optional(),
+        role: z.enum(RoleType),
+    })
+    .partial();
 
 export type AdminUpdateUserInputType = z.infer<typeof adminUpdateUserSchema>;
 
