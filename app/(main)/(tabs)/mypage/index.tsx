@@ -65,7 +65,7 @@ export default function MyPageScreen() {
     };
 
     return (
-        <View className="flex-1 pt-10 bg-bg-default relative md:items-center">
+        <View className="flex-1 bg-bg-default relative md:items-center md:justify-center">
             {/* 콘텐츠 영역 */}
             <View className="px-6 pt-10 w-full flex-1  md:pt-0">
                 {/* 프로필 영역 */}
@@ -160,6 +160,7 @@ export default function MyPageScreen() {
                         size={20}
                         color={theme === "light" ? "#333333" : "#FFD700"}
                     />
+
                 </Button>
             </View>
         </View>
