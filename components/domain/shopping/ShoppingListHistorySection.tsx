@@ -128,13 +128,7 @@ export default function ShoppingListHistorySection({
             <Button
                 variant={"contained-circle"}
                 onPress={onAddPress}
-                className={"w-14 h-14"}
-                style={{
-                    position: "absolute",
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 50,
-                }}>
+                className="absolute right-6 md:right-0 bottom-6 md:bottom-10 elevation-4 z-50">
                 <Feather name={"plus"} size={24} color="#FFFFFF" />
             </Button>
         </View>
