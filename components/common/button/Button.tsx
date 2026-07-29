@@ -62,7 +62,7 @@ function Button({
             <Text
                 className={twMerge(
                     "font-bold",
-                    `text-${color}-contrast`,
+                    "color-white",
                     size === "small" ? "text-xl" : size === "large" ? "text-3xl" : "text-2xl",
                 )}>
                 {children}

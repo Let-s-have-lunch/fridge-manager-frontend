@@ -35,7 +35,7 @@ export default function ShoppingListHistorySection({
     }, [targetDate]);
 
     return (
-        <View className={"flex-1 w-full max-w-[600px] self-center"}>
+        <View className={"flex-1 w-full max-w-[600px] self-center relative"}>
             <Title
                 title={`${formattedDate}`}
                 showBackButton={true}
@@ -45,7 +45,7 @@ export default function ShoppingListHistorySection({
                 <Card className={"relative mt-6"}>
                     {/* 🎀 상단 마스킹 테이프 장식 (CSS 연출) */}
                     <View
-                        className="absolute -top-3 self-center w-16 h-7 -rotate-3 opacity-90 shadow-sm"
+                        className="absolute -top-3 self-center w-16 h-7 -rotate-12 opacity-90 shadow-sm"
                         style={{ backgroundColor: "#F4E3C5", borderRadius: 2 }}
                     />
                     {/* 타이틀 영역 */}
@@ -53,13 +53,6 @@ export default function ShoppingListHistorySection({
                         <TextComponent className="text-2xl font-bold tracking-wide">
                             장보기 리스트
                         </TextComponent>
-
-                        {/* 버튼을 감싸서 오른쪽 끝에 고정 */}
-                        <View className="absolute right-2">
-                            <Button variant={"contained-circle"} onPress={onAddPress} className={"w-12 h-12"}>
-                                <Feather name={"plus"} size={20} color="#FFFFFF" />
-                            </Button>
-                        </View>
                     </View>
                     {/* 3. 리스트 영역 */}
                     <View className={twMerge("gap-3", "pt-2")}>
@@ -131,6 +124,19 @@ export default function ShoppingListHistorySection({
                     </View>
                 </Card>
             </ScrollView>
+
+            <Button
+                variant={"contained-circle"}
+                onPress={onAddPress}
+                className={"w-14 h-14"}
+                style={{
+                    position: "absolute",
+                    right: 24,
+                    bottom: 25,
+                    zIndex: 50,
+                }}>
+                <Feather name={"plus"} size={24} color="#FFFFFF" />
+            </Button>
         </View>
     );
 }

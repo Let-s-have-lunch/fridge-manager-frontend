@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { View, Platform, Alert } from "react-native";
-import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
+import { useLocalSearchParams, useFocusEffect } from "expo-router";
 import { ShoppingItem } from "@/types/shoppingList";
 import shoppingListApi from "@/api/user/shoppingListApi";
 import ShoppingListHistorySection from "@/components/domain/shopping/ShoppingListHistorySection";
