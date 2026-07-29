@@ -15,3 +15,4 @@ export const getAnimalIcon = (id?: number): ImageSourcePropType => {
 
     return PROFILE_IMAGES[id % PROFILE_IMAGES.length];
 };
+

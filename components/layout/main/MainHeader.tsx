@@ -5,39 +5,43 @@ import { Ionicons } from "@expo/vector-icons";
 import Input from "@/components/common/input/Input";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
 import { getAnimalIcon } from "@/components/utils/profile";
+import { useHomeStore } from "@/stores/home/productStore";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
-interface MainHeaderProps {
-    userId?: number;
-    userName: string;
-    onSearch: (keyword: string) => void;
-    onSortToggle: (order: "asc" | "desc") => void;
-}
 
-export default function MainHeader({ userId, userName, onSearch, onSortToggle }: MainHeaderProps) {
+export default function MainHeader() {
     useSetupLayout({ showMainHeader: true });
 
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState("");
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+    const user = useAuthStore(state => state.user);
+    const userName = user?.nickname ?? "";
+    const userId = user?.id;
 
+    const keyword = useHomeStore(state => state.keyword);
+    const setKeyword = useHomeStore(state => state.setKeyword);
+
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const handleSearchToggle = () => {
         setIsSearchOpen(prev => !prev);
 
         if (isSearchOpen) {
-            setSearchKeyword("");
-            onSearch("");
+            setKeyword("");
         }
     };
+
+    const category = useHomeStore(state => state.category);
+
+    const sortOrder = useHomeStore(state => state.sortOrder);
+    const setSortOrder = useHomeStore(state => state.setSortOrder);
 
     const handleSortToggle = () => {
         const nextOrder = sortOrder === "asc" ? "desc" : "asc";
         setSortOrder(nextOrder);
-        onSortToggle(nextOrder);
     };
 
-    const handleSearchExecute = () => {
-        onSearch(searchKeyword.trim());
-    };
+    const [ selectedFridge, setSelectedFridge ] = useState("집 냉장고");
+    const [ isFridgeOpen, setIsFridgeOpen ] = useState(false);
+
+
 
     return (
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
@@ -56,7 +60,13 @@ export default function MainHeader({ userId, userName, onSearch, onSortToggle }:
                         <Text className="text-[22px] font-bold text-text-default">
                             {userName}님
                         </Text>
+                        <Pressable onPress={() => setIsFridgeOpen((prev => !prev))} className={"flex-row items-center ml-2"}>
+                            <Text className={"text-sm text-text-secondary"}>
+                                {selectedFridge}
+                            </Text>
+                            <Ionicons name={isFridgeOpen ? "chevron-up" : "chevron-down"} size={16} color={"text-text-secondary"}/>
 
+                        </Pressable>
                         <Text className="mt-1 text-[13px] text-text-secondary">
                             오늘도 신선한 하루되세요!
                         </Text>
@@ -109,9 +119,8 @@ export default function MainHeader({ userId, userName, onSearch, onSortToggle }:
                         placeholder=" 어떤 식재료를 찾으시나요?"
                         placeholderTextColor="text-text-subtle"
                         hideBorder
-                        value={searchKeyword}
-                        onChangeText={setSearchKeyword}
-                        onSubmitEditing={handleSearchExecute}
+                        value={keyword}
+                        onChangeText={setKeyword}
                         returnKeyType="search"
                         autoFocus
                         searchIcon={<Ionicons name={"search"} size={20} color={"#A18F8F"} />}

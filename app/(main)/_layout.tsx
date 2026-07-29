@@ -9,6 +9,8 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 export default function MainLayout() {
     const { showMainHeader, showMainFooter } = useLayoutStore();
     const user = useAuthStore(state => state.user);
+    console.log("user:", user);
+
     const handleSearch = (keyword: string) => {
         console.log("검색어 입력됨:", keyword);
     };
@@ -19,7 +21,7 @@ export default function MainLayout() {
     return (
         <View className="flex-1 bg-bg-default">
             {showMainHeader && (
-                <MainHeader userName={user?.nickname ?? ""} onSearch={handleSearch} onSortToggle={handleSort} />
+                <MainHeader userId={user?.id} userName={user?.nickname ?? ""} onSearch={handleSearch} onSortToggle={handleSort} />
             )}
 
             <View
