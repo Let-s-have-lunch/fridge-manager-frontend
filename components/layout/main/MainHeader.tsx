@@ -43,11 +43,11 @@ export default function MainHeader({ userId, userName, onSearch, onSortToggle }:
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
             <View className="flex-row justify-between">
                 <View className="flex-row flex-1">
-                    <Pressable
-                        className="w-[60px] h-[60px] rounded-full overflow-hidden bg-bg-default">
+                    <Pressable className="w-[60px] h-[60px] rounded-full overflow-hidden bg-bg-default">
                         <Image
                             source={getAnimalIcon(userId)}
-                            className="w-full h-full"
+                            // className="w-full h-full" 대신 아래와 같이 style 적용
+                            style={{ width: "100%", height: "100%" }}
                             resizeMode="cover"
                         />
                     </Pressable>
@@ -115,7 +115,7 @@ export default function MainHeader({ userId, userName, onSearch, onSortToggle }:
                         returnKeyType="search"
                         autoFocus
                         searchIcon={<Ionicons name={"search"} size={20} color={"#A18F8F"} />}
-                        />
+                    />
                 </View>
             )}
         </View>
