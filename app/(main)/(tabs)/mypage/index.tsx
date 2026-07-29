@@ -65,9 +65,9 @@ export default function MyPageScreen() {
     };
 
     return (
-        <View className="flex-1 bg-bg-default relative md:justify-center md:items-center">
+        <View className="flex-1 pt-10 bg-bg-default relative md:items-center">
             {/* 콘텐츠 영역 */}
-            <View className="relative px-6 pt-10 w-full md:max-w-[600px] flex-1 md:flex-none md:pt-0 md:pb-16">
+            <View className="px-6 pt-10 w-full md:max-w-[600px] flex-1 md:flex-none md:pt-0">
                 {/* 프로필 영역 */}
                 <View className="mb-8">
                     <Card className="px-[20px] py-[20px]">
@@ -93,7 +93,7 @@ export default function MyPageScreen() {
                 </View>
 
                 {/* 나의 계정정보 리스트 */}
-                <View className="mb-8">
+                <View className="mb-8 md:mb-12">
                     <TextComponent className="text-base font-bold text-text-default mb-3">
                         나의 계정정보
                     </TextComponent>
@@ -139,7 +139,7 @@ export default function MyPageScreen() {
                 </View>
 
                 {/* 로그아웃 버튼 */}
-                <View className="mt-2 md:mt-12 mb-16">
+                <View className="mt-16 md:mt-6">
                     <TouchableOpacity
                         onPress={handleLogout}
                         className="w-full py-4 bg-bg-subtle active:opacity-80 rounded-2xl items-center">
@@ -148,10 +148,15 @@ export default function MyPageScreen() {
                         </TextComponent>
                     </TouchableOpacity>
                 </View>
-
+            </View>
+            <View
+                // 🔄 inset-0 대신 top-0 h-full을 사용하여 충돌 방지
+                // 🔄 justify-end (아래로 정렬), items-end (우측으로 정렬), pb-6 pr-6 (여백 24px)
+                className="absolute top-0 h-full w-full max-w-[600px] pointer-events-none justify-end items-end pb-6 pr-6">
                 <Button
                     variant="contained-circle"
-                    className="absolute right-6 bottom-0 md:-bottom-2 bg-bg-paper border border-divider shadow-sm elevation-3 z-50"
+                    // 🔄 Button 자체의 absolute right-6 bottom-6을 제거 (부모 컨테이너가 위치를 잡아주므로 불필요)
+                    className="bg-bg-paper border border-divider shadow-sm elevation-3 z-50 pointer-events-auto"
                     onPress={handleToggleTheme}>
                     <Feather
                         name={theme === "light" ? "moon" : "sun"}
