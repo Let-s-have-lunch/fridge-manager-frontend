@@ -10,7 +10,7 @@ export const tabs = [
         iconName: "home",
     },
     {
-        name: "목록",
+        name: "일정",
         path: "/shopping",
         iconComponent: Feather,
         iconName: "calendar",
