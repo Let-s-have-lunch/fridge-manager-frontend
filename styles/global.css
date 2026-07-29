@@ -33,9 +33,9 @@
         /* ===========================
            Secondary (Fresh Blue)
         =========================== */
-        --secondary-main: #7FAFD8; /* 보조 버튼 */
+        --secondary-main: #A8C8E3; /* 보조 버튼 */
         --secondary-contrast: #DCEAF6; /* 연한 배경 */
-        --secondary-point: #5D97C7; /* 강조 */
+        --secondary-point: #7EAED2; /* 강조 */
 
         /* ===========================
            Success
@@ -47,9 +47,9 @@
         /* ===========================
            Error
         =========================== */
-        --error-main: #F7B8AE; /* 오류 상태 */
+        --error-main: #F6C8C0; /* 오류 상태 */
         --error-contrast: #FFFFFF; /* 텍스트 */
-        --error-point: #EF7D6D; /* 오류 강조 */
+        --error-point: #E98D82; /* 오류 강조 */
 
         /* ===========================
            Warning

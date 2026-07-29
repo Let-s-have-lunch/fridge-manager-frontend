@@ -4,30 +4,21 @@ import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "@/components/common/input/Input";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-
-const PROFILE_IMAGES = [
-    require("@/assets/images/bear.png"),
-    require("@/assets/images/cat.png"),
-    require("@/assets/images/dog.png"),
-    require("@/assets/images/fox.png"),
-    require("@/assets/images/hamster.png"),
-    require("@/assets/images/rabbit.png"),
-    require("@/assets/images/tiger.png"),
-];
+import { getAnimalIcon } from "@/components/utils/profile";
 
 interface MainHeaderProps {
+    userId?: number;
     userName: string;
     onSearch: (keyword: string) => void;
     onSortToggle: (order: "asc" | "desc") => void;
 }
 
-export default function MainHeader({ userName, onSearch, onSortToggle }: MainHeaderProps) {
+export default function MainHeader({ userId, userName, onSearch, onSortToggle }: MainHeaderProps) {
     useSetupLayout({ showMainHeader: true });
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState("");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-    const [selectedProfileIndex, setSelectedProfileIndex] = useState(0);
 
     const handleSearchToggle = () => {
         setIsSearchOpen(prev => !prev);
@@ -48,19 +39,14 @@ export default function MainHeader({ userName, onSearch, onSortToggle }: MainHea
         onSearch(searchKeyword.trim());
     };
 
-    const handleProfileChange = () => {
-        setSelectedProfileIndex(prev => (prev + 1) % PROFILE_IMAGES.length);
-    };
-
     return (
-        <View className="bg-bg-subtle px-6 pt-7 pb-5">
+        <View className="bg-bg-subtle px-6 pt-5 pb-4">
             <View className="flex-row justify-between">
                 <View className="flex-row flex-1">
                     <Pressable
-                        onPress={handleProfileChange}
                         className="w-[60px] h-[60px] rounded-full overflow-hidden bg-bg-default">
                         <Image
-                            source={PROFILE_IMAGES[selectedProfileIndex]}
+                            source={getAnimalIcon(userId)}
                             className="w-full h-full"
                             resizeMode="cover"
                         />

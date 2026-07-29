@@ -168,7 +168,7 @@ export default function MyPageScreen() {
                 <View className="mt-2 mb-16">
                     <TouchableOpacity
                         onPress={handleLogout}
-                        className="w-full py-[18px] bg-bg-subtle active:opacity-80 rounded-[14px] items-center">
+                        className="w-full py-4 bg-bg-subtle active:opacity-80 rounded-2xl items-center">
                         <TextComponent className="text-[15px] font-medium text-text-default">
                             로그아웃
                         </TextComponent>
