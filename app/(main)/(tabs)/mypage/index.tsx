@@ -67,7 +67,7 @@ export default function MyPageScreen() {
     return (
         <View className="flex-1 pt-10 bg-bg-default relative md:items-center">
             {/* 콘텐츠 영역 */}
-            <View className="px-6 pt-10 w-full md:max-w-[600px] flex-1 md:flex-none md:pt-0">
+            <View className="px-6 pt-10 w-full flex-1  md:pt-0">
                 {/* 프로필 영역 */}
                 <View className="mb-8">
                     <Card className="px-[20px] py-[20px]">
@@ -150,7 +150,7 @@ export default function MyPageScreen() {
                 </View>
             </View>
             <View
-                className="absolute top-0 h-full w-full max-w-[600px] pointer-events-none justify-end items-end pb-6 pr-6">
+                className="absolute top-0 h-full w-full pointer-events-none justify-end items-end pb-6 pr-6">
                 <Button
                     variant="contained-circle"
                     className="bg-bg-paper border border-divider shadow-sm elevation-3 z-50 pointer-events-auto"
