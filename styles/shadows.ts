@@ -3,10 +3,13 @@ export const shadows = {
 
     sm: {
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.02,
+        shadowRadius: 30,
+        elevation: 1,
     },
 
     md: {
