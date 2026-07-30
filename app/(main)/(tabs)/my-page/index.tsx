@@ -179,7 +179,7 @@ export default function MyPageScreen() {
                     <Feather
                         name={theme === "light" ? "moon" : "sun"}
                         size={20}
-                        color={theme === "light" ? "#333333" : "#FFD700"}
+                        color={theme === "light" ? "text-text-default" : "#F8F5F1" }
                     />
                 </Button>
             </View>
