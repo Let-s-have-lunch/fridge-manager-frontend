@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "@/components/common/input/Input";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-import { getAnimalIcon } from "@/components/utils/profile";
+import { getAnimalIcon } from "@/constants/profile";
 import { useHomeStore } from "@/stores/home/productStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 

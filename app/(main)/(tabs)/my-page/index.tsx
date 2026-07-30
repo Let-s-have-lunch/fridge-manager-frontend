@@ -10,22 +10,7 @@ import { useThemeStore } from "@/stores/theme/useThemeStore";
 import Button from "@/components/common/button/Button";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
-
-const ANIMAL_ICONS = [
-    require("../../../../assets/images/dog.png"),
-    require("../../../../assets/images/cat.png"),
-    require("../../../../assets/images/rabbit.png"),
-    require("../../../../assets/images/bear.png"),
-    require("../../../../assets/images/hamster.png"),
-    require("../../../../assets/images/fox.png"),
-    require("../../../../assets/images/tiger.png"),
-];
-
-const getAnimalIcon = (id?: number): ImageSourcePropType => {
-    if (!id) return ANIMAL_ICONS[0];
-    const index = id % ANIMAL_ICONS.length;
-    return ANIMAL_ICONS[index];
-};
+import { getAnimalIcon } from "@/constants/profile";
 
 export default function MyPageScreen() {
     const router = useRouter();
