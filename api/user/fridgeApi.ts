@@ -19,7 +19,7 @@ const updateFridge = async (id: number, input: FridgeInputType): Promise<Fridge>
 };
 
 const deleteFridge = async (id: number): Promise<void> => {
-    await axiosInstance.delete(`/fridge/${id}`);
+    await axiosInstance.delete(`/fridges/${id}`);
 };
 
 export default {
