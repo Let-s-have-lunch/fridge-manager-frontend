@@ -13,6 +13,7 @@ import ConsumptionStatusCard from "@/components/domain/stats/ConsumptionStatusCa
 import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCard";
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
 import { twMerge } from "tailwind-merge";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 
@@ -26,6 +27,8 @@ function StatsPage() {
     const [statsData, setStatsData] = useState<GetStatisticsResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const { isLoggedIn } = useAuthStore();
+
     const [modalConfig, setModalConfig] = useState<ModalConfigState>({
         visible: false,
         type: "expiringSoon",
@@ -35,6 +38,11 @@ function StatsPage() {
     const month = String(selectedDate.getMonth() + 1);
 
     const loadStatsData = useCallback(async () => {
+        if (!isLoggedIn) {
+            setIsLoading(false);
+            return;
+        }
+
         try {
             setIsLoading(true);
 
@@ -52,11 +60,32 @@ function StatsPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [month, year]);
+    }, [isLoggedIn, month, year]);
 
     useEffect(() => {
         void loadStatsData();
     }, [loadStatsData]);
+
+    const handleCardPress = (action: () => void) => {
+        if (!isLoggedIn) {
+            const title = "로그인이 필요해요";
+            const msg = "상세 통계 내역을 확인하시려면 먼저 로그인해주세요.";
+
+            if (Platform.OS === "web") {
+                if (window.confirm(`${title}\n${msg}`)) {
+                    router.push("/auth/login");
+                }
+            } else {
+                Alert.alert(title, msg, [
+                    { text: "취소", style: "cancel" },
+                    { text: "로그인", onPress: () => router.push("/auth/login") },
+                ]);
+            }
+            return;
+        }
+
+        action();
+    };
 
     const handlePrevMonth = () => {
         setSelectedDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
@@ -98,34 +127,34 @@ function StatsPage() {
                 </TouchableOpacity>
             </View>
 
-            {isLoading || !statsData ? (
-                <LoadingIndicator fullScreen={true}/>
+            {isLoading ? (
+                <LoadingIndicator fullScreen={true} />
             ) : (
                 <ScrollView className={twMerge("flex-1")} showsVerticalScrollIndicator={false}>
                     {/* 2. 월(Month) 선택 영역 */}
                     <MonthSelector
-                        targetMonth={statsData.targetMonth}
+                        targetMonth={statsData?.targetMonth || `${year}-${month.padStart(2, "0")}`}
                         onPrev={handlePrevMonth}
                         onNext={handleNextMonth}
                     />
 
                     {/* 3. 이번 달 소비/폐기 현황 카드 */}
                     <ConsumptionStatusCard
-                        totalPrice={statsData.dashboardData.totalConsumedPrice}
-                        rates={statsData.dashboardData.statusRates}
-                        onPress={openConsumptionModal}
+                        totalPrice={statsData?.dashboardData?.totalConsumedPrice || 0}
+                        rates={statsData?.dashboardData?.statusRates}
+                        onPress={() => handleCardPress(openConsumptionModal)}
                     />
 
                     {/* 4. 임박 / 지난 알림 요약 카드 */}
                     <ExpirationSummaryCard
-                        expiringCount={statsData.dashboardData.expirationCards.expiringSoon}
-                        expiredCount={statsData.dashboardData.expirationCards.expired}
-                        onPressExpiring={openExpiringSoonModal}
-                        onPressExpired={openExpiredModal}
+                        expiringCount={statsData?.dashboardData?.expirationCards?.expiringSoon || 0}
+                        expiredCount={statsData?.dashboardData?.expirationCards?.expired || 0}
+                        onPressExpiring={() => handleCardPress(openExpiringSoonModal)}
+                        onPressExpired={() => handleCardPress(openExpiredModal)}
                     />
 
                     {/* 5. 가장 많이 소비한 TOP 3 리스트 */}
-                    <TopConsumptionCard products={statsData.dashboardData.top3Products} />
+                    <TopConsumptionCard products={statsData?.dashboardData?.top3Products || []} />
                 </ScrollView>
             )}
 

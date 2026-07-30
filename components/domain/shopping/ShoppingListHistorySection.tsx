@@ -18,6 +18,7 @@ interface Props {
     onDeletePress: (id: number) => void;
     onTogglePress: (id: number) => void;
     isLoading: boolean;
+    isLoggedIn: boolean;
 }
 
 export default function ShoppingListHistorySection({
@@ -28,6 +29,7 @@ export default function ShoppingListHistorySection({
     onDeletePress,
     onTogglePress,
     isLoading,
+    isLoggedIn,
 }: Props) {
     const router = useRouter();
 
@@ -69,83 +71,78 @@ export default function ShoppingListHistorySection({
                         <View className={twMerge("py-10 items-center justify-center")}>
                             <LoadingIndicator fullScreen={false} />
                         </View>
-                    ) : (
+                    ) : !isLoggedIn ? (
+                        <Card className={twMerge("py-6 items-center")}>
+                            <TextComponent className={twMerge("text-sm text-text-secondary")}>
+                                로그인하고 나만의 장보기 일정을 스마트하게 관리해보세요!
+                            </TextComponent>
+                        </Card>
+                    ) : shoppingList.length > 0 ? (
                         <View className={twMerge("gap-3 pt-2")}>
-                            {shoppingList.length > 0 ? (
-                                shoppingList.map(shoppingItem => {
-                                    const isChecked = shoppingItem.isChecked;
+                            {shoppingList.map(shoppingItem => {
+                                const isChecked = shoppingItem.isChecked;
 
-                                    return (
-                                        <Card
-                                            key={shoppingItem.id}
-                                            className={twMerge(
-                                                "flex-row items-center p-4 gap-4 elevation-1",
-                                            )}>
-                                            <Button
-                                                variant={"icon-only"}
-                                                className={twMerge("mr-1")}
-                                                onPress={() => onTogglePress(shoppingItem.id)}>
-                                                {isChecked ? (
-                                                    <Feather
-                                                        name="check-square"
-                                                        size={22}
-                                                        color="#EF7D6D"
-                                                    />
-                                                ) : (
-                                                    <Feather
-                                                        name="square"
-                                                        size={22}
-                                                        color="#F79C79"
-                                                    />
-                                                )}
-                                            </Button>
+                                return (
+                                    <Card
+                                        key={shoppingItem.id}
+                                        className={twMerge(
+                                            "flex-row items-center p-4 gap-4 elevation-1",
+                                        )}>
+                                        <Button
+                                            variant={"icon-only"}
+                                            className={twMerge("mr-1")}
+                                            onPress={() => onTogglePress(shoppingItem.id)}>
+                                            {isChecked ? (
+                                                <Feather
+                                                    name="check-square"
+                                                    size={22}
+                                                    color="#EF7D6D"
+                                                />
+                                            ) : (
+                                                <Feather name="square" size={22} color="#F79C79" />
+                                            )}
+                                        </Button>
 
-                                            <View className={twMerge("flex-1")}>
-                                                <TextComponent
-                                                    className={twMerge(
-                                                        "font-semibold text-[15px] mb-1",
-                                                        isChecked
-                                                            ? "text-text-secondary line-through"
-                                                            : "text-text-default",
-                                                    )}>
-                                                    {shoppingItem.memo}
-                                                </TextComponent>
-                                            </View>
+                                        <View className={twMerge("flex-1")}>
+                                            <TextComponent
+                                                className={twMerge(
+                                                    "font-semibold text-[15px] mb-1",
+                                                    isChecked
+                                                        ? "text-text-secondary line-through"
+                                                        : "text-text-default",
+                                                )}>
+                                                {shoppingItem.memo}
+                                            </TextComponent>
+                                        </View>
 
-                                            <View className={twMerge("flex-row items-center ml-2")}>
-                                                {!isChecked && (
-                                                    <Button
-                                                        variant={"icon-only"}
-                                                        className={twMerge("mr-1")}
-                                                        onPress={() => onEditPress(shoppingItem)}>
-                                                        <Feather
-                                                            name="edit-2"
-                                                            size={16}
-                                                            color="#444444"
-                                                        />
-                                                    </Button>
-                                                )}
+                                        <View className={twMerge("flex-row items-center ml-2")}>
+                                            {!isChecked && (
                                                 <Button
                                                     variant={"icon-only"}
-                                                    onPress={() => onDeletePress(shoppingItem.id)}>
+                                                    className={twMerge("mr-1")}
+                                                    onPress={() => onEditPress(shoppingItem)}>
                                                     <Feather
-                                                        name="trash-2"
+                                                        name="edit-2"
                                                         size={16}
                                                         color="#444444"
                                                     />
                                                 </Button>
-                                            </View>
-                                        </Card>
-                                    );
-                                })
-                            ) : (
-                                <Card className={twMerge("py-6 items-center")}>
-                                    <TextComponent
-                                        className={twMerge("text-sm text-text-secondary")}>
-                                        등록된 일정이 없습니다.
-                                    </TextComponent>
-                                </Card>
-                            )}
+                                            )}
+                                            <Button
+                                                variant={"icon-only"}
+                                                onPress={() => onDeletePress(shoppingItem.id)}>
+                                                <Feather name="trash-2" size={16} color="#444444" />
+                                            </Button>
+                                        </View>
+                                    </Card>
+                                );
+                            })}
+                        </View>
+                    ) : (
+                        <View className={twMerge("py-10 items-center")}>
+                            <TextComponent className={twMerge("text-sm text-text-secondary")}>
+                                등록된 일정이 없습니다.
+                            </TextComponent>
                         </View>
                     )}
                 </Card>
