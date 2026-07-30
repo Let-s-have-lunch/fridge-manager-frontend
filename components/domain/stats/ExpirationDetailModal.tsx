@@ -5,12 +5,14 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     FlatList,
-    useWindowDimensions, Pressable, // 💡 수정된 부분: 반응형 체크를 위해 추가
+    useWindowDimensions,
+    Pressable,
 } from "react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import { ExpirationListItem } from "@/types/statistic";
 import { useSwipeDown } from "@/hooks/useSwipeDown";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
     visible: boolean;
@@ -35,19 +37,26 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
     // 1. 리스트 아이템 렌더링 함수
     const renderItem = ({ item }: { item: ExpirationListItem }) => (
         <View
-            className={`flex-row items-center p-4 mb-3 border rounded-[20px] ${itemBgColor} ${itemBorderColor}`}>
-            <View className="w-12 h-12 bg-bg-paper rounded-xl items-center justify-center mr-4">
+            className={twMerge(
+                "flex-row items-center p-4 mb-3 border rounded-[20px]",
+                itemBgColor,
+                itemBorderColor,
+            )}>
+            <View
+                className={twMerge(
+                    "w-12 h-12 bg-bg-paper rounded-xl items-center justify-center mr-4",
+                )}>
                 <MaterialCommunityIcons
                     name={item.icon as any}
                     size={24}
-                    className="text-text-secondary"
+                    className={twMerge("text-text-secondary")}
                 />
             </View>
-            <View className="flex-1">
-                <TextComponent className="text-lg font-bold text-text-default mb-1">
+            <View className={twMerge("flex-1")}>
+                <TextComponent className={twMerge("text-lg font-bold text-text-default mb-1")}>
                     {item.name}
                 </TextComponent>
-                <TextComponent className="text-[15px] text-text-secondary">
+                <TextComponent className={twMerge("text-[15px] text-text-secondary")}>
                     {new Date(item.expirationDate).toISOString().split("T")[0]} 까지
                 </TextComponent>
             </View>
@@ -63,37 +72,54 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
         >
             {/* 1. 반투명 배경 (누르면 모달 닫힘) */}
             <TouchableWithoutFeedback onPress={onClose}>
-                <View className="flex-1 bg-black/50 justify-end md:justify-center md:items-center">
+                <View
+                    className={twMerge(
+                        "flex-1 bg-black/50 justify-end md:justify-center md:items-center",
+                    )}>
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
-                        <View className="bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0">
+                        <View
+                            className={twMerge(
+                                "bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0",
+                            )}>
                             {/* 헤더: 타이틀과 닫기 버튼 */}
                             {!isMd && (
                                 <View
                                     {...swipeDownHandlers}
-                                    className="w-full items-center pb-6 -mt-2">
+                                    className={twMerge("w-full items-center pb-6 -mt-2")}>
                                     <Pressable
                                         onPress={onClose}
-                                        className="w-full items-center py-2 cursor-pointer">
-                                        <View className="w-12 h-1.5 rounded-full bg-gray-400" />
+                                        className={twMerge(
+                                            "w-full items-center py-2 cursor-pointer",
+                                        )}>
+                                        <View
+                                            className={twMerge(
+                                                "w-12 h-1.5 rounded-full bg-gray-400",
+                                            )}
+                                        />
                                     </Pressable>
                                 </View>
                             )}
-                            <View className="flex-row justify-between items-center mb-6">
-                                <View className="flex-row items-center gap-2">
+                            <View className={twMerge("flex-row justify-between items-center mb-6")}>
+                                <View className={twMerge("flex-row items-center gap-2")}>
                                     <Feather
                                         name={isExpiring ? "clock" : "alert-triangle"}
                                         size={22}
                                         className={textColor}
                                     />
-                                    <TextComponent className={`text-2xl font-bold ${textColor}`}>
+                                    <TextComponent
+                                        className={twMerge("text-2xl font-bold", textColor)}>
                                         {title}
                                     </TextComponent>
                                 </View>
                                 <TouchableOpacity
                                     onPress={onClose}
-                                    className="p-2 -mr-2"
+                                    className={twMerge("p-2 -mr-2")}
                                     activeOpacity={0.7}>
-                                    <Feather name="x" size={24} className="text-text-secondary" />
+                                    <Feather
+                                        name="x"
+                                        size={24}
+                                        className={twMerge("text-text-secondary")}
+                                    />
                                 </TouchableOpacity>
                             </View>
 
@@ -104,18 +130,21 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                     keyExtractor={item => String(item.id)}
                                     renderItem={renderItem}
                                     showsVerticalScrollIndicator={false}
-                                    // 마지막 아이템이 바닥에 딱 붙지 않도록 여백 제공
                                     contentContainerStyle={{ paddingBottom: 20 }}
                                 />
                             ) : (
                                 /* 데이터가 0개일 때의 똑똑한 빈 화면 (Empty State) 처리 */
-                                <View className="flex-1 items-center justify-center py-10">
+                                <View
+                                    className={twMerge("flex-1 items-center justify-center py-10")}>
                                     <Feather
                                         name="check-circle"
                                         size={48}
-                                        className="text-success-main mb-4"
+                                        className={twMerge("text-success-main mb-4")}
                                     />
-                                    <TextComponent className="text-lg text-text-secondary text-center leading-relaxed">
+                                    <TextComponent
+                                        className={twMerge(
+                                            "text-lg text-text-secondary text-center leading-relaxed",
+                                        )}>
                                         해당하는 상품이 없습니다.{"\n"}냉장고 관리를 아주 잘하고
                                         계시네요!
                                     </TextComponent>

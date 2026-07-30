@@ -3,7 +3,7 @@ import { RegisterUserInputType } from "@/schemas/user/registerUserSchema";
 import { LoginUserInputType } from "@/schemas/user/loginUserSchema";
 import { User } from "@/types/user";
 import { UpdateUserInputType } from "@/schemas/user/updateUserSchema";
-import { ChangePasswordInputType } from "@/schemas/user/changePasswordSchema";
+import { UpdatePasswordInputType } from "@/schemas/user/changePasswordSchema";
 
 const registerUser = async (
     data: Omit<RegisterUserInputType, "confirmPassword">,
@@ -35,7 +35,7 @@ const updateUser = async (data: UpdateUserInputType): Promise<User> => {
 };
 
 // 6. 비밀번호 변경 (마이페이지 내)
-const changePassword = async (data: ChangePasswordInputType) => {
+const changePassword = async (data: UpdatePasswordInputType) => {
     const response = await axiosInstance.patch("/users/password", data);
     return response.data;
 };

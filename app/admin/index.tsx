@@ -41,7 +41,7 @@ export default function AdminDashboard() {
                 <Title
                     title="관리자 대시보드"
                     showBackButton={true}
-                    onBackPress={() => router.replace("/mypage")}
+                    onBackPress={() => router.replace("/my-page")}
                     className="bg-bg-default py-6"
                 />
 

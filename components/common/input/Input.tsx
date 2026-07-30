@@ -32,7 +32,7 @@ function Input({
             {searchIcon && <View className={"pl-4"}>{searchIcon}</View>}
             <TextInput
                 className={twMerge(
-                    ["flex-1", "text-text-default"],
+                    "flex-1 text-text-default",
                     INPUT_SIZE_STYLE[size],
                     className,
                 )}

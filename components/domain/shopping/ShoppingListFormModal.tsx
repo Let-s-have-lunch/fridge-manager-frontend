@@ -21,7 +21,6 @@ import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
 import { useSwipeDown } from "@/hooks/useSwipeDown";
-import { twMerge } from "tailwind-merge";
 
 interface Props {
     visible: boolean;
@@ -32,12 +31,12 @@ interface Props {
 }
 
 export default function ShoppingListFormModal({
-    visible,
-    onClose,
-    targetDate,
-    initialData,
-    onRefresh,
-}: Props) {
+                                                  visible,
+                                                  onClose,
+                                                  targetDate,
+                                                  initialData,
+                                                  onRefresh,
+                                              }: Props) {
     const { width } = useWindowDimensions();
     const isMd = width >= 768;
 
@@ -103,45 +102,24 @@ export default function ShoppingListFormModal({
             <TouchableWithoutFeedback onPress={onClose}>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className={twMerge(
-                        ["flex-1 justify-end"],
-                        ["bg-black/50"],
-                        ["md:justify-center md:items-center"],
-                    )}>
+                    className="flex-1 justify-end bg-black/50 md:justify-center md:items-center">
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
-                        <View
-                            className={twMerge(
-                                ["w-full min-h-[50%]"],
-                                ["px-6 pt-4 pb-12"],
-                                ["bg-bg-default rounded-t-[36px]"],
-                                ["md:max-w-[450px] md:min-h-0 md:pt-8 md:rounded-[36px]"],
-                            )}>
+                        <View className="w-full min-h-[50%] px-6 pt-4 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[450px] md:min-h-0 md:pt-8 md:rounded-[36px]">
                             {!isMd && (
                                 <View
                                     {...swipeDownHandlers}
-                                    className={twMerge(
-                                        ["w-full items-center"],
-                                        ["pb-6 -mt-2"],
-                                    )}>
+                                    className="w-full items-center pb-6 -mt-2">
                                     <Pressable
                                         onPress={onClose}
-                                        className={twMerge(
-                                            ["w-full items-center cursor-pointer"],
-                                            ["py-2"],
-                                        )}>
-                                        <View
-                                            className={twMerge(
-                                                ["w-12 h-1.5"],
-                                                ["bg-gray-400 rounded-full"],
-                                            )}
-                                        />
+                                        className="w-full items-center cursor-pointer py-2">
+                                        <View className="w-12 h-1.5 bg-gray-400 rounded-full" />
                                     </Pressable>
                                 </View>
                             )}
 
                             <Title
                                 title={isEditMode ? "일정 수정" : "일정 등록"}
-                                className={twMerge(["h-auto"], ["pb-6 mb-6"])}
+                                className="h-auto pb-6 mb-6"
                                 textClassName={"text-2xl"}
                             />
 
@@ -161,7 +139,7 @@ export default function ShoppingListFormModal({
                                 )}
                             />
 
-                            <View className={twMerge(["flex-row gap-3"], ["mt-6"])}>
+                            <View className="flex-row gap-3 mt-6">
                                 <Button wrap={true} onPress={onClose} color={"success"}>
                                     취소
                                 </Button>
