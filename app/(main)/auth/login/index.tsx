@@ -51,18 +51,7 @@ export default function AuthLoginPage() {
             if (result.user && result.token) {
                 login(result.user, result.token);
             }
-
-            if (Platform.OS === "web") {
-                window.alert("로그인에 성공했습니다.");
-                router.replace("/");
-            } else {
-                Alert.alert("로그인 성공", "로그인에 성공했습니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => router.replace("/"),
-                    },
-                ]);
-            }
+            router.replace("/")
         } catch (error) {
             console.log(error);
 
