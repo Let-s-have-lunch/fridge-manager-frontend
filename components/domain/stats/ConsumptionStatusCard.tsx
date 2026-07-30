@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import React from "react";
-import HalfDonutChart from "@/components/domain/chart/HalfDonutChart";
+import HalfDonutChart from "@/components/domain/stats/HalfDonutChart";
 
 interface Props {
     totalPrice: number;

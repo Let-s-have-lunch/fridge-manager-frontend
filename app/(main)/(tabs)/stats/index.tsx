@@ -12,6 +12,7 @@ import MonthSelector from "@/components/domain/stats/MonthSelector";
 import ConsumptionStatusCard from "@/components/domain/stats/ConsumptionStatusCard";
 import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCard";
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
+import { twMerge } from "tailwind-merge";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 
@@ -41,7 +42,7 @@ function StatsPage() {
 
             setStatsData(response);
         } catch (error) {
-            console.log("통계 데이터를 불러오는 중 오류 발생:", error);
+            console.error("통계 데이터를 불러오는 중 오류 발생:", error);
             const msg = "통계 데이터를 불러오는데 실패했습니다.";
             if (Platform.OS === "web") {
                 alert(msg);
@@ -54,7 +55,7 @@ function StatsPage() {
     }, [month, year]);
 
     useEffect(() => {
-        loadStatsData().then(() => {});
+        void loadStatsData();
     }, [loadStatsData]);
 
     const handlePrevMonth = () => {
@@ -82,25 +83,25 @@ function StatsPage() {
     };
 
     return (
-        <View className="flex-1 bg-bg-default">
+        <View className={twMerge("flex-1 bg-bg-default")}>
             {/* 1. 타이틀 헤더 */}
-            <View className="relative">
+            <View className={twMerge("relative")}>
                 <Title
                     title="월간 대시보드"
                     showBackButton={true}
                     onBackPress={() => router.back()}
                 />
                 <TouchableOpacity
-                    className="absolute right-5 top-0 bottom-0 justify-center"
+                    className={twMerge("absolute right-5 top-0 bottom-0 justify-center")}
                     activeOpacity={0.7}>
-                    <Feather name="calendar" size={24} className="text-text-default" />
+                    <Feather name="calendar" size={24} className={twMerge("text-text-default")} />
                 </TouchableOpacity>
             </View>
 
             {isLoading || !statsData ? (
-                <LoadingIndicator />
+                <LoadingIndicator fullScreen={true}/>
             ) : (
-                <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+                <ScrollView className={twMerge("flex-1")} showsVerticalScrollIndicator={false}>
                     {/* 2. 월(Month) 선택 영역 */}
                     <MonthSelector
                         targetMonth={statsData.targetMonth}
@@ -108,7 +109,7 @@ function StatsPage() {
                         onNext={handleNextMonth}
                     />
 
-                    {/* 💡 2. 이번 달 소비/폐기 현황 카드 */}
+                    {/* 3. 이번 달 소비/폐기 현황 카드 */}
                     <ConsumptionStatusCard
                         totalPrice={statsData.dashboardData.totalConsumedPrice}
                         rates={statsData.dashboardData.statusRates}

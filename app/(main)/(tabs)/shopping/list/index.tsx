@@ -5,7 +5,7 @@ import { ShoppingItem } from "@/types/shoppingList";
 import shoppingListApi from "@/api/user/shoppingListApi";
 import ShoppingListHistorySection from "@/components/domain/shopping/ShoppingListHistorySection";
 import ShoppingListFormModal from "@/components/domain/shopping/ShoppingListFormModal";
-import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { twMerge } from "tailwind-merge";
 
 export default function DailyShoppingListScreen() {
     const { date } = useLocalSearchParams<{ date: string }>();
@@ -49,7 +49,7 @@ export default function DailyShoppingListScreen() {
                 await shoppingListApi.deleteShoppingItem(id);
                 await loadShoppingList();
             } catch (error) {
-                console.log(error);
+                console.error("삭제 실패:", error); // 통일성을 위해 console.error로 변경
                 if (Platform.OS === "web") {
                     alert("일정을 삭제하는 중 오류가 발생했습니다.");
                 } else {
@@ -59,8 +59,8 @@ export default function DailyShoppingListScreen() {
         };
 
         if (Platform.OS === "web") {
-            if (confirm("정말 이 일정을 삭제 처리 하시겠습니까?")) {
-                executeDelete().then(() => {});
+            if (window.confirm("정말 이 일정을 삭제 처리 하시겠습니까?")) {
+                void executeDelete();
             }
         } else {
             Alert.alert("경고", "정말 이 일정을 삭제 처리 하시겠습니까?", [
@@ -73,7 +73,6 @@ export default function DailyShoppingListScreen() {
     const handleToggleStatus = async (id: number) => {
         try {
             await shoppingListApi.toggleShoppingTodo(id);
-
             await loadShoppingList();
         } catch (error) {
             console.error("상태 변경 실패:", error);
@@ -93,7 +92,7 @@ export default function DailyShoppingListScreen() {
     );
 
     return (
-        <View className="flex-1">
+        <View className={twMerge("flex-1")}>
             <ShoppingListHistorySection
                 targetDate={date}
                 shoppingList={shoppingList}
@@ -101,7 +100,9 @@ export default function DailyShoppingListScreen() {
                 onEditPress={handleOpenEditModal}
                 onDeletePress={handleDelete}
                 onTogglePress={handleToggleStatus}
+                isLoading={isLoading}
             />
+
             <ShoppingListFormModal
                 visible={isModalVisible}
                 onClose={handleCloseModal}
@@ -109,8 +110,6 @@ export default function DailyShoppingListScreen() {
                 initialData={selectedShoppingItem}
                 onRefresh={loadShoppingList}
             />
-
-            {isLoading && <LoadingIndicator fullScreen={true} />}
         </View>
     );
 }
