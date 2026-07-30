@@ -3,11 +3,11 @@ import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import React from "react";
-import HalfDonutChart from "@/components/domain/chart/HalfDonutChart";
+import HalfDonutChart from "@/components/domain/stats/HalfDonutChart";
 
 interface Props {
     totalPrice: number;
-    rates: {
+    rates?: {
         consumed: number;
         discarded: number;
         others: number;
@@ -15,7 +15,11 @@ interface Props {
     onPress: () => void;
 }
 
-export default function ConsumptionStatusCard({ totalPrice, rates, onPress }: Props) {
+export default function ConsumptionStatusCard({
+    totalPrice = 0,
+    rates = { consumed: 0, discarded: 0, others: 0 },
+    onPress,
+}: Props) {
     return (
         <Card className="mb-6">
             <TouchableOpacity

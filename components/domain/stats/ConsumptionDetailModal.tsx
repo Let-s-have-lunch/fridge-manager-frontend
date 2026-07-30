@@ -49,32 +49,25 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
             <TouchableWithoutFeedback onPress={onClose}>
                 <View
                     className={twMerge(
-                        ["flex-1 justify-end"],
-                        ["bg-black/50"],
-                        ["md:justify-center md:items-center"],
+                        "flex-1 justify-end bg-black/50 md:justify-center md:items-center",
                     )}>
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                         <View
                             className={twMerge(
-                                ["w-full min-h-[50%]"],
-                                ["px-6 pt-8 pb-12"],
-                                ["bg-bg-default rounded-t-[36px]"],
-                                ["md:max-w-[450px] md:min-h-0 md:rounded-[36px]"],
+                                "w-full min-h-[50%] px-6 pt-8 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[450px] md:min-h-0 md:rounded-[36px]",
                             )}>
                             {!isMd && (
                                 <View
                                     {...swipeDownHandlers}
-                                    className={twMerge(["w-full items-center"], ["pb-6 -mt-2"])}>
+                                    className={twMerge("w-full items-center pb-6 -mt-2")}>
                                     <Pressable
                                         onPress={onClose}
                                         className={twMerge(
-                                            ["w-full items-center cursor-pointer"],
-                                            ["py-2"],
+                                            "w-full items-center cursor-pointer py-2",
                                         )}>
                                         <View
                                             className={twMerge(
-                                                ["w-12 h-1.5"],
-                                                ["bg-gray-400 rounded-full"],
+                                                "w-12 h-1.5 bg-gray-400 rounded-full",
                                             )}
                                         />
                                     </Pressable>
@@ -82,39 +75,30 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                             )}
 
                             {/* 헤더 영역 (타이틀 + 기간 + X 버튼) */}
-                            <View
-                                className={twMerge(
-                                    ["flex-row justify-between items-start"],
-                                    ["mb-6"],
-                                )}>
+                            <View className={twMerge("flex-row justify-between items-start mb-6")}>
                                 <View>
                                     <TextComponent
-                                        className={twMerge(
-                                            ["text-2xl font-bold"],
-                                            ["text-text-default"],
-                                        )}>
+                                        className={twMerge("text-2xl font-bold text-text-default")}>
                                         이번 달 소비 내역
                                     </TextComponent>
                                     <TextComponent
                                         className={twMerge(
-                                            ["text-[15px]"],
-                                            ["text-text-secondary"],
-                                            ["mt-1.5"],
+                                            "text-[15px] text-text-secondary mt-1.5",
                                         )}>
                                         {dateRange}
                                     </TextComponent>
                                 </View>
                                 <TouchableOpacity
                                     onPress={onClose}
-                                    className={twMerge(["p-2 -mr-2"])}
+                                    className={twMerge("p-2 -mr-2")}
                                     activeOpacity={0.7}>
                                     <Feather name="x" size={24} className="text-text-secondary" />
                                 </TouchableOpacity>
                             </View>
 
                             {/* 차트 & 범례 영역 */}
-                            <View className={twMerge(["flex-row items-center"], ["my-4"])}>
-                                {/* 임시 도넛 차트 레이아웃 (추후 실제 차트 컴포넌트로 교체) */}
+                            <View className={twMerge("flex-row items-center my-4")}>
+                                {/* 도넛 차트 */}
                                 <View className="mr-6">
                                     <CategoryDonutChart
                                         data={data.categoryChartData}
@@ -124,7 +108,7 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                                 </View>
 
                                 {/* 범례 (Legend) 리스트 */}
-                                <View className={twMerge(["flex-1 justify-center"], ["gap-3.5"])}>
+                                <View className={twMerge("flex-1 justify-center gap-3.5")}>
                                     {data.categoryChartData.map((item, index) => (
                                         <View
                                             key={index}
@@ -132,27 +116,22 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                                             <View className="flex-row items-center">
                                                 <View
                                                     className={twMerge(
-                                                        ["w-2.5 h-2.5"],
-                                                        ["rounded-full mr-2.5"],
-                                                        [
-                                                            CHART_BG_CLASSES[
-                                                                index % CHART_BG_CLASSES.length
-                                                            ],
+                                                        "w-2.5 h-2.5 rounded-full mr-2.5",
+                                                        CHART_BG_CLASSES[
+                                                            index % CHART_BG_CLASSES.length
                                                         ],
                                                     )}
                                                 />
                                                 <TextComponent
                                                     className={twMerge(
-                                                        ["text-[15px]"],
-                                                        ["text-text-secondary"],
+                                                        "text-[15px] text-text-secondary",
                                                     )}>
                                                     {item.name}
                                                 </TextComponent>
                                             </View>
                                             <TextComponent
                                                 className={twMerge(
-                                                    ["text-[15px] font-bold"],
-                                                    ["text-text-default"],
+                                                    "text-[15px] font-bold text-text-default",
                                                 )}>
                                                 {item.price.toLocaleString()}원
                                             </TextComponent>
@@ -161,41 +140,29 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                                 </View>
                             </View>
 
-                            <View
-                                className={twMerge(["w-full h-[1px]"], ["bg-divider"], ["my-7"])}
-                            />
+                            <View className={twMerge("w-full h-[1px] bg-divider my-7")} />
 
                             {/* 절약 효과 영역 */}
                             <View>
                                 <TextComponent
-                                    className={twMerge(
-                                        ["text-xl font-bold"],
-                                        ["text-text-default"],
-                                    )}>
+                                    className={twMerge("text-xl font-bold text-text-default")}>
                                     절약 효과
                                 </TextComponent>
                                 <TextComponent
-                                    className={twMerge(
-                                        ["text-[14px]"],
-                                        ["text-text-secondary"],
-                                        ["mt-1"],
-                                    )}>
+                                    className={twMerge("text-[14px] text-text-secondary mt-1")}>
                                     이번 달 예상 절약액
                                 </TextComponent>
 
                                 <View
                                     className={twMerge(
-                                        ["flex-row justify-between items-center"],
-                                        ["mt-3"],
+                                        "flex-row justify-between items-center mt-3",
                                     )}>
                                     <TextComponent
                                         className={twMerge(
-                                            ["text-3xl font-bold"],
-                                            [
-                                                data.savingEffect.isPositive
-                                                    ? "text-success-point"
-                                                    : "text-error-point",
-                                            ],
+                                            "text-3xl font-bold",
+                                            data.savingEffect.isPositive
+                                                ? "text-success-point"
+                                                : "text-error-point",
                                         )}>
                                         {data.savingEffect.amount.toLocaleString()}원
                                     </TextComponent>
@@ -203,22 +170,17 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                                     {/* 퍼센트 뱃지 */}
                                     <View
                                         className={twMerge(
-                                            ["px-4 py-1.5"],
-                                            ["rounded-full"],
-                                            [
-                                                data.savingEffect.isPositive
-                                                    ? "bg-[#E8F3E7]"
-                                                    : "bg-[#FCE1DE]",
-                                            ],
+                                            "px-4 py-1.5 rounded-full",
+                                            data.savingEffect.isPositive
+                                                ? "bg-[#E8F3E7]"
+                                                : "bg-[#FCE1DE]",
                                         )}>
                                         <TextComponent
                                             className={twMerge(
-                                                ["text-lg font-bold"],
-                                                [
-                                                    data.savingEffect.isPositive
-                                                        ? "text-success-point"
-                                                        : "text-error-point",
-                                                ],
+                                                "text-lg font-bold",
+                                                data.savingEffect.isPositive
+                                                    ? "text-success-point"
+                                                    : "text-error-point",
                                             )}>
                                             {data.savingEffect.percentage}
                                         </TextComponent>

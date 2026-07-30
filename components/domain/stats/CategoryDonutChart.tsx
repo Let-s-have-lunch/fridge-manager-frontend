@@ -27,13 +27,11 @@ export default function CategoryDonutChart({ data, totalPrice, colors }: Props) 
 
     return (
         <View
-            className={twMerge(
-                ["relative"],
-                ["items-center justify-center"],
-            )}
+            className={twMerge("relative items-center justify-center")}
             style={{ width: size, height: size }}>
             <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-                <G rotation="-90" origin={`${center}, ${center}`}>
+                {/* 개별 속성 대신 웹 표준 방식인 transform 속성을 사용합니다 */}
+                <G transform={`rotate(-90, ${center}, ${center})`}>
                     {/* 데이터가 없을 때 뜰 기본 배경 원 */}
                     {totalPrice === 0 ? (
                         <Circle
@@ -72,25 +70,12 @@ export default function CategoryDonutChart({ data, totalPrice, colors }: Props) 
                 </G>
             </Svg>
 
-            {/* 원 중앙 중앙 텍스트 */}
-            <View
-                className={twMerge(
-                    ["absolute"],
-                    ["items-center justify-center"],
-                )}>
-                <TextComponent
-                    className={twMerge(
-                        ["text-[11px]"],
-                        ["text-text-secondary"],
-                    )}>
+            {/* 원 중앙 텍스트 */}
+            <View className={twMerge("absolute items-center justify-center")}>
+                <TextComponent className={twMerge("text-[11px] text-text-secondary")}>
                     총 소비
                 </TextComponent>
-                <TextComponent
-                    className={twMerge(
-                        ["text-sm font-bold"],
-                        ["text-text-default"],
-                        ["mt-0.5"],
-                    )}>
+                <TextComponent className={twMerge("text-sm font-bold text-text-default mt-0.5")}>
                     {totalPrice.toLocaleString()}원
                 </TextComponent>
             </View>

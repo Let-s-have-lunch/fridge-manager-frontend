@@ -1,5 +1,5 @@
 import { ShoppingItem } from "@/types/shoppingList";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import Title from "@/components/common/title/Title";
 import React, { useMemo } from "react";
 import { useRouter } from "expo-router";
@@ -8,6 +8,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { twMerge } from "tailwind-merge";
 import Button from "@/components/common/button/Button";
 import { Feather } from "@expo/vector-icons";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 
 interface Props {
     targetDate: string;
@@ -16,6 +17,8 @@ interface Props {
     onEditPress: (shoppingItem: ShoppingItem) => void;
     onDeletePress: (id: number) => void;
     onTogglePress: (id: number) => void;
+    isLoading: boolean;
+    isLoggedIn: boolean;
 }
 
 export default function ShoppingListHistorySection({
@@ -25,6 +28,8 @@ export default function ShoppingListHistorySection({
     onEditPress,
     onDeletePress,
     onTogglePress,
+    isLoading,
+    isLoggedIn,
 }: Props) {
     const router = useRouter();
 
@@ -35,61 +40,57 @@ export default function ShoppingListHistorySection({
     }, [targetDate]);
 
     return (
-        <View
-            className={twMerge(
-                ["flex-1 w-full max-w-[600px]"],
-                ["self-center"],
-                ["relative"],
-            )}>
+        <View className={twMerge("flex-1 w-full max-w-[600px] self-center relative")}>
             <Title
                 title={`${formattedDate}`}
                 showBackButton={true}
                 onBackPress={() => router.back()}
             />
-            <ScrollView
-                className={twMerge(["relative"], ["mt-4"])}
-                showsVerticalScrollIndicator={false}>
-                <Card className={twMerge(["relative"], ["mt-6"])}>
-                    {/* 🎀 상단 마스킹 테이프 장식 (CSS 연출) */}
+
+            <ScrollView className={twMerge("relative mt-4")} showsVerticalScrollIndicator={false}>
+                <Card className={twMerge("relative mt-6")}>
+                    {/* 🎀 상단 마스킹 테이프 장식 (인라인 스타일을 Tailwind 클래스로 병합 가능하지만 기존 유지) */}
                     <View
                         className={twMerge(
-                            ["absolute -top-3 self-center z-10"],
-                            ["w-16 h-7"],
-                            ["-rotate-12 opacity-90 shadow-sm"],
+                            "absolute -top-3 self-center z-10 w-16 h-7 -rotate-12 opacity-90 shadow-sm",
                         )}
                         style={{ backgroundColor: "#F4E3C5", borderRadius: 2 }}
                     />
+
                     {/* 타이틀 영역 */}
                     <View
                         className={twMerge(
-                            ["flex-row items-center justify-center w-full"],
-                            ["relative"],
-                            ["mt-3 mb-8"],
+                            "flex-row items-center justify-center w-full relative mt-3 mb-8",
                         )}>
-                        <TextComponent
-                            className={twMerge(
-                                ["text-2xl font-bold tracking-wide"],
-                            )}>
+                        <TextComponent className={twMerge("text-2xl font-bold tracking-wide")}>
                             장보기 리스트
                         </TextComponent>
                     </View>
-                    {/* 3. 리스트 영역 */}
-                    <View className={twMerge(["gap-3"], ["pt-2"])}>
-                        {shoppingList.length > 0 ? (
-                            shoppingList.map(shoppingItem => {
+
+                    {isLoading ? (
+                        <View className={twMerge("py-10 items-center justify-center")}>
+                            <LoadingIndicator fullScreen={false} />
+                        </View>
+                    ) : !isLoggedIn ? (
+                        <Card className={twMerge("py-6 items-center")}>
+                            <TextComponent className={twMerge("text-sm text-text-secondary")}>
+                                로그인하고 나만의 장보기 일정을 스마트하게 관리해보세요!
+                            </TextComponent>
+                        </Card>
+                    ) : shoppingList.length > 0 ? (
+                        <View className={twMerge("gap-3 pt-2")}>
+                            {shoppingList.map(shoppingItem => {
                                 const isChecked = shoppingItem.isChecked;
 
                                 return (
                                     <Card
                                         key={shoppingItem.id}
                                         className={twMerge(
-                                            ["flex-row items-center"],
-                                            ["p-4 gap-4"],
-                                            ["elevation-1"],
+                                            "flex-row items-center p-4 gap-4 elevation-1",
                                         )}>
                                         <Button
                                             variant={"icon-only"}
-                                            className="mr-1"
+                                            className={twMerge("mr-1")}
                                             onPress={() => onTogglePress(shoppingItem.id)}>
                                             {isChecked ? (
                                                 <Feather
@@ -102,28 +103,23 @@ export default function ShoppingListHistorySection({
                                             )}
                                         </Button>
 
-                                        <View className="flex-1">
+                                        <View className={twMerge("flex-1")}>
                                             <TextComponent
                                                 className={twMerge(
-                                                    ["font-semibold text-[15px]"],
-                                                    ["mb-1"],
+                                                    "font-semibold text-[15px] mb-1",
                                                     isChecked
-                                                        ? ["text-text-secondary line-through"]
-                                                        : ["text-text-default"],
+                                                        ? "text-text-secondary line-through"
+                                                        : "text-text-default",
                                                 )}>
                                                 {shoppingItem.memo}
                                             </TextComponent>
                                         </View>
 
-                                        <View
-                                            className={twMerge(
-                                                ["flex-row items-center"],
-                                                ["ml-2"],
-                                            )}>
+                                        <View className={twMerge("flex-row items-center ml-2")}>
                                             {!isChecked && (
                                                 <Button
                                                     variant={"icon-only"}
-                                                    className="mr-1"
+                                                    className={twMerge("mr-1")}
                                                     onPress={() => onEditPress(shoppingItem)}>
                                                     <Feather
                                                         name="edit-2"
@@ -140,27 +136,25 @@ export default function ShoppingListHistorySection({
                                         </View>
                                     </Card>
                                 );
-                            })
-                        ) : (
-                            <Card
-                                className={twMerge(
-                                    ["py-6"],
-                                    ["text-center text-sm text-text-secondary"],
-                                )}>
-                                <TextComponent>등록된 일정이 없습니다.</TextComponent>
-                            </Card>
-                        )}
-                    </View>
+                            })}
+                        </View>
+                    ) : (
+                        <View className={twMerge("py-10 items-center")}>
+                            <TextComponent className={twMerge("text-sm text-text-secondary")}>
+                                등록된 일정이 없습니다.
+                            </TextComponent>
+                        </View>
+                    )}
                 </Card>
             </ScrollView>
 
             <Button
                 variant={"contained-circle"}
-                onPress={onAddPress}
+                onPress={isLoading ? undefined : onAddPress}
+                disabled={isLoading}
                 className={twMerge(
-                    ["absolute z-50"],
-                    ["right-6 bottom-6", "md:right-8 md:bottom-8"],
-                    ["elevation-4"],
+                    "absolute z-50 right-6 bottom-6 md:right-8 md:bottom-8 elevation-4",
+                    isLoading && "opacity-50",
                 )}>
                 <Feather name={"plus"} size={24} color="#FFFFFF" />
             </Button>

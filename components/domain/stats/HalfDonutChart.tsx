@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import Svg, { Path, Circle } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 interface Props {
     consumed: number;
@@ -41,7 +41,6 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
 
     const consumedAngle = (consumed / 100) * 180;
     const discardedAngle = (discarded / 100) * 180;
-    const othersAngle = (others / 100) * 180;
 
     const consumedStart = 0;
     const consumedEnd = consumedAngle;
@@ -57,19 +56,10 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
     const r = 100;
     const strokeWidth = 30;
 
-    // 🌟 양 끝을 둥글게 만들기 위한 좌표 계산
-    const startPoint = polarToCartesian(cx, cy, r, 0); // 항상 왼쪽 끝 (0도)
-    const endPoint = polarToCartesian(cx, cy, r, 180); // 항상 오른쪽 끝 (180도)
-
-    // 만약 소비(60%)가 0%일 경우를 대비해 맨 왼쪽 동그라미 색상을 동적으로 결정
-    const startColor =
-        consumed > 0 ? COLOR_CONSUMED : discarded > 0 ? COLOR_DISCARDED : COLOR_OTHERS;
-    const endColor = others > 0 ? COLOR_OTHERS : discarded > 0 ? COLOR_DISCARDED : COLOR_CONSUMED;
-
     return (
         <View className="items-center justify-center">
             <Svg width={300} height={150}>
-                {/* 1. 소비 - 다시 평평하게(butt) 원복 */}
+                {/* 1. 소비 */}
                 <Path
                     d={describeArc(cx, cy, r, consumedStart, consumedEnd)}
                     fill="none"
@@ -77,7 +67,7 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeWidth={strokeWidth}
                     strokeLinecap="butt"
                 />
-                {/* 2. 폐기 - 다시 평평하게(butt) 원복 */}
+                {/* 2. 폐기 */}
                 <Path
                     d={describeArc(cx, cy, r, discardedStart, discardedEnd)}
                     fill="none"
@@ -85,7 +75,7 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeWidth={strokeWidth}
                     strokeLinecap="butt"
                 />
-                {/* 3. 기타 - 다시 평평하게(butt) 원복 */}
+                {/* 3. 기타 */}
                 <Path
                     d={describeArc(cx, cy, r, othersStart, othersEnd)}
                     fill="none"
