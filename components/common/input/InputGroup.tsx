@@ -17,7 +17,7 @@ function InputGroup({
     errorMessage,
     wrap,
     className,
-    size = "medium",
+    size = "small",
     children,
     ...props
 }: InputGroupProps) {

@@ -1,58 +1,101 @@
-import { useEffect, useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
+import { useEffect } from "react";
+import { Alert, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 
 import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import InputGroup from "@/components/common/input/InputGroup";
-import Input from "@/components/common/input/Input";
 import userApi from "@/api/user/userApi";
-import Label from "@/components/common/label/Label";
+import { UpdateUserInputType, updateUserSchema } from "@/schemas/user/updateUserSchema";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { isAxiosError } from "axios";
+import { Controller, useForm } from "react-hook-form";
+import ErrorMessage from "@/components/common/label/ErrorMessage";
+import { twMerge } from "tailwind-merge";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
 
 export default function EditProfilePage() {
-    const [nickname, setNickname] = useState("");
-    const [email, setEmail] = useState("");
-    const [birthdate, setBirthdate] = useState("");
+    const router = useRouter();
 
-    // 💡 초기값을 undefined로 설정하여 텍스트 노드 에러 방지
-    const [nicknameError, setNicknameError] = useState<string | undefined>(undefined);
+    const {
+        control,
+        handleSubmit,
+        setError,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm<UpdateUserInputType>({
+        resolver: zodResolver(updateUserSchema),
+        mode: "onTouched",
+        defaultValues: {
+            nickname: "",
+            birthdate: "",
+        },
+    });
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const data = await userApi.getMyProfile();
 
-                setNickname(data.nickname ?? "");
-                setEmail(data.email ?? "");
-                setBirthdate(
-                    data.birthdate ? new Date(data.birthdate).toISOString().split("T")[0] : "",
-                );
+                let formattedBirthdate = "";
+
+                if (data.birthdate) {
+                    formattedBirthdate = data.birthdate.substring(0, 10).replace(/-/g, "");
+                } else {
+                    formattedBirthdate = "";
+                }
+
+                reset({
+                    nickname: data.nickname,
+                    birthdate: formattedBirthdate,
+                });
             } catch (error) {
                 console.error(error);
             }
         };
 
         fetchProfile().then(() => {});
-    }, []);
+    }, [reset]);
 
-    const handleSave = async () => {
-        if (!nickname.trim()) {
-            setNicknameError("닉네임을 입력해주세요.");
-            return;
-        }
-
+    const handleSave = async (data: UpdateUserInputType) => {
         try {
-            await userApi.updateUser({
-                nickname,
-                email,
-                birthdate,
-            });
+            const { nickname, birthdate } = data;
+            let formattedBirthdate;
+            if (birthdate && birthdate.length === 8) {
+                const year = birthdate.slice(0, 4);
+                const month = birthdate.slice(4, 6);
+                const day = birthdate.slice(6, 8);
 
-            Alert.alert("알림", "회원정보가 수정되었습니다.");
-            router.back();
+                formattedBirthdate = `${year}-${month}-${day}T00:00:00Z`;
+            } else {
+                formattedBirthdate = undefined;
+            }
+
+            const result = await userApi.updateUser({ nickname, birthdate: formattedBirthdate });
+            useAuthStore.setState({ user: result });
+
+            if (Platform.OS === "web") {
+                alert("회원정보가 성공적으로 수정되었습니다.");
+                router.push("/my-page");
+            } else {
+                Alert.alert("수정 완료", "회원정보가 성공적으로 수정되었습니다.", [
+                    { text: "확인", onPress: () => router.push("/my-page") },
+                ]);
+            }
         } catch (error) {
-            console.error(error);
-            Alert.alert("오류", "회원정보 수정에 실패했습니다.");
+            console.log(error);
+            if (isAxiosError(error) && error.response) {
+                const errorMessage = error.response.data.message;
+                if (error.response.status === 409) {
+                    if (errorMessage.includes("닉네임")) {
+                        setError("nickname", { message: errorMessage });
+                    }
+                    return;
+                }
+                setError("root", { message: errorMessage });
+            } else {
+                setError("root", { message: "알수 없는 오류가 발생했습니다." });
+            }
         }
     };
 
@@ -68,55 +111,55 @@ export default function EditProfilePage() {
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}>
                 {/* 닉네임 */}
-                <View className="mb-5">
-                    <Label size="small">닉네임</Label>
-                    <InputGroup errorMessage={nicknameError}>
-                        <Input
-                            value={nickname}
-                            onChangeText={text => {
-                                setNickname(text);
-                                if (text) setNicknameError(undefined);
-                            }}
-                            placeholder="닉네임을 입력해주세요."
-                            hasError={!!nicknameError}
-                            // 💡 좌우 여백(px-5), 상하 여백(py-4), 글꼴 크기 및 굵기 추가
-                            className="px-5 py-4 text-base font-medium rounded-2xl"
-                        />
-                    </InputGroup>
-                </View>
-
-                {/* 이메일 */}
-                <View className="mb-5">
-                    <Label size="small">이메일</Label>
-                    <InputGroup>
-                        <Input
-                            value={email}
-                            onChangeText={setEmail}
-                            keyboardType="email-address"
-                            placeholder="이메일을 입력해주세요."
-                            // 💡 스타일 동일하게 적용
-                            className="px-5 py-4 text-base font-medium rounded-2xl"
-                        />
-                    </InputGroup>
-                </View>
+                <Controller
+                    control={control}
+                    name={"nickname"}
+                    render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                            <InputGroup
+                                label={"닉네임"}
+                                placeholder={"닉네임을 입력해주세요."}
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                                errorMessage={errors.nickname?.message}
+                            />
+                        );
+                    }}
+                />
 
                 {/* 생년월일 */}
-                <View className="mb-5">
-                    <Label size="small">생년월일</Label>
-                    <InputGroup>
-                        <Input
-                            value={birthdate}
-                            onChangeText={setBirthdate}
-                            placeholder="YYYY-MM-DD"
-                            // 💡 스타일 동일하게 적용
-                            className="px-5 py-4 text-base font-medium rounded-2xl"
-                        />
-                    </InputGroup>
-                </View>
+                <Controller
+                    control={control}
+                    name={"birthdate"}
+                    render={({ field: { onChange, onBlur, value } }) => {
+                        return (
+                            <InputGroup
+                                size={"small"}
+                                id={"birthdate"}
+                                label={"생년월일"}
+                                placeholder={"YYYYMMDD"}
+                                keyboardType={"number-pad"}
+                                maxLength={8}
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                                errorMessage={errors.birthdate?.message}
+                            />
+                        );
+                    }}
+                />
+
+                {errors.root?.message && (
+                    <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
+                        {errors.root?.message}
+                    </ErrorMessage>
+                )}
 
                 {/* 저장 버튼 */}
                 <TouchableOpacity
-                    onPress={handleSave}
+                    disabled={isSubmitting}
+                    onPress={handleSubmit(handleSave)}
                     className="mt-8 w-full py-4 rounded-2xl bg-primary-main items-center">
                     <TextComponent className="text-base font-bold text-white tracking-wide">
                         저장하기

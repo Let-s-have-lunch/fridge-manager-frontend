@@ -53,7 +53,7 @@ export default function ChangePasswordPage() {
                 if (router.canGoBack()) {
                     router.back();
                 } else {
-                    router.replace("/(tabs)/mypage");
+                    router.replace("/my-page");
                 }
             };
 
