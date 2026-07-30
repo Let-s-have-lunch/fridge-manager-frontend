@@ -99,7 +99,7 @@ export default function MyPageScreen() {
                         </TextComponent>
                         <View>
                             <TouchableOpacity
-                                onPress={() => router.push(`/(main)/mypage/edit-profile`)}
+                                onPress={() => router.push(`/(main)/my-page/edit-profile`)}
                                 className="flex-row items-center justify-between py-4 border-b border-divider">
                                 <TextComponent className="text-[15px] text-text-default">
                                     회원정보 수정

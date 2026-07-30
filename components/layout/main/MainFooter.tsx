@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, Platform , Text } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { useRouter, usePathname, Href } from "expo-router";
-import { tabs } from "@/constants/tab";
+import { tabs } from "@/constants/tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
