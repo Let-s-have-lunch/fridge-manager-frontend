@@ -1,41 +1,32 @@
 import axiosInstance from "@/api/axiosInstance";
+import { Fridge } from "@/types/fridge";
+import { FridgeInputType } from "@/schemas/user/createFridge";
 
 
-export interface Fridge {
-    id: number;
-    userId: number;
-    name: string;
-    createdAt?: string;
-    updatedAt?: string;
-    deletedAt?: string;
-}
-
-interface ApiResponse<T> {
-    message: string;
-    data: T;
-}
-
-export const getFridgeList = async () => {
-    const { data } = await axiosInstance.get<ApiResponse<Fridge[]>>("/fridge/list");
-    return data.data;
+const getFridgeList = async (): Promise<Fridge[]> => {
+    const response = await axiosInstance.get("/fridges");
+    return response.data.data;
 };
 
-export const createFridge = async (name: string) => {
-    const { data } = await axiosInstance.post<ApiResponse<Fridge>>("/fridge", {
-        name,
-    });
-
-    return data.data;
+const createFridge = async (input: FridgeInputType ): Promise<Fridge> => {
+    const response = await axiosInstance.post("/fridges/create", input);
+    return response.data.data;
 };
 
-export const updateFridge = async (id: number, name: string) => {
-    const { data } = await axiosInstance.patch<ApiResponse<Fridge>>(`/fridge/${id}`, {
-        name,
-    });
-
-    return data.data;
+const updateFridge = async (id: number, input: FridgeInputType): Promise<Fridge> => {
+    const response = await axiosInstance.patch(`/fridges/${id}`, input);
+    return response.data.data;
 };
 
-export const deleteFridge = async (id: number) => {
+const deleteFridge = async (id: number): Promise<void> => {
     await axiosInstance.delete(`/fridge/${id}`);
 };
+
+export default {
+    getFridgeList,
+    createFridge,
+    updateFridge,
+    deleteFridge,
+
+
+}
