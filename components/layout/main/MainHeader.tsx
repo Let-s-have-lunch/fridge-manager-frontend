@@ -8,7 +8,6 @@ import { getAnimalIcon } from "@/components/utils/profile";
 import { useHomeStore } from "@/stores/home/productStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
-
 export default function MainHeader() {
     useSetupLayout({ showMainHeader: true });
 
@@ -38,10 +37,8 @@ export default function MainHeader() {
         setSortOrder(nextOrder);
     };
 
-    const [ selectedFridge, setSelectedFridge ] = useState("집 냉장고");
-    const [ isFridgeOpen, setIsFridgeOpen ] = useState(false);
-
-
+    const [selectedFridge, setSelectedFridge] = useState("집 냉장고");
+    const [isFridgeOpen, setIsFridgeOpen] = useState(false);
 
     return (
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
@@ -57,16 +54,28 @@ export default function MainHeader() {
                     </Pressable>
 
                     <View className="ml-4 justify-center">
-                        <Text className="text-[22px] font-bold text-text-default">
-                            {userName}님
-                        </Text>
-                        <Pressable onPress={() => setIsFridgeOpen((prev => !prev))} className={"flex-row items-center ml-2"}>
-                            <Text className={"text-sm text-text-secondary"}>
-                                {selectedFridge}
+                        <View className={"flex-row gap-3"}>
+                            <Text className="text-[22px] font-bold text-text-default">
+                                {userName}님
                             </Text>
-                            <Ionicons name={isFridgeOpen ? "chevron-up" : "chevron-down"} size={16} color={"text-text-secondary"}/>
+                            <Pressable
+                                onPress={() => setIsFridgeOpen(prev => !prev)}
+                                className={twMerge(
+                                    ["mt-1 px-3 py-1"],
+                                    ["self-start flex-row items-center"],
+                                    ["rounded-full border border-[#A18F8F]"],
+                                )}>
+                                <Text className="mr-1 text-xs font-medium text-text-default">
+                                    {selectedFridge}
+                                </Text>
 
-                        </Pressable>
+                                <Ionicons
+                                    name={isFridgeOpen ? "chevron-up" : "chevron-down"}
+                                    size={14}
+                                    color="#A18F8F"
+                                />
+                            </Pressable>
+                        </View>
                         <Text className="mt-1 text-[13px] text-text-secondary">
                             오늘도 신선한 하루되세요!
                         </Text>
