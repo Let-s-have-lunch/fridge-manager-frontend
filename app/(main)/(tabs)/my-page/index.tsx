@@ -38,7 +38,7 @@ export default function MyPageScreen() {
         try {
             await userApi.logout();
             logout();
-            router.replace("/auth/login");
+            router.replace("/");
         } catch (error) {
             console.error("로그아웃 실패:", error);
         }
