@@ -16,7 +16,6 @@ import userApi from "@/api/user/userApi";
 import { updatePasswordSchema, UpdatePasswordInputType } from "@/schemas/user/changePasswordSchema";
 
 export default function ChangePasswordPage() {
-    // 비밀번호 표시/숨김 상태 관리
     const [showPrevPassword, setShowPrevPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -33,7 +32,7 @@ export default function ChangePasswordPage() {
             password: "",
             confirmPassword: "",
         },
-        mode: "onTouched", // 포커스가 빠질 때(onBlur) 에러 검증
+        mode: "onTouched",
     });
 
     const onSubmit = async (data: UpdatePasswordInputType) => {
@@ -86,7 +85,7 @@ export default function ChangePasswordPage() {
     return (
         <View className="flex-1 bg-bg-default">
             <Title
-                title={"비밀번호 수정"}
+                title={"비밀번호 변경"}
                 showBackButton={true}
                 onBackPress={() => router.back()}
             />
@@ -95,27 +94,34 @@ export default function ChangePasswordPage() {
                 className="flex-1 px-6 pt-4"
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}>
-                <View className="mb-5">
+                <View className="mb-2">
                     {/* 현재 비밀번호 */}
                     <Controller
                         control={control}
                         name={"prevPassword"}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <InputGroup
-                                size={"small"}
                                 label={"현재 비밀번호"}
-                                errorMessage={errors.prevPassword?.message}>
+                                errorMessage={errors.prevPassword?.message}
+                                className="mb-8"
+                            >
                                 <View className="relative justify-center w-full">
                                     <Input
-                                        size={"small"}
                                         id={"prevPassword"}
-                                        placeholder={"현재 비밀번호를 입력하세요."}
+                                        placeholder={"현재 비밀번호를 입력해주세요."}
                                         value={value}
                                         onChangeText={onChange}
                                         onBlur={onBlur}
                                         secureTextEntry={!showPrevPassword}
                                         hasError={!!errors.prevPassword}
-                                        className="pr-12" // 아이콘이 들어갈 우측 여백 확보
+                                        searchIcon={
+                                            <Ionicons
+                                                name="lock-closed-outline"
+                                                size={20}
+                                                color="#9ca3af"
+                                            />
+                                        }
+                                        className="pr-12"
                                     />
                                     <TouchableOpacity
                                         onPress={() => setShowPrevPassword(!showPrevPassword)}
@@ -133,25 +139,33 @@ export default function ChangePasswordPage() {
                         )}
                     />
 
-                    {/* 새 비밀번호 */}
                     <Controller
                         control={control}
                         name={"password"}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <InputGroup
                                 size={"small"}
-                                label={"변경할 비밀번호"}
-                                errorMessage={errors.password?.message}>
+                                label={"새 비밀번호"}
+                                errorMessage={errors.password?.message}
+                                className="mb-8"
+                            >
                                 <View className="relative justify-center w-full">
                                     <Input
                                         size={"small"}
                                         id={"password"}
-                                        placeholder={"변경할 비밀번호를 입력해주세요."}
+                                        placeholder={"새 비밀번호를 입력해주세요 (6자 이상)."}
                                         value={value}
                                         onChangeText={onChange}
                                         onBlur={onBlur}
                                         secureTextEntry={!showPassword}
                                         hasError={!!errors.password}
+                                        searchIcon={
+                                            <Ionicons
+                                                name="lock-closed-outline"
+                                                size={20}
+                                                color="#9ca3af"
+                                            />
+                                        }
                                         className="pr-12"
                                     />
                                     <TouchableOpacity
@@ -168,25 +182,33 @@ export default function ChangePasswordPage() {
                         )}
                     />
 
-                    {/* 새 비밀번호 확인 */}
                     <Controller
                         control={control}
                         name={"confirmPassword"}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <InputGroup
                                 size={"small"}
-                                label={"변경할 비밀번호 확인"}
-                                errorMessage={errors.confirmPassword?.message}>
+                                label={"새 비밀번호 확인"}
+                                errorMessage={errors.confirmPassword?.message}
+                                className="mb-10"
+                            >
                                 <View className="relative justify-center w-full">
                                     <Input
                                         size={"small"}
                                         id={"confirmPassword"}
-                                        placeholder={"변경할 비밀번호를 다시 입력해주세요."}
+                                        placeholder={"새 비밀번호를 다시 입력해주세요."}
                                         value={value}
                                         onChangeText={onChange}
                                         onBlur={onBlur}
                                         secureTextEntry={!showConfirmPassword}
                                         hasError={!!errors.confirmPassword}
+                                        searchIcon={
+                                            <Ionicons
+                                                name="lock-closed-outline"
+                                                size={20}
+                                                color="#9ca3af"
+                                            />
+                                        }
                                         className="pr-12"
                                     />
                                     <TouchableOpacity
@@ -208,15 +230,17 @@ export default function ChangePasswordPage() {
                     />
                 </View>
 
-                {/* 백엔드 등에서 넘어온 최상단(Root) 에러 메시지 처리 */}
                 {errors.root?.message && (
                     <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
                         {errors.root?.message}
                     </ErrorMessage>
                 )}
 
-                <View className={"mt-3"}>
-                    <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting} size={"small"}>
+                <View>
+                    <Button
+                        onPress={handleSubmit(onSubmit)}
+                        disabled={isSubmitting}
+                        >
                         변경하기
                     </Button>
                 </View>

@@ -3,7 +3,7 @@ import { z } from "zod";
 export const updateUserSchema = z.object({
     nickname: z
         .string()
-        .min(2, "닉네임을 2자 이상 입려갷주세요.")
+        .min(2, "닉네임을 2자 이상 입력해주세요.")
         .max(10, "닉네임은 10자 이하로 입력해주세요."),
     birthdate: z
         .string()

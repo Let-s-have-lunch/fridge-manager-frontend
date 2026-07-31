@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { Alert, Platform, ScrollView, TouchableOpacity, View } from "react-native";
+import { Alert, Platform, ScrollView, View } from "react-native";
 
 import Title from "@/components/common/title/Title";
-import TextComponent from "@/components/common/text/TextComponent";
 import InputGroup from "@/components/common/input/InputGroup";
 import userApi from "@/api/user/userApi";
 import { UpdateUserInputType, updateUserSchema } from "@/schemas/user/updateUserSchema";
@@ -102,39 +101,37 @@ export default function EditProfilePage() {
 
     return (
         <View className="flex-1 bg-bg-default">
-            {/* 상단 타이틀 영역 */}
-            <View className="px-2 pt-4 pb-2">
-                <Title title="회원정보 수정" showBackButton onBackPress={() => router.back()} />
-            </View>
+            {/* 상단 타이틀 영역 (이전 페이지와 동일하게 패딩 정리) */}
+            <Title title="회원정보 수정" showBackButton={true} onBackPress={() => router.back()} />
 
             <ScrollView
                 className="flex-1 px-6 pt-4"
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}>
-                {/* 닉네임 */}
-                <Controller
-                    control={control}
-                    name={"nickname"}
-                    render={({ field: { onChange, onBlur, value } }) => {
-                        return (
+                <View className="mb-2">
+                    {/* 닉네임 */}
+                    <Controller
+                        control={control}
+                        name={"nickname"}
+                        render={({ field: { onChange, onBlur, value } }) => (
                             <InputGroup
+                                size={"small"}
                                 label={"닉네임"}
                                 placeholder={"닉네임을 입력해주세요."}
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
                                 errorMessage={errors.nickname?.message}
+                                className="mb-8" // 다음 인풋과의 간격 넓히기
                             />
-                        );
-                    }}
-                />
+                        )}
+                    />
 
-                {/* 생년월일 */}
-                <Controller
-                    control={control}
-                    name={"birthdate"}
-                    render={({ field: { onChange, onBlur, value } }) => {
-                        return (
+                    {/* 생년월일 */}
+                    <Controller
+                        control={control}
+                        name={"birthdate"}
+                        render={({ field: { onChange, onBlur, value } }) => (
                             <InputGroup
                                 size={"small"}
                                 id={"birthdate"}
@@ -146,20 +143,28 @@ export default function EditProfilePage() {
                                 onChangeText={onChange}
                                 value={value}
                                 errorMessage={errors.birthdate?.message}
+                                className="mb-10" // 마지막 인풋이므로 버튼과 간격을 더 띄우기
                             />
-                        );
-                    }}
-                />
+                        )}
+                    />
+                </View>
 
+                {/* Root 에러 메시지 */}
                 {errors.root?.message && (
                     <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
                         {errors.root?.message}
                     </ErrorMessage>
                 )}
 
-                <Button onPress={handleSubmit(handleSave)} disabled={isSubmitting} size={"small"}>
-                    저장하기
-                </Button>
+                {/* 버튼 사이즈 통일 및 View 감싸기 */}
+                <View>
+                    <Button
+                        onPress={handleSubmit(handleSave)}
+                        disabled={isSubmitting}
+                    >
+                        저장하기
+                    </Button>
+                </View>
             </ScrollView>
         </View>
     );
