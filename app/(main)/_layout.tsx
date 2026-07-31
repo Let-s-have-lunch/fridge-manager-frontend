@@ -44,7 +44,7 @@ export default function MainLayout() {
                     "flex-1",
                     "w-full",
                     "max-w-6xl",
-                    "p-5",
+                    "p-6",
                     "self-center",
                     "bg-bg-default",
                 ])}>

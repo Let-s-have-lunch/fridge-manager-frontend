@@ -55,8 +55,11 @@ export default function MyPageScreen() {
 
     return (
         <View className="flex-1 bg-bg-default relative md:items-center md:justify-center">
-            <ScrollView className="w-full flex-1" showsVerticalScrollIndicator={false}>
-                <View className="px-6 pt-10 pb-32 w-full flex-1 md:pt-10">
+            <ScrollView
+                className="w-full flex-1"
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}>
+                <View className=" w-full flex-1">
                     {/* 🌟 1. 프로필 영역 (비회원 / 회원 분기 처리) 🌟 */}
                     <View className="mb-8">
                         <Card className="px-[20px] py-[20px]">
@@ -194,8 +197,15 @@ export default function MyPageScreen() {
                         </View>
                     ) : (
                         <View className={"flex flex-col md:flex-row mt-8 md:mt-6 gap-3 w-full"}>
-                            <Button onPress={() => router.push("/auth/login")} wrap={true}>로그인</Button>
-                            <Button onPress={() => router.push("/auth/register")} wrap={true} color={"success"}>회원가입</Button>
+                            <Button onPress={() => router.push("/auth/login")} wrap={true}>
+                                로그인
+                            </Button>
+                            <Button
+                                onPress={() => router.push("/auth/register")}
+                                wrap={true}
+                                color={"success"}>
+                                회원가입
+                            </Button>
                         </View>
                     )}
                 </View>
