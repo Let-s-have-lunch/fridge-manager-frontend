@@ -70,10 +70,22 @@ function Button({
         );
     } else if (React.isValidElement(children)) {
         const childElement = children as React.ReactElement<any>;
-        content = React.cloneElement(childElement, {
+
+        // 새로 적용할 props를 객체로 정리
+        const overrideProps: any = {
             size: childElement.props.size || getIconSize(),
-            color: childElement.props.color || "white",
-        });
+        };
+
+        // 아이콘에 color 속성이 직접 있으면 그걸 쓰고,
+        // 없는데 만약 icon-only 버튼이 아니라면(일반 둥근/네모 버튼) white를 칠한다.
+        // 즉, icon-only일 때는 강제로 color를 덮어씌우지 않고 내버려 둔다!
+        if (childElement.props.color) {
+            overrideProps.color = childElement.props.color;
+        } else if (variant !== "icon-only") {
+            overrideProps.color = "white";
+        }
+
+        content = React.cloneElement(childElement, overrideProps);
     }
 
     return (

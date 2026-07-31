@@ -13,6 +13,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { ExpirationListItem } from "@/types/statistic";
 import { useSwipeDown } from "@/hooks/useSwipeDown";
 import { twMerge } from "tailwind-merge";
+import Button from "@/components/common/button/Button";
 
 interface Props {
     visible: boolean;
@@ -86,17 +87,16 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                 <View
                                     {...swipeDownHandlers}
                                     className={twMerge("w-full items-center pb-6 -mt-2")}>
-                                    <Pressable
+                                    <Button
+                                        variant="icon-only"
                                         onPress={onClose}
-                                        className={twMerge(
-                                            "w-full items-center py-2 cursor-pointer",
-                                        )}>
-                                        <View
-                                            className={twMerge(
-                                                "w-12 h-1.5 rounded-full bg-gray-400",
-                                            )}
+                                        className={twMerge("-mr-2")}>
+                                        <Feather
+                                            name="x"
+                                            size={24}
+                                            className="text-text-secondary"
                                         />
-                                    </Pressable>
+                                    </Button>
                                 </View>
                             )}
                             <View className={twMerge("flex-row justify-between items-center mb-6")}>

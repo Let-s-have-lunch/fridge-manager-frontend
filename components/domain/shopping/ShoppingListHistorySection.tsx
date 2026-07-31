@@ -52,9 +52,9 @@ export default function ShoppingListHistorySection({
                     {/* 🎀 상단 마스킹 테이프 장식 (인라인 스타일을 Tailwind 클래스로 병합 가능하지만 기존 유지) */}
                     <View
                         className={twMerge(
-                            "absolute -top-3 self-center z-10 w-16 h-7 -rotate-12 opacity-90 shadow-sm",
+                            "absolute -top-3 self-center z-10 w-16 h-7 -rotate-12 opacity-90 shadow-sm rounded-[2px]",
+                            "bg-[#F4E3C5] dark:bg-bg-subtle",
                         )}
-                        style={{ backgroundColor: "#F4E3C5", borderRadius: 2 }}
                     />
 
                     {/* 타이틀 영역 */}
@@ -124,14 +124,18 @@ export default function ShoppingListHistorySection({
                                                     <Feather
                                                         name="edit-2"
                                                         size={16}
-                                                        color="#444444"
+                                                        className="text-text-secondary"
                                                     />
                                                 </Button>
                                             )}
                                             <Button
                                                 variant={"icon-only"}
                                                 onPress={() => onDeletePress(shoppingItem.id)}>
-                                                <Feather name="trash-2" size={16} color="#444444" />
+                                                <Feather
+                                                    name="trash-2"
+                                                    size={16}
+                                                    className="text-text-secondary"
+                                                />
                                             </Button>
                                         </View>
                                     </Card>
@@ -156,7 +160,7 @@ export default function ShoppingListHistorySection({
                     "absolute z-50 right-6 bottom-6 md:right-8 md:bottom-8 elevation-4",
                     isLoading && "opacity-50",
                 )}>
-                <Feather name={"plus"} size={24} color="#FFFFFF" />
+                <Feather name={"plus"} size={24}  />
             </Button>
         </View>
     );
