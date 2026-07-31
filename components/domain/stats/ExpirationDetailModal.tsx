@@ -87,16 +87,17 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                 <View
                                     {...swipeDownHandlers}
                                     className={twMerge("w-full items-center pb-6 -mt-2")}>
-                                    <Button
-                                        variant="icon-only"
+                                    <Pressable
                                         onPress={onClose}
-                                        className={twMerge("-mr-2")}>
-                                        <Feather
-                                            name="x"
-                                            size={24}
-                                            className="text-text-secondary"
+                                        className={twMerge(
+                                            "w-full items-center cursor-pointer py-2",
+                                        )}>
+                                        <View
+                                            className={twMerge(
+                                                "w-12 h-1.5 bg-gray-400 rounded-full",
+                                            )}
                                         />
-                                    </Button>
+                                    </Pressable>
                                 </View>
                             )}
                             <View className={twMerge("flex-row justify-between items-center mb-6")}>
