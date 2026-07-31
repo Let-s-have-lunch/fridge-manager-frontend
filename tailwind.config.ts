@@ -68,14 +68,38 @@ export default {
                     main: "var(--info-main)",
                     contrast: "var(--info-contrast)",
                 },
+
+                expire: {
+                    expired: {
+                        bg: "var(--expire-expired-bg)",
+                        text: "var(--expire-expired-text)",
+                    },
+                    soon: {
+                        bg: "var(--expire-soon-bg)",
+                        text: "var(--expire-soon-text)",
+                    },
+                    warning: {
+                        bg: "var(--expire-warning-bg)",
+                        text: "var(--expire-warning-text)",
+                    },
+                    safe: {
+                        bg: "var(--expire-safe-bg)",
+                        text: "var(--expire-safe-text)",
+                    },
+                },
             },
         },
     },
 
     safelist: [
         {
+            // 기존 3단어 조합 (예: bg-primary-main)
             pattern:
                 /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle|bg|border)/,
+        },
+        {
+            // 👉 [추가된 부분]: expire 전용 4단어 조합 정규식 추가! (예: bg-expire-expired-bg)
+            pattern: /(bg|text|border)-expire-(expired|soon|warning|safe)-(bg|text)/,
         },
     ],
 

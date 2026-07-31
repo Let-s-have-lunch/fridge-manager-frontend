@@ -66,7 +66,24 @@
         =========================== */
         --info-main: #DCEAF6; /* 정보 상태 */
         --info-contrast: #2C2C2C; /* 텍스트 */
+
+        /* 👉 [추가된 부분]: 유통기한 상태별 색상 (라이트 모드) */
+        /* ===========================
+           Expire (유통기한 상태)
+        =========================== */
+        --expire-expired-bg: #FBE3DF; /* 만료 (D+) 배경 */
+        --expire-expired-text: #E98D82; /* 만료 (D+) 텍스트 */
+
+        --expire-soon-bg: #FFEAD8; /* 임박 (D-3 이내) 배경 */
+        --expire-soon-text: #F79C79; /* 임박 (D-3 이내) 텍스트 */
+
+        --expire-warning-bg: #FFF4D9; /* 주의 (D-7 이내) 배경 */
+        --expire-warning-text: #D6A83D; /* 주의 (D-7 이내) 텍스트 */
+
+        --expire-safe-bg: #E8F3E4; /* 여유 (D-8 이상) 배경 */
+        --expire-safe-text: #7DAE79; /* 여유 (D-8 이상) 텍스트 */
     }
+    /* 👉 [수정된 부분]: 여기서 :root 직후에 닫혀있던 } 를 지웠습니다! */
 
     .dark {
         /* ===========================
@@ -131,75 +148,24 @@
         =========================== */
         --info-main: #6C9EC5; /* 정보 상태 */
         --info-contrast: #FFFFFF; /* 텍스트 */
+
+        /* 👉 [추가된 부분]: 유통기한 상태별 색상 (다크 모드) */
+        /* ===========================
+           Expire (유통기한 상태)
+        =========================== */
+        /* 다크모드에서는 배경을 어둡게, 텍스트(포인트)를 밝게 조정했습니다 */
+        --expire-expired-bg: #4A3232;
+        --expire-expired-text: #F18B81;
+
+        --expire-soon-bg: #4D382B;
+        --expire-soon-text: #F5B79F;
+
+        --expire-warning-bg: #4F442E;
+        --expire-warning-text: #E5C77A;
+
+        --expire-safe-bg: #2E4533;
+        --expire-safe-text: #98D792;
     }
-
-    /*@media (prefers-color-scheme: dark) {*/
-    /*    :root {*/
-    /*        !* ===========================*/
-    /*           Background*/
-    /*        =========================== *!*/
-    /*        --bg-default: #2F2B29;*/
-    /*        --bg-paper: #3A3532;*/
-    /*        --bg-subtle: #4A4440;*/
-
-    /*        !* ===========================*/
-    /*           Text*/
-    /*        =========================== *!*/
-    /*        --text-default: #F8F5F1;*/
-    /*        --text-secondary: #C9C1BA;*/
-    /*        --text-subtle: #9C948E;*/
-
-    /*        !* ===========================*/
-    /*           Border*/
-    /*        =========================== *!*/
-    /*        --divider: #5B534E;*/
-
-    /*        !* ===========================*/
-    /*           Primary*/
-    /*        =========================== *!*/
-    /*        --primary-main: #F79C79;*/
-    /*        --primary-contrast: #FFFFFF;*/
-    /*        --primary-point: #F5B79F;*/
-
-    /*        !* ===========================*/
-    /*           Secondary*/
-    /*        =========================== *!*/
-    /*        --secondary-main: #6D9FC9;*/
-    /*        --secondary-contrast: #FFFFFF;*/
-    /*        --secondary-point: #8FC3EE;*/
-
-    /*        !* ===========================*/
-    /*           Success*/
-    /*        =========================== *!*/
-    /*        --success-main: #7DAE79;*/
-    /*        --success-contrast: #FFFFFF;*/
-    /*        --success-point: #98D792;*/
-
-    /*        !* ===========================*/
-    /*           Error*/
-    /*        =========================== *!*/
-    /*        --error-main: #D86D61;*/
-    /*        --error-contrast: #FFFFFF;*/
-    /*        --error-point: #F18B81;*/
-    /*        --error-bg: var(--bg-paper); !* 👈 다크모드 배경은 카드 배경과 통일 *!*/
-    /*        --error-border: var(--error-main); !* 👈 테두리로 포인트 *!*/
-
-    /*        !* ===========================*/
-    /*           Warning*/
-    /*        =========================== *!*/
-    /*        --warning-main: #D9B86A;*/
-    /*        --warning-contrast: #2C2C2C;*/
-    /*        --warning-bg: var(--bg-paper); !* 👈 다크모드 배경은 카드 배경과 통일 *!*/
-    /*        --warning-border: var(--warning-main); !* 👈 테두리로 포인트 *!*/
-    
-    /*        !* ===========================*/
-    /*           Info*/
-    /*        =========================== *!*/
-    /*        --info-main: #6C9EC5;*/
-    /*        --info-contrast: #FFFFFF;*/
-    /*    }*/
-    /*}*/
-
 
     input:focus,
     textarea:focus {
