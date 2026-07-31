@@ -11,8 +11,11 @@ import Button from "@/components/common/button/Button";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import { getAnimalIcon } from "@/constants/profile";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 export default function MyPageScreen() {
+    useSetupLayout({ showDesktopHeader: true });
+
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const { logout, isLoggedIn } = useAuthStore();
@@ -92,7 +95,8 @@ export default function MyPageScreen() {
                                             로그인이 필요해요
                                         </TextComponent>
                                         <TextComponent className="text-[13px] text-text-secondary mt-1">
-                                            스마트한 유통기한 관리로 식재료 폐기는 줄이고 소비 효율을 높여보세요!
+                                            스마트한 유통기한 관리로 식재료 폐기는 줄이고 소비
+                                            효율을 높여보세요!
                                         </TextComponent>
                                     </View>
                                     <Feather name="chevron-right" size={24} color="#BDBDBD" />
@@ -201,7 +205,7 @@ export default function MyPageScreen() {
                     <Feather
                         name={theme === "light" ? "moon" : "sun"}
                         size={20}
-                        color={theme === "light" ? "text-text-default" : "#F8F5F1" }
+                        color={theme === "light" ? "text-text-default" : "#F8F5F1"}
                     />
                 </Button>
             </View>

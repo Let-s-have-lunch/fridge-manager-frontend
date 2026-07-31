@@ -3,10 +3,12 @@ import { useFocusEffect } from "expo-router";
 import { useLayoutStore } from "@/stores/layout/useLayoutStore";
 
 export const useSetupLayout = ({
-    showMainHeader = false, // 💡 아무것도 안 넘기면 무조건 false (헤더 꺼짐)
-    showMainFooter = true, // 💡 아무것도 안 넘기면 무조건 true (푸터 켜짐)
+    showMainHeader ,
+    showDesktopHeader,
+    showMainFooter ,
 }: {
     showMainHeader?: boolean;
+    showDesktopHeader?: boolean;
     showMainFooter?: boolean;
 }) => {
     const setLayout = useLayoutStore(state => state.setLayout);
@@ -15,6 +17,7 @@ export const useSetupLayout = ({
         useCallback(() => {
             setLayout({
                 ...(showMainHeader !== undefined && { showMainHeader }),
+                ...(showDesktopHeader !== undefined && { showDesktopHeader }),
                 ...(showMainFooter !== undefined && { showMainFooter }),
             });
 
@@ -22,9 +25,10 @@ export const useSetupLayout = ({
             return () => {
                 setLayout({
                     showMainHeader: false,
+                    showDesktopHeader: false,
                     showMainFooter: true,
                 });
             };
-        }, [showMainHeader, showMainFooter, setLayout]),
+        }, [setLayout, showMainHeader, showDesktopHeader, showMainFooter]),
     );
 };

@@ -4,8 +4,11 @@ import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import formattingUtil from "@/utils/formattingUtil";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 export default function ShoppingCalendarScreen() {
+    useSetupLayout({ showDesktopHeader: true });
+
     const router = useRouter();
 
     // 달력 상단에 보여줄 현재 기준 월
@@ -96,7 +99,6 @@ export default function ShoppingCalendarScreen() {
             bgClass: "bg-secondary-main border-secondary-main",
         },
     ];
-
 
     return (
         <View className="flex-1 bg-bg-default pt-5">
