@@ -13,6 +13,7 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 import { twMerge } from "tailwind-merge";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
+import Button from "@/components/common/button/Button";
 
 export default function EditProfilePage() {
     const router = useRouter();
@@ -156,15 +157,9 @@ export default function EditProfilePage() {
                     </ErrorMessage>
                 )}
 
-                {/* 저장 버튼 */}
-                <TouchableOpacity
-                    disabled={isSubmitting}
-                    onPress={handleSubmit(handleSave)}
-                    className="mt-8 w-full py-4 rounded-2xl bg-primary-main items-center">
-                    <TextComponent className="text-base font-bold text-white tracking-wide">
-                        저장하기
-                    </TextComponent>
-                </TouchableOpacity>
+                <Button onPress={handleSubmit(handleSave)} disabled={isSubmitting} size={"small"}>
+                    저장하기
+                </Button>
             </ScrollView>
         </View>
     );

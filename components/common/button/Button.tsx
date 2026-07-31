@@ -12,7 +12,7 @@ interface Props extends PressableProps {
 }
 
 export const SQUARE_SIZE_STYLE = {
-    small: "rounded-[10px] px-2 py-2",
+    small: "rounded-[15px] px-3 py-3",
     medium: "rounded-[15px] px-3 py-3",
     large: "rounded-[20px] px-5 py-4",
 };
