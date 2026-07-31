@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { Slot } from "expo-router";
 import { useLayoutStore } from "@/stores/layout/useLayoutStore";
 import MainFooter from "@/components/layout/main/MainFooter";
