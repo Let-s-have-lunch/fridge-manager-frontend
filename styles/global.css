@@ -50,12 +50,16 @@
         --error-main: #F6C8C0; /* 오류 상태 */
         --error-contrast: #FFFFFF; /* 텍스트 */
         --error-point: #E98D82; /* 오류 강조 */
+        --error-bg: #FFF5F4; /* 👈 추가: 지남 카드 배경 */
+        --error-border: #FCE1DE; /* 👈 추가: 지남 카드 테두리 */
 
         /* ===========================
            Warning
         =========================== */
         --warning-main: #F7D88A; /* 경고 상태 */
         --warning-contrast: #2C2C2C; /* 텍스트 */
+        --warning-bg: #FFFBF3; /* 👈 추가: 임박 카드 배경 */
+        --warning-border: #FBEAC1; /* 👈 추가: 임박 카드 테두리 */
 
         /* ===========================
            Info
@@ -111,12 +115,16 @@
         --error-main: #D86D61; /* 오류 상태 */
         --error-contrast: #FFFFFF; /* 텍스트 */
         --error-point: #F18B81; /* 오류 강조 */
+        --error-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
+        --error-border: var(--error-main); /* 👈 테두리로 포인트 */
 
         /* ===========================
            Warning
         =========================== */
         --warning-main: #D9B86A; /* 경고 상태 */
         --warning-contrast: #2C2C2C; /* 텍스트 */
+        --warning-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
+        --warning-border: var(--warning-main); /* 👈 테두리로 포인트 */
 
         /* ===========================
            Info
@@ -173,12 +181,16 @@
             --error-main: #D86D61;
             --error-contrast: #FFFFFF;
             --error-point: #F18B81;
+            --error-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
+            --error-border: var(--error-main); /* 👈 테두리로 포인트 */
 
             /* ===========================
                Warning
             =========================== */
             --warning-main: #D9B86A;
             --warning-contrast: #2C2C2C;
+            --warning-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
+            --warning-border: var(--warning-main); /* 👈 테두리로 포인트 */
 
             /* ===========================
                Info

@@ -31,8 +31,8 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
 
     const title = isExpiring ? "유통기한 임박 상품" : "유통기한 지난 상품";
     const textColor = isExpiring ? "text-warning-main" : "text-error-point";
-    const itemBgColor = isExpiring ? "bg-[#FFFBF3]" : "bg-[#FFF5F4]";
-    const itemBorderColor = isExpiring ? "border-[#FBEAC1]" : "border-[#FCE1DE]";
+    const itemBgColor = isExpiring ? "bg-warning-bg" : "bg-error-bg";
+    const itemBorderColor = isExpiring ? "border-warning-border" : "border-error-border";
 
     // 1. 리스트 아이템 렌더링 함수
     const renderItem = ({ item }: { item: ExpirationListItem }) => (

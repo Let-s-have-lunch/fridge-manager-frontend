@@ -53,11 +53,15 @@ export default {
                     main: "var(--error-main)",
                     contrast: "var(--error-contrast)",
                     point: "var(--error-point)",
+                    bg: "var(--error-bg)",
+                    border: "var(--error-border)",
                 },
 
                 warning: {
                     main: "var(--warning-main)",
                     contrast: "var(--warning-contrast)",
+                    bg: "var(--warning-bg)",
+                    border: "var(--warning-border)",
                 },
 
                 info: {
@@ -71,7 +75,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle|bg|border)/,
         },
     ],
 

@@ -25,7 +25,7 @@ export default function ExpirationSummaryCard({
                 activeOpacity={0.7}
                 onPress={onPressExpiring}
                 className={twMerge(
-                    "flex-1 bg-[#FFFBF3] border border-[#FBEAC1] rounded-[20px] py-4 items-center justify-center gap-1",
+                    "flex-1 bg-warning-bg border border-warning-border rounded-[20px] py-4 items-center justify-center gap-1",
                 )}>
                 <View className={twMerge("flex-row items-center gap-1")}>
                     <Feather name="clock" size={18} className={twMerge("text-warning-main")} />
@@ -50,7 +50,7 @@ export default function ExpirationSummaryCard({
                 activeOpacity={0.7}
                 onPress={onPressExpired}
                 className={twMerge(
-                    "flex-1 bg-[#FFF5F4] border border-[#FCE1DE] rounded-[20px] py-4 items-center justify-center gap-1",
+                    "flex-1 bg-error-bg border border-error-border rounded-[20px] py-4 items-center justify-center gap-1",
                 )}>
                 <View className={twMerge("flex-row items-center gap-1")}>
                     <Feather
