@@ -130,17 +130,17 @@ export default function AdminUserManagement() {
     };
 
     return (
-        <View className="flex-1 bg-bg-default items-center">
-            <View className="w-full max-w-md flex-1 bg-bg-default">
+        <View className="flex-1 items-center">
+            <View className="w-full flex-1 ">
                 {/* 헤더 */}
                 <Title
                     title="회원 관리"
                     showBackButton={true}
                     onBackPress={() => router.replace("/admin")}
-                    className="bg-bg-default py-6"
+                    className="py-6 md:hidden"
                 />
 
-                <ScrollView className="flex-1 px-5 py-5" showsVerticalScrollIndicator={false}>
+                <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                     {/* 상단 안내 카드 */}
                     <Card className="p-4 mb-5 bg-bg-paper border border-divider rounded-2xl flex-row items-center justify-between">
                         <View>

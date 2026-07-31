@@ -34,7 +34,9 @@ function Button({
     ...props
 }: Props) {
     const getSizeClasses = () => {
-        if (variant === "contained-square") return SQUARE_SIZE_STYLE[size];
+        // 👉 [추가]: outlined 일 때도 네모 버튼과 동일한 크기를 가지도록 합쳐줍니다.
+        if (variant === "contained-square" || variant === "outlined")
+            return SQUARE_SIZE_STYLE[size];
         if (variant === "contained-circle") return CIRCLE_SIZE_STYLE[size];
         if (variant === "icon-only") return "rounded-full bg-transparent p-2";
         return "";
@@ -48,7 +50,8 @@ function Button({
 
     const containerClasses = twMerge(
         "flex justify-center items-center",
-        `bg-${color}-main`,
+        // 👉 [수정]: outlined일 때는 옅은 테두리와 종이(paper) 배경을, 아닐 때는 원래대로 꽉 찬 색상을 줍니다.
+        variant === "outlined" ? `bg-bg-paper border border-divider` : `bg-${color}-main`,
         getSizeClasses(),
         fullWidth ? "w-full" : "",
         className,
@@ -62,8 +65,11 @@ function Button({
             <Text
                 className={twMerge(
                     "font-bold",
-                    "color-white",
-                    size === "small" ? "text-xl" : size === "large" ? "text-3xl" : "text-2xl",
+                    // 👉 [수정]: outlined일 때는 글씨를 어두운 회색으로, 꽉 찬 버튼은 흰색으로 줍니다.
+                    // (참고: 기존 color-white 대신 테일윈드 정식 클래스인 text-white를 사용했습니다)
+                    variant === "outlined" ? "text-text-secondary" : "text-white",
+                    // 👉 [꿀팁]: 기존 2xl, 3xl은 버튼 텍스트 치고 너무 거대해서 화면을 깨뜨릴 수 있습니다! 보통 아래 크기를 많이 씁니다.
+                    size === "small" ? "text-sm" : size === "large" ? "text-lg" : "text-base",
                 )}>
                 {children}
             </Text>
@@ -71,16 +77,15 @@ function Button({
     } else if (React.isValidElement(children)) {
         const childElement = children as React.ReactElement<any>;
 
-        // 새로 적용할 props를 객체로 정리
         const overrideProps: any = {
             size: childElement.props.size || getIconSize(),
         };
 
-        // 아이콘에 color 속성이 직접 있으면 그걸 쓰고,
-        // 없는데 만약 icon-only 버튼이 아니라면(일반 둥근/네모 버튼) white를 칠한다.
-        // 즉, icon-only일 때는 강제로 color를 덮어씌우지 않고 내버려 둔다!
         if (childElement.props.color) {
             overrideProps.color = childElement.props.color;
+        } else if (variant === "outlined") {
+            // 👉 [추가]: outlined 버튼 안에 아이콘이 있으면 아이콘도 회색으로 맞춰줍니다.
+            overrideProps.color = "#777777";
         } else if (variant !== "icon-only") {
             overrideProps.color = "white";
         }

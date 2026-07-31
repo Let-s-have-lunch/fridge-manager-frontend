@@ -6,9 +6,9 @@ import { useRouter, usePathname, Href } from "expo-router";
 import { getAnimalIcon } from "@/constants/profile";
 import { useHomeStore } from "@/stores/home/productStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
-import { tabs } from "@/constants/tabs";
 import TextComponent from "@/components/common/text/TextComponent";
 import Input from "@/components/common/input/Input";
+import { USER_NAV_LIST } from "@/constants/menu";
 
 export default function MainDesktopHeader() {
     const router = useRouter();
@@ -88,7 +88,7 @@ export default function MainDesktopHeader() {
 
                 {/* 2. [중앙] 하단에 있던 탭 메뉴들을 상단 헤더로 이동 (홈, 일정, 통계, 마이페이지) */}
                 <View className="flex-row items-center gap-14 mx-4">
-                    {tabs.map(tab => {
+                    {USER_NAV_LIST.map(tab => {
                         const isActive =
                             tab.path === "/" ? pathname === "/" : pathname.startsWith(tab.path);
                         const colorClass = isActive

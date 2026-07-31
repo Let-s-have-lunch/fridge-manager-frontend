@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, Platform , Text } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { useRouter, usePathname, Href } from "expo-router";
-import { tabs } from "@/constants/tabs";
+import { USER_NAV_LIST } from "@/constants/menu";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
@@ -25,7 +25,7 @@ export default function MainFooter({ className }: Props) {
                 paddingTop: 8,
             }}>
             <View className="w-full max-w-4xl flex-row items-center justify-around">
-                {tabs.map(tab => {
+                {USER_NAV_LIST.map(tab => {
                     // 하위 페이지(/schedule/detail)에 가도 탭 불이 안 꺼지도록 startsWith 적용
                     const isActive =
                         tab.path === "/" ? pathname === "/" : pathname.startsWith(tab.path);

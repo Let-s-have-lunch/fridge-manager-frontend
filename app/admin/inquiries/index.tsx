@@ -49,7 +49,7 @@ function AdminInquiryListPage() {
     const totalPage = Math.ceil(total / pageSize) || 1;
 
     return (
-        <View className="flex-1 bg-bg-paper p-4 md:p-6 w-full">
+        <View className="flex-1 w-full">
             {/* 상단 타이틀 영역 */}
             <View className="mb-6">
                 <Title
@@ -62,9 +62,9 @@ function AdminInquiryListPage() {
             </View>
 
             {/* 테이블 컨테이너 */}
-            <View className="flex-1 bg-bg-subtle/30 border border-divider rounded-2xl overflow-hidden flex flex-col">
+            <View className="flex-1  border border-divider rounded-2xl overflow-hidden flex flex-col">
                 {/* 테이블 헤더 (웹 환경 대응) */}
-                <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-bg-subtle">
+                <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-primary-main">
                     <TextComponent className="w-16 font-bold text-text-secondary text-center">
                         ID
                     </TextComponent>

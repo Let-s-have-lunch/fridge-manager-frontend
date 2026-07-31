@@ -49,7 +49,7 @@ function AdminNoticeListPage() {
     const totalPages = Math.ceil(total / pageSize) || 1;
 
     return (
-        <View className="flex-1 bg-bg-paper p-4 md:p-6 w-full">
+        <View className="flex-1 w-full">
             {/* 상단 Title 컴포넌트 및 공지 등록 버튼 영역 */}
             <View className="flex-row items-center justify-between mb-6 gap-2">
                 <View className="flex-1">
@@ -69,7 +69,7 @@ function AdminNoticeListPage() {
             </View>
 
             {/* 웹 전용 테이블 헤더 */}
-            <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-bg-subtle rounded-t-xl">
+            <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-primary-main rounded-t-xl">
                 <TextComponent className="w-16 font-bold text-text-secondary text-center">
                     ID
                 </TextComponent>

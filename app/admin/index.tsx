@@ -35,19 +35,11 @@ export default function AdminDashboard() {
 
     return (
         /* 웹에서 너무 넓어지지 않도록 중앙 정렬 및 최대 너비(max-w-md) 적용 */
-        <View className="flex-1 bg-bg-default items-center">
-            <View className="w-full max-w- flex-1 bg-bg-default">
-                {/* 헤더 밑줄 제거하여 깔끔하게 정돈 */}
-                <Title
-                    title="관리자 대시보드"
-                    showBackButton={true}
-                    onBackPress={() => router.replace("/my-page")}
-                    className="bg-bg-default py-6"
-                />
-
-                <ScrollView className="flex-1 px-5 py-5" showsVerticalScrollIndicator={false}>
+        <View className="flex-1 items-center">
+            <View className="w-full flex-1 ">
+                <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                     {/* 웰컴 배너 카드 */}
-                    <Card className="p-5 mb-5 bg-bg-paper border border-divider rounded-2xl">
+                    <Card className="p-5 mb-5 bg-bg-paper border border-divider rounded-2xl md:hidden">
                         <View className="flex-col">
                             <TextComponent className="text-xl font-extrabold text-text-default">
                                 관리자 시스템
@@ -59,13 +51,13 @@ export default function AdminDashboard() {
                     </Card>
 
                     {/* 빠른 메뉴 바로가기 */}
-                    <View className="mb-6">
+                    <View className="mb-6 md:hidden">
                         <TextComponent className="text-base font-bold text-text-default mb-3 px-1">
                             바로가기 메뉴
                         </TextComponent>
                         <View className="flex-row gap-3">
                             <TouchableOpacity
-                                onPress={() => router.push("/admin/user")}
+                                onPress={() => router.push("/admin/users")}
                                 className="flex-1 bg-bg-paper p-4 rounded-2xl border border-divider items-center justify-center active:opacity-70">
                                 <View className="w-11 h-11 bg-blue-500/15 dark:bg-blue-500/25 rounded-xl items-center justify-center mb-2 border border-blue-500/30">
                                     <Feather
