@@ -14,6 +14,8 @@ import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCa
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
 import { twMerge } from "tailwind-merge";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
+import MainDesktopHeader from "@/components/layout/main/MainDesktopHeader";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 
@@ -23,6 +25,8 @@ interface ModalConfigState {
 }
 
 function StatsPage() {
+    useSetupLayout({  showDesktopHeader: true });
+
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [statsData, setStatsData] = useState<GetStatisticsResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);

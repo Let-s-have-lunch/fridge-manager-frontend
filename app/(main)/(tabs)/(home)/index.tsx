@@ -1,10 +1,9 @@
 import { useSetupLayout } from "@/hooks/useSetupLayout";
 import CategoryTabs, { Category } from "@/components/home/CategoryTabs";
 import { useState } from "react";
-import MainHeader from "@/components/layout/main/MainHeader";
 
 export default function HomeScreen() {
-    useSetupLayout({ showMainHeader: true });
+    useSetupLayout({ showMainHeader: true, showDesktopHeader: true });
     const [category, setCategory] = useState<Category>("전체");
     const [keyword, setKeyword] = useState("");
 

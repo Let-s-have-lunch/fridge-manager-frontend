@@ -11,8 +11,11 @@ import Button from "@/components/common/button/Button";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import { getAnimalIcon } from "@/constants/profile";
+import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 export default function MyPageScreen() {
+    useSetupLayout({ showDesktopHeader: true });
+
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const { logout, isLoggedIn } = useAuthStore();
