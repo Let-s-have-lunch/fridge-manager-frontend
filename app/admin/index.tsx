@@ -36,7 +36,7 @@ export default function AdminDashboard() {
     return (
         /* 웹에서 너무 넓어지지 않도록 중앙 정렬 및 최대 너비(max-w-md) 적용 */
         <View className="flex-1 bg-bg-default items-center">
-            <View className="w-full max-w-md flex-1 bg-bg-default">
+            <View className="w-full max-w- flex-1 bg-bg-default">
                 {/* 헤더 밑줄 제거하여 깔끔하게 정돈 */}
                 <Title
                     title="관리자 대시보드"
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                onPress={() => router.push("/admin/notice")}
+                                onPress={() => router.push("/admin/notices")}
                                 className="flex-1 bg-bg-paper p-4 rounded-2xl border border-divider items-center justify-center active:opacity-70">
                                 <View className="w-11 h-11 bg-amber-500/15 dark:bg-amber-500/25 rounded-xl items-center justify-center mb-2 border border-amber-500/30">
                                     <Feather
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                onPress={() => router.push("/admin/inquiry")}
+                                onPress={() => router.push("/admin/inquiries")}
                                 className="flex-1 bg-bg-paper p-4 rounded-2xl border border-divider items-center justify-center active:opacity-70">
                                 <View className="w-11 h-11 bg-emerald-500/15 dark:bg-emerald-500/25 rounded-xl items-center justify-center mb-2 border border-emerald-500/30">
                                     <Feather
