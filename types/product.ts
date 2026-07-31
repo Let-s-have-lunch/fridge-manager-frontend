@@ -32,14 +32,19 @@ export const Status = {
 export type StatusType = (typeof Status)[keyof typeof Status];
 
 export interface Product {
+    id: number;
     name: string;
-    memo: string;
-    category: number;
-    storageType: StorageType;
+    memo: string | null;
+
     quantity: number;
     unit: UnitType;
-    price: number;
+    storageType: StorageType;
+
     expirationDate: string;
+    createdAt: string;
+    dDay: number;
+
+    price: number | null;
     addMethod: AddMethodType;
     status: StatusType;
 }

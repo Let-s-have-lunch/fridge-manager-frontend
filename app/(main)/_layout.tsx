@@ -9,7 +9,6 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 export default function MainLayout() {
     const { showMainHeader, showMainFooter } = useLayoutStore();
     const user = useAuthStore(state => state.user);
-    console.log("user:", user);
 
     const handleSearch = (keyword: string) => {
         console.log("검색어 입력됨:", keyword);
