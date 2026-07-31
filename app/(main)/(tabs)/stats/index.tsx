@@ -118,17 +118,12 @@ function StatsPage() {
     return (
         <View className={twMerge("flex-1 bg-bg-default")}>
             {/* 1. 타이틀 헤더 */}
-            <View className={twMerge("relative")}>
+            <View className={twMerge("relative", "md:hidden")}>
                 <Title
                     title="월간 대시보드"
                     showBackButton={true}
                     onBackPress={() => router.back()}
                 />
-                <TouchableOpacity
-                    className={twMerge("absolute right-5 top-0 bottom-0 justify-center")}
-                    activeOpacity={0.7}>
-                    <Feather name="calendar" size={24} className={twMerge("text-text-default")} />
-                </TouchableOpacity>
             </View>
 
             {isLoading ? (
