@@ -133,72 +133,72 @@
         --info-contrast: #FFFFFF; /* 텍스트 */
     }
 
-    @media (prefers-color-scheme: dark) {
-        :root {
-            /* ===========================
-               Background
-            =========================== */
-            --bg-default: #2F2B29;
-            --bg-paper: #3A3532;
-            --bg-subtle: #4A4440;
+    /*@media (prefers-color-scheme: dark) {*/
+    /*    :root {*/
+    /*        !* ===========================*/
+    /*           Background*/
+    /*        =========================== *!*/
+    /*        --bg-default: #2F2B29;*/
+    /*        --bg-paper: #3A3532;*/
+    /*        --bg-subtle: #4A4440;*/
 
-            /* ===========================
-               Text
-            =========================== */
-            --text-default: #F8F5F1;
-            --text-secondary: #C9C1BA;
-            --text-subtle: #9C948E;
+    /*        !* ===========================*/
+    /*           Text*/
+    /*        =========================== *!*/
+    /*        --text-default: #F8F5F1;*/
+    /*        --text-secondary: #C9C1BA;*/
+    /*        --text-subtle: #9C948E;*/
 
-            /* ===========================
-               Border
-            =========================== */
-            --divider: #5B534E;
+    /*        !* ===========================*/
+    /*           Border*/
+    /*        =========================== *!*/
+    /*        --divider: #5B534E;*/
 
-            /* ===========================
-               Primary
-            =========================== */
-            --primary-main: #F79C79;
-            --primary-contrast: #FFFFFF;
-            --primary-point: #F5B79F;
+    /*        !* ===========================*/
+    /*           Primary*/
+    /*        =========================== *!*/
+    /*        --primary-main: #F79C79;*/
+    /*        --primary-contrast: #FFFFFF;*/
+    /*        --primary-point: #F5B79F;*/
 
-            /* ===========================
-               Secondary
-            =========================== */
-            --secondary-main: #6D9FC9;
-            --secondary-contrast: #FFFFFF;
-            --secondary-point: #8FC3EE;
+    /*        !* ===========================*/
+    /*           Secondary*/
+    /*        =========================== *!*/
+    /*        --secondary-main: #6D9FC9;*/
+    /*        --secondary-contrast: #FFFFFF;*/
+    /*        --secondary-point: #8FC3EE;*/
 
-            /* ===========================
-               Success
-            =========================== */
-            --success-main: #7DAE79;
-            --success-contrast: #FFFFFF;
-            --success-point: #98D792;
+    /*        !* ===========================*/
+    /*           Success*/
+    /*        =========================== *!*/
+    /*        --success-main: #7DAE79;*/
+    /*        --success-contrast: #FFFFFF;*/
+    /*        --success-point: #98D792;*/
 
-            /* ===========================
-               Error
-            =========================== */
-            --error-main: #D86D61;
-            --error-contrast: #FFFFFF;
-            --error-point: #F18B81;
-            --error-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
-            --error-border: var(--error-main); /* 👈 테두리로 포인트 */
+    /*        !* ===========================*/
+    /*           Error*/
+    /*        =========================== *!*/
+    /*        --error-main: #D86D61;*/
+    /*        --error-contrast: #FFFFFF;*/
+    /*        --error-point: #F18B81;*/
+    /*        --error-bg: var(--bg-paper); !* 👈 다크모드 배경은 카드 배경과 통일 *!*/
+    /*        --error-border: var(--error-main); !* 👈 테두리로 포인트 *!*/
 
-            /* ===========================
-               Warning
-            =========================== */
-            --warning-main: #D9B86A;
-            --warning-contrast: #2C2C2C;
-            --warning-bg: var(--bg-paper); /* 👈 다크모드 배경은 카드 배경과 통일 */
-            --warning-border: var(--warning-main); /* 👈 테두리로 포인트 */
-
-            /* ===========================
-               Info
-            =========================== */
-            --info-main: #6C9EC5;
-            --info-contrast: #FFFFFF;
-        }
-    }
+    /*        !* ===========================*/
+    /*           Warning*/
+    /*        =========================== *!*/
+    /*        --warning-main: #D9B86A;*/
+    /*        --warning-contrast: #2C2C2C;*/
+    /*        --warning-bg: var(--bg-paper); !* 👈 다크모드 배경은 카드 배경과 통일 *!*/
+    /*        --warning-border: var(--warning-main); !* 👈 테두리로 포인트 *!*/
+    
+    /*        !* ===========================*/
+    /*           Info*/
+    /*        =========================== *!*/
+    /*        --info-main: #6C9EC5;*/
+    /*        --info-contrast: #FFFFFF;*/
+    /*    }*/
+    /*}*/
 
 
     input:focus,

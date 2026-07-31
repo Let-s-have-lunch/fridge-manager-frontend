@@ -193,8 +193,9 @@ export default function MyPageScreen() {
                             </TouchableOpacity>
                         </View>
                     ) : (
-                        <View className={"mt-16 md:mt-6"}>
-                            <Button onPress={() => router.push("/auth/login")}>로그인</Button>
+                        <View className={"flex flex-col md:flex-row mt-8 md:mt-6 gap-3 w-full"}>
+                            <Button onPress={() => router.push("/auth/login")} wrap={true}>로그인</Button>
+                            <Button onPress={() => router.push("/auth/register")} wrap={true} color={"success"}>회원가입</Button>
                         </View>
                     )}
                 </View>

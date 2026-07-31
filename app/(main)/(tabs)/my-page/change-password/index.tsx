@@ -83,168 +83,170 @@ export default function ChangePasswordPage() {
     };
 
     return (
-        <View className="flex-1 bg-bg-default">
-            <Title
-                title={"비밀번호 변경"}
-                showBackButton={true}
-                onBackPress={() => router.back()}
-            />
+        <View className="flex-1 bg-bg-default items-center">
+            <View className={"flex-1 w-full max-w-[480px]"}>
+                <Title
+                    title={"비밀번호 변경"}
+                    showBackButton={true}
+                    onBackPress={() => router.back()}
+                />
 
-            <ScrollView
-                className="flex-1 px-6 pt-4"
-                contentContainerStyle={{ paddingBottom: 40 }}
-                showsVerticalScrollIndicator={false}>
-                <View className="mb-2">
-                    {/* 현재 비밀번호 */}
-                    <Controller
-                        control={control}
-                        name={"prevPassword"}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <InputGroup
-                                label={"현재 비밀번호"}
-                                errorMessage={errors.prevPassword?.message}
-                                className="mb-8"
-                            >
-                                <View className="relative justify-center w-full">
-                                    <Input
-                                        id={"prevPassword"}
-                                        placeholder={"현재 비밀번호를 입력해주세요."}
-                                        value={value}
-                                        onChangeText={onChange}
-                                        onBlur={onBlur}
-                                        secureTextEntry={!showPrevPassword}
-                                        hasError={!!errors.prevPassword}
-                                        searchIcon={
-                                            <Ionicons
-                                                name="lock-closed-outline"
-                                                size={20}
-                                                color="#9ca3af"
-                                            />
-                                        }
-                                        className="pr-12"
-                                    />
-                                    <TouchableOpacity
-                                        onPress={() => setShowPrevPassword(!showPrevPassword)}
-                                        className="absolute right-3 p-2 z-10">
-                                        <Ionicons
-                                            name={
-                                                showPrevPassword ? "eye-off-outline" : "eye-outline"
+                <ScrollView
+                    className="flex-1 px-6 pt-4"
+                    contentContainerStyle={{ paddingBottom: 40 }}
+                    showsVerticalScrollIndicator={false}>
+                    <View className="mb-2">
+                        {/* 현재 비밀번호 */}
+                        <Controller
+                            control={control}
+                            name={"prevPassword"}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <InputGroup
+                                    label={"현재 비밀번호"}
+                                    errorMessage={errors.prevPassword?.message}
+                                    className="mb-8">
+                                    <View className="relative justify-center w-full">
+                                        <Input
+                                            id={"prevPassword"}
+                                            placeholder={"현재 비밀번호를 입력해주세요."}
+                                            value={value}
+                                            onChangeText={onChange}
+                                            onBlur={onBlur}
+                                            secureTextEntry={!showPrevPassword}
+                                            hasError={!!errors.prevPassword}
+                                            searchIcon={
+                                                <Ionicons
+                                                    name="lock-closed-outline"
+                                                    size={20}
+                                                    color="#9ca3af"
+                                                />
                                             }
-                                            size={20}
-                                            color="#9ca3af"
+                                            className="pr-12"
                                         />
-                                    </TouchableOpacity>
-                                </View>
-                            </InputGroup>
-                        )}
-                    />
-
-                    <Controller
-                        control={control}
-                        name={"password"}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <InputGroup
-                                size={"small"}
-                                label={"새 비밀번호"}
-                                errorMessage={errors.password?.message}
-                                className="mb-8"
-                            >
-                                <View className="relative justify-center w-full">
-                                    <Input
-                                        size={"small"}
-                                        id={"password"}
-                                        placeholder={"새 비밀번호를 입력해주세요 (6자 이상)."}
-                                        value={value}
-                                        onChangeText={onChange}
-                                        onBlur={onBlur}
-                                        secureTextEntry={!showPassword}
-                                        hasError={!!errors.password}
-                                        searchIcon={
+                                        <TouchableOpacity
+                                            onPress={() => setShowPrevPassword(!showPrevPassword)}
+                                            className="absolute right-3 p-2 z-10">
                                             <Ionicons
-                                                name="lock-closed-outline"
+                                                name={
+                                                    showPrevPassword
+                                                        ? "eye-off-outline"
+                                                        : "eye-outline"
+                                                }
                                                 size={20}
                                                 color="#9ca3af"
                                             />
-                                        }
-                                        className="pr-12"
-                                    />
-                                    <TouchableOpacity
-                                        onPress={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 p-2 z-10">
-                                        <Ionicons
-                                            name={showPassword ? "eye-off-outline" : "eye-outline"}
-                                            size={20}
-                                            color="#9ca3af"
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </InputGroup>
-                        )}
-                    />
+                                        </TouchableOpacity>
+                                    </View>
+                                </InputGroup>
+                            )}
+                        />
 
-                    <Controller
-                        control={control}
-                        name={"confirmPassword"}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <InputGroup
-                                size={"small"}
-                                label={"새 비밀번호 확인"}
-                                errorMessage={errors.confirmPassword?.message}
-                                className="mb-10"
-                            >
-                                <View className="relative justify-center w-full">
-                                    <Input
-                                        size={"small"}
-                                        id={"confirmPassword"}
-                                        placeholder={"새 비밀번호를 다시 입력해주세요."}
-                                        value={value}
-                                        onChangeText={onChange}
-                                        onBlur={onBlur}
-                                        secureTextEntry={!showConfirmPassword}
-                                        hasError={!!errors.confirmPassword}
-                                        searchIcon={
-                                            <Ionicons
-                                                name="lock-closed-outline"
-                                                size={20}
-                                                color="#9ca3af"
-                                            />
-                                        }
-                                        className="pr-12"
-                                    />
-                                    <TouchableOpacity
-                                        onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 p-2 z-10">
-                                        <Ionicons
-                                            name={
-                                                showConfirmPassword
-                                                    ? "eye-off-outline"
-                                                    : "eye-outline"
+                        <Controller
+                            control={control}
+                            name={"password"}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <InputGroup
+                                    size={"small"}
+                                    label={"새 비밀번호"}
+                                    errorMessage={errors.password?.message}
+                                    className="mb-8">
+                                    <View className="relative justify-center w-full">
+                                        <Input
+                                            size={"small"}
+                                            id={"password"}
+                                            placeholder={"새 비밀번호를 입력해주세요 (6자 이상)."}
+                                            value={value}
+                                            onChangeText={onChange}
+                                            onBlur={onBlur}
+                                            secureTextEntry={!showPassword}
+                                            hasError={!!errors.password}
+                                            searchIcon={
+                                                <Ionicons
+                                                    name="lock-closed-outline"
+                                                    size={20}
+                                                    color="#9ca3af"
+                                                />
                                             }
-                                            size={20}
-                                            color="#9ca3af"
+                                            className="pr-12"
                                         />
-                                    </TouchableOpacity>
-                                </View>
-                            </InputGroup>
-                        )}
-                    />
-                </View>
+                                        <TouchableOpacity
+                                            onPress={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 p-2 z-10">
+                                            <Ionicons
+                                                name={
+                                                    showPassword ? "eye-off-outline" : "eye-outline"
+                                                }
+                                                size={20}
+                                                color="#9ca3af"
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </InputGroup>
+                            )}
+                        />
 
-                {errors.root?.message && (
-                    <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
-                        {errors.root?.message}
-                    </ErrorMessage>
-                )}
+                        <Controller
+                            control={control}
+                            name={"confirmPassword"}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <InputGroup
+                                    size={"small"}
+                                    label={"새 비밀번호 확인"}
+                                    errorMessage={errors.confirmPassword?.message}
+                                    className="mb-10">
+                                    <View className="relative justify-center w-full">
+                                        <Input
+                                            size={"small"}
+                                            id={"confirmPassword"}
+                                            placeholder={"새 비밀번호를 다시 입력해주세요."}
+                                            value={value}
+                                            onChangeText={onChange}
+                                            onBlur={onBlur}
+                                            secureTextEntry={!showConfirmPassword}
+                                            hasError={!!errors.confirmPassword}
+                                            searchIcon={
+                                                <Ionicons
+                                                    name="lock-closed-outline"
+                                                    size={20}
+                                                    color="#9ca3af"
+                                                />
+                                            }
+                                            className="pr-12"
+                                        />
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                setShowConfirmPassword(!showConfirmPassword)
+                                            }
+                                            className="absolute right-3 p-2 z-10">
+                                            <Ionicons
+                                                name={
+                                                    showConfirmPassword
+                                                        ? "eye-off-outline"
+                                                        : "eye-outline"
+                                                }
+                                                size={20}
+                                                color="#9ca3af"
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </InputGroup>
+                            )}
+                        />
+                    </View>
 
-                <View>
-                    <Button
-                        onPress={handleSubmit(onSubmit)}
-                        disabled={isSubmitting}
-                        >
-                        변경하기
-                    </Button>
-                </View>
-            </ScrollView>
+                    {errors.root?.message && (
+                        <ErrorMessage className={twMerge("text-center", "mt-2", "mb-4")}>
+                            {errors.root?.message}
+                        </ErrorMessage>
+                    )}
+
+                    <View className={"mt-8"}>
+                        <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
+                            변경하기
+                        </Button>
+                    </View>
+                </ScrollView>
+            </View>
         </View>
     );
 }
