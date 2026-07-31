@@ -8,6 +8,7 @@ import Card from "@/components/common/card/Card";
 import adminApi from "@/api/admin/adminApi";
 import { AdminUser } from "@/types/admin";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import EditUserModal from "@/components/domain/admin/EditUserModal";
 
 export default function AdminUserManagement() {
     const router = useRouter();
@@ -17,6 +18,10 @@ export default function AdminUserManagement() {
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+
+    // ✅ 모달 상태 관리를 위한 state 추가
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
 
     // 회원 목록 불러오기
     const fetchUsers = async () => {
@@ -118,6 +123,12 @@ export default function AdminUserManagement() {
         ]);
     };
 
+    // ✅ 모달 열기 핸들러 추가
+    const handleOpenEdit = (user: AdminUser) => {
+        setSelectedUser(user);
+        setIsEditModalVisible(true);
+    };
+
     return (
         <View className="flex-1 bg-bg-default items-center">
             <View className="w-full max-w-md flex-1 bg-bg-default">
@@ -195,8 +206,9 @@ export default function AdminUserManagement() {
                                         </View>
                                     </TouchableOpacity>
 
-                                    {/* 우측 액션 버튼들 (권한 토글 + 삭제 버튼) */}
-                                    <View className="items-end gap-1.5 flex-row">
+                                    {/* 우측 액션 버튼들 (권한 토글 + 수정 + 삭제) */}
+                                    {/* ✅ 버튼들의 수직 정렬을 맞추기 위해 items-end를 items-center로 변경 */}
+                                    <View className="items-center gap-1.5 flex-row">
                                         <TouchableOpacity
                                             onPress={() => handleToggleRole(user.id, user.role)}
                                             className={`px-2.5 py-1 rounded-full ${
@@ -214,6 +226,17 @@ export default function AdminUserManagement() {
                                             </TextComponent>
                                         </TouchableOpacity>
 
+                                        {/* ✅ 수정 버튼 추가 */}
+                                        <TouchableOpacity
+                                            onPress={() => handleOpenEdit(user)}
+                                            className="p-1.5 bg-bg-subtle rounded-lg border border-divider ml-1">
+                                            <Feather
+                                                name="edit-2"
+                                                size={14}
+                                                color={isDark ? "#C9C1BA" : "#777777"}
+                                            />
+                                        </TouchableOpacity>
+
                                         {/* 삭제 버튼 추가 */}
                                         <TouchableOpacity
                                             onPress={() => handleDeleteUser(user.id, user.nickname)}
@@ -227,6 +250,14 @@ export default function AdminUserManagement() {
                     </Card>
                 </ScrollView>
             </View>
+
+            {/* ✅ 회원 수정 모달 추가 */}
+            <EditUserModal
+                visible={isEditModalVisible}
+                user={selectedUser}
+                onClose={() => setIsEditModalVisible(false)}
+                onSuccess={fetchUsers}
+            />
         </View>
     );
 }

@@ -31,3 +31,10 @@ export interface AdminNotice {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface AdminNoticeListResponse {
+    page: number;
+    size: number;
+    total: number;
+    list: AdminNotice[];
+}
