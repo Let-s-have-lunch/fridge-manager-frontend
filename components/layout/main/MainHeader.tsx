@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Pressable, View, Image, Text, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
-
 import Input from "@/components/common/input/Input";
 import { getAnimalIcon } from "@/constants/profile";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useHomeStore } from "@/stores/home/productStore";
+import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import MenuItem from "@/components/home/header/MenuItem";
+import FridgeSettingSheet from "@/components/home/header/FridgeSettingSheet";
 
 export default function MainHeader() {
     const user = useAuthStore(state => state.user);
@@ -25,6 +27,8 @@ export default function MainHeader() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isFridgeOpen, setIsFridgeOpen] = useState(false);
 
+    const bottomSheetRef = useRef<BottomSheetModal>(null);
+    const snapPoints = useMemo(() => ["70%"], []);
     const handleSearchToggle = () => {
         setIsSearchOpen(prev => !prev);
 
@@ -119,7 +123,6 @@ export default function MainHeader() {
                     </Pressable>
                 </View>
             </View>
-
             {isSearchOpen && (
                 <View
                     className={twMerge(
@@ -190,13 +193,19 @@ export default function MainHeader() {
                             onPress={() => {
                                 setIsFridgeOpen(false);
 
-                                // TODO : 냉장고 설정 모달 열기
+                                setTimeout(() => {
+                                    bottomSheetRef.current?.present();
+                                }, 200);
                             }}>
                             <Text className="font-medium text-text-default">⚙️ 냉장고 설정</Text>
                         </Pressable>
                     </View>
                 </Pressable>
             </Modal>
+            <FridgeSettingSheet
+                ref={bottomSheetRef}
+                onClose={() => bottomSheetRef.current?.dismiss()}
+            />
         </View>
     );
 }
