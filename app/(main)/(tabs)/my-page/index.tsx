@@ -168,21 +168,22 @@ export default function MyPageScreen() {
 
                     {/* 4. 관리자 전용 별도 카테고리 */}
                     {isLoggedIn && user?.role === "ADMIN" && (
-                        <View className="mb-8 bg-bg-paper border border-divider rounded-xl p-4">
+                        <TouchableOpacity
+                            onPress={() => router.push("/admin")}
+                            activeOpacity={0.7}
+                            className="mb-8 bg-bg-paper border border-divider rounded-xl p-4">
                             <TextComponent className="text-base font-bold text-text-default mb-1">
                                 관리자 전용
                             </TextComponent>
-                            <View>
-                                <TouchableOpacity
-                                    onPress={() => router.push("/admin")}
-                                    className="flex-row items-center justify-between py-3">
-                                    <TextComponent className="text-[15px] font-bold text-primary-main">
-                                        관리자 대시보드 바로가기
-                                    </TextComponent>
-                                    <Feather name="chevron-right" size={20} color="#BDBDBD" />
-                                </TouchableOpacity>
+
+                            {/* 2. 기존의 안쪽 TouchableOpacity는 단순 View로 변경하여 레이아웃만 유지 */}
+                            <View className="flex-row items-center justify-between py-3">
+                                <TextComponent className="text-[15px] font-bold text-primary-main">
+                                    관리자 대시보드 바로가기
+                                </TextComponent>
+                                <Feather name="chevron-right" size={20} color="#BDBDBD" />
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )}
 
                     {/* 🌟 5. 로그아웃 버튼 (회원에게만 노출) 🌟 */}

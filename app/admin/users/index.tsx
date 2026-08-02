@@ -134,15 +134,14 @@ export default function AdminUserManagement() {
             <View className="w-full flex-1 ">
                 {/* 헤더 */}
                 <Title
-                    title="회원 관리"
-                    showBackButton={true}
-                    onBackPress={() => router.replace("/admin")}
-                    className="py-6 md:hidden"
+                    title="사용자 관리"
+                    className="h-auto pb-4 mb-6 "
+                    description={"서비스에 가입한 유저 목록을 조회하고 관리합니다."}
                 />
 
                 <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                     {/* 상단 안내 카드 */}
-                    <Card className="p-4 mb-5 bg-bg-paper border border-divider rounded-2xl flex-row items-center justify-between">
+                    <Card className="md:hidden p-4 mb-5 bg-bg-paper border border-divider rounded-2xl flex-row items-center justify-between">
                         <View>
                             <TextComponent className="text-sm font-bold text-text-default">
                                 전체 회원 목록

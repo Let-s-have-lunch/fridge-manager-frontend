@@ -51,22 +51,16 @@ function AdminNoticeListPage() {
     return (
         <View className="flex-1 w-full">
             {/* 상단 Title 컴포넌트 및 공지 등록 버튼 영역 */}
-            <View className="flex-row items-center justify-between mb-6 gap-2">
-                <View className="flex-1">
-                    <Title
-                        title="공지사항 관리"
-                        description="등록된 공지사항 목록을 확인하고 관리합니다."
-                        showBackButton={true}
-                        onBackPress={() => router.back()}
-                        className="h-auto py-1"
-                    />
-                </View>
+            <Title
+                title="공지사항 관리"
+                description="등록된 공지사항 목록을 확인하고 관리합니다."
+                className="h-auto pb-4 mb-6">
                 <Pressable
                     onPress={() => router.push("/admin/notices/create")}
                     className="bg-primary-main px-4 py-2.5 rounded-xl items-center shrink-0">
                     <TextComponent className="font-bold text-white">공지 등록</TextComponent>
                 </Pressable>
-            </View>
+            </Title>
 
             {/* 웹 전용 테이블 헤더 */}
             <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-primary-main rounded-t-xl">

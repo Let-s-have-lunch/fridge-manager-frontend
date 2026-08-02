@@ -51,15 +51,11 @@ function AdminInquiryListPage() {
     return (
         <View className="flex-1 w-full">
             {/* 상단 타이틀 영역 */}
-            <View className="mb-6">
                 <Title
                     title="1:1 문의 관리"
                     description="사용자의 문의글을 확인하고 관리합니다."
-                    showBackButton={true}
-                    onBackPress={() => router.back()}
-                    className="h-auto py-1"
+                    className="h-auto pb-4 mb-6 "
                 />
-            </View>
 
             {/* 테이블 컨테이너 */}
             <View className="flex-1  border border-divider rounded-2xl overflow-hidden flex flex-col">
