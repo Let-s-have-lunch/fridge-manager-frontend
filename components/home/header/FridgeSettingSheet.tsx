@@ -7,10 +7,12 @@ import MenuItem from "@/components/home/header/MenuItem";
 interface FridgeSettingSheetProps {
     onClose: () => void;
     onAddFridge: () => void;
+    onEditFridge: () => void;
+    onDeleteFridge: () => void;
 }
 
 const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>(
-    ({ onClose, onAddFridge }, ref) => {
+    ({ onClose, onAddFridge, onEditFridge, onDeleteFridge }, ref) => {
         const snapPoints = useMemo(() => ["70%"], []);
 
         return (
@@ -60,7 +62,7 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                             bg="#F7F3EE"
                             title="냉장고 수정"
                             subTitle="냉장고 이름을 수정해요"
-                            onPress={onClose}
+                            onPress={onEditFridge}
                         />
 
                         <MenuItem
@@ -69,7 +71,7 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                             bg="#F7F3EE"
                             title="냉장고 삭제"
                             subTitle="냉장고를 삭제해요"
-                            onPress={onClose}
+                            onPress={onDeleteFridge}
                             isLast
                         />
                     </View>

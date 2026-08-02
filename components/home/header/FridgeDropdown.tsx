@@ -1,6 +1,7 @@
 import { Modal, Pressable, Text, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Fridge } from "@/types/fridge";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface FridgeDropdownProps {
     visible: boolean;
@@ -52,7 +53,7 @@ export default function FridgeDropdown({
                     <View className="border-t border-divider" />
 
                     <Pressable className="px-4 py-3" onPress={onOpenSetting}>
-                        <Text className="font-medium text-text-default">⚙️ 냉장고 설정</Text>
+                        <Text>냉장고 설정</Text>
                     </Pressable>
                 </View>
             </Pressable>

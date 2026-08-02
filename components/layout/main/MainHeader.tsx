@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Pressable, View, } from "react-native";
+import { Alert, Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -9,7 +9,9 @@ import FridgeSettingSheet from "@/components/home/header/FridgeSettingSheet";
 import HeaderProfile from "@/components/home/header/HeaderProfile";
 import FridgeDropdown from "@/components/home/header/FridgeDropdown";
 import SearchBar from "@/components/home/header/SearchBar";
-import AddFridgeSheet from "@/components/home/header/AddFridgeSheet";
+import FridgeSheet from "@/components/home/header/FridgeSheet";
+import fridgeApi from "@/api/user/fridgeApi";
+import DeleteFridgeSheet from "@/components/home/header/DeleteFridgeSheet";
 
 export default function MainHeader() {
     const user = useAuthStore(state => state.user);
@@ -17,6 +19,7 @@ export default function MainHeader() {
     const userId = user?.id;
 
     const fridges = useHomeStore(state => state.fridges);
+    const setFridges = useHomeStore(state => state.setFridges);
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
     const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
 
@@ -49,12 +52,27 @@ export default function MainHeader() {
             addFridgeRef.current?.present();
         }, 200);
     };
+    const handleOpenEditFridge = () => {
+        bottomSheetRef.current?.dismiss();
 
+        setTimeout(() => {
+            editFridgeRef.current?.present();
+        }, 200);
+    };
+    const handleOpenDeleteFridge = () => {
+        bottomSheetRef.current?.dismiss();
+
+        setTimeout(() => {
+            deleteFridgeRef.current?.present();
+        }, 200);
+    };
 
     const addFridgeRef = useRef<BottomSheetModal>(null);
 
     // 현재 선택된 냉장고
     const selectedFridge = fridges.find(fridge => fridge.id === selectedFridgeId);
+    const editFridgeRef = useRef<BottomSheetModal>(null);
+    const deleteFridgeRef = useRef<BottomSheetModal>(null);
 
     return (
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
@@ -115,8 +133,26 @@ export default function MainHeader() {
                 ref={bottomSheetRef}
                 onClose={() => bottomSheetRef.current?.dismiss()}
                 onAddFridge={handleOpenAddFridge}
+                onEditFridge={handleOpenEditFridge}
+                onDeleteFridge={handleOpenDeleteFridge}
             />
-            <AddFridgeSheet ref={addFridgeRef} onClose={() => addFridgeRef.current?.dismiss()} />
+            <FridgeSheet
+                ref={addFridgeRef}
+                mode="create"
+                onClose={() => addFridgeRef.current?.dismiss()}
+            />
+            <FridgeSheet
+                ref={editFridgeRef}
+                mode="edit"
+                fridge={selectedFridge}
+                onClose={() => editFridgeRef.current?.dismiss()}
+            />
+
+            <DeleteFridgeSheet
+                ref={deleteFridgeRef}
+                fridge={selectedFridge}
+                onClose={() => deleteFridgeRef.current?.dismiss()}
+            />
         </View>
     );
 }
