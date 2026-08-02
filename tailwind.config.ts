@@ -20,12 +20,15 @@ export default {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
                     subtle: "var(--bg-subtle)",
+                    button: "var(--bg-button)",
                 },
 
                 text: {
                     default: "var(--text-default)",
                     secondary: "var(--text-secondary)",
                     subtle: "var(--text-subtle)",
+                    contrast: "var(--text-contrast)",
+
                 },
 
                 divider: "var(--divider)",
@@ -64,6 +67,19 @@ export default {
                     main: "var(--info-main)",
                     contrast: "var(--info-contrast)",
                 },
+
+                menu: {
+                    bg: "var(--menu-bg)",
+                    icon: "var(--menu-icon)",
+                    danger: {
+                        bg: "var(--menu-danger-bg)",
+                        icon: "var(--menu-danger-icon)",
+                    },
+                },
+
+                button: {
+                    subtle: "var(--button-subtle)",
+                },
             },
         },
     },
@@ -71,7 +87,7 @@ export default {
     safelist: [
         {
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text|menu|button)-(main|contrast|secondary|point|subtle|bg|icon|danger)/,
         },
     ],
 

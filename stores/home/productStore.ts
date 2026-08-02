@@ -19,6 +19,8 @@ interface HomeState {
     setFridges: (fridges: Fridge[]) => void;
     setSelectedFridgeId: (id: number | null) => void;
 
+
+
 }
 
 export const useHomeStore = create<HomeState>(set => ({

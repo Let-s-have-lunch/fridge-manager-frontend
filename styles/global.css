@@ -10,6 +10,8 @@
         --bg-default: #F9F4EE; /* 앱 전체 기본 배경 */
         --bg-paper: #FFFFFF; /* 카드, 입력창 */
         --bg-subtle: #F8EAD9; /* 푸터, 섹션, 강조 배경 */
+        --bg-button: #F3EFEA;
+
 
         /* ===========================
            Text
@@ -17,6 +19,7 @@
         --text-default: #444444; /* 기본 본문 */
         --text-secondary: #777777; /* 보조 텍스트 */
         --text-subtle: #BDBDBD; /* Placeholder, 비활성 */
+        --text-contrast: #FFFFFF;
 
         /* ===========================
            Border
@@ -62,6 +65,15 @@
         =========================== */
         --info-main: #DCEAF6; /* 정보 상태 */
         --info-contrast: #2C2C2C; /* 텍스트 */
+
+        /* Menu Item */
+        --menu-bg: #F7F3EE;
+        --menu-icon: #8AA9B9;
+
+        --menu-danger-icon: #EB7868;
+        --menu-danger-bg: #F7F3EE;
+
+        --button-subtle: #F3EFEA;
     }
 
     .dark {
@@ -71,6 +83,7 @@
         --bg-default: #2F2B29; /* 앱 전체 기본 배경 */
         --bg-paper: #3A3532; /* 카드, 입력창 */
         --bg-subtle: #4A4440; /* 푸터, 섹션, 강조 배경 */
+        --bg-button: #504943;
 
         /* ===========================
            Text
@@ -78,6 +91,7 @@
         --text-default: #F8F5F1; /* 기본 본문 */
         --text-secondary: #C9C1BA; /* 보조 텍스트 */
         --text-subtle: #9C948E; /* Placeholder, 비활성 */
+        --text-contrast: #444444;
 
         /* ===========================
            Border
@@ -123,6 +137,15 @@
         =========================== */
         --info-main: #6C9EC5; /* 정보 상태 */
         --info-contrast: #FFFFFF; /* 텍스트 */
+
+        /* Menu Item */
+        --menu-bg: #47413D;
+        --menu-icon: #A8C8E3;
+
+        --menu-danger-icon: #F18B81;
+        --menu-danger-bg: #47413D;
+
+        --button-subtle: #504943;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -133,6 +156,7 @@
             --bg-default: #2F2B29;
             --bg-paper: #3A3532;
             --bg-subtle: #4A4440;
+            --bg-button: #504943;
 
             /* ===========================
                Text
@@ -140,6 +164,7 @@
             --text-default: #F8F5F1;
             --text-secondary: #C9C1BA;
             --text-subtle: #9C948E;
+            --text-contrast: #444444;
 
             /* ===========================
                Border
@@ -185,6 +210,15 @@
             =========================== */
             --info-main: #6C9EC5;
             --info-contrast: #FFFFFF;
+
+            /* Menu Item */
+            --menu-bg: #47413D;
+            --menu-icon: #A8C8E3;
+
+            --menu-danger-icon: #F18B81;
+            --menu-danger-bg: #47413D;
+
+            --button-subtle: #504943;
         }
     }
 

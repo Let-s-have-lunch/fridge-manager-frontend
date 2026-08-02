@@ -6,10 +6,11 @@ import MenuItem from "@/components/home/header/MenuItem";
 
 interface FridgeSettingSheetProps {
     onClose: () => void;
+    onAddFridge: () => void;
 }
 
 const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>(
-    ({ onClose }, ref) => {
+    ({ onClose, onAddFridge }, ref) => {
         const snapPoints = useMemo(() => ["70%"], []);
 
         return (
@@ -47,17 +48,16 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                         }}>
                         <MenuItem
                             icon="add"
-                            color="#8FBBD6"
-                            bg="#EDF7FB"
+                            color="#8AA9B9"
+                            bg="#F7F3EE"
                             title="냉장고 추가"
                             subTitle="새로운 냉장고를 추가해요"
-                            onPress={onClose}
+                            onPress={onAddFridge}
                         />
-
                         <MenuItem
                             icon="create-outline"
-                            color="#F79C79"
-                            bg="#FFF5F1"
+                            color="#8AA9B9"
+                            bg="#F7F3EE"
                             title="냉장고 수정"
                             subTitle="냉장고 이름을 수정해요"
                             onPress={onClose}
@@ -65,8 +65,8 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
 
                         <MenuItem
                             icon="trash-outline"
-                            color="#EF7D6D"
-                            bg="#FFF2F0"
+                            color="#EB7868"
+                            bg="#F7F3EE"
                             title="냉장고 삭제"
                             subTitle="냉장고를 삭제해요"
                             onPress={onClose}
@@ -75,7 +75,7 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                     </View>
 
                     <Pressable
-                        className="mx-5 mt-8 mb-8 h-14 items-center justify-center rounded-[22px] bg-bg-subtle"
+                        className="mx-5 mt-8 mb-8 h-14 items-center justify-center rounded-[22px] bg-[#F3EFEA]"
                         onPress={onClose}>
                         <Text className="text-lg font-semibold text-text-default">닫기</Text>
                     </Pressable>
