@@ -1,12 +1,12 @@
 import axiosInstance from "../axiosInstance";
-import { InquiryListResponseType, InquiryUserItemType } from "@/types/inquiry";
+import { InquiryUserItemType } from "@/types/inquiry";
 
 const adminInquiryApi = {
     // 1:1 문의 목록 조회 (/admin/inquiries/list 로 수정)
     fetchInquiryList: async (
         page: number = 1,
         size: number = 15,
-    ): Promise<InquiryListResponseType> => {
+    ): Promise<PaginationResponseType<InquiryUserItemType>> => {
         const response = await axiosInstance.get(`/admin/inquiry/list`, {
             params: { page, size },
         });
@@ -20,7 +20,7 @@ const adminInquiryApi = {
     },
 
     // 답변 등록/수정
-    createOrUpdateAnswer: async (id: number, answer: string) => {
+    createOrUpdateAnswer: async (id: number, answer: string):Promise<Inquiry> => {
         const response = await axiosInstance.patch(`/admin/inquiry/${id}`, { answer });
         return response.data.data;
     },
@@ -33,3 +33,4 @@ const adminInquiryApi = {
 };
 
 export default adminInquiryApi;
+

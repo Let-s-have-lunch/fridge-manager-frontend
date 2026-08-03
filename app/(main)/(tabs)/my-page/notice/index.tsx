@@ -4,13 +4,23 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
-import noticeApi, { NoticeItem } from "@/api/user/noticeApi";
+import noticeApi from "@/api/user/noticeApi";
 import { twMerge } from "tailwind-merge";
 import Pagination from "@/components/common/pagination/Paginnation";
+import { Notice } from "@/types/notice";
+import Badge from "@/components/common/badge/Badge"; // 🆕 뱃지 임포트
+
+const checkIsNewNotice = (dateString: string) => {
+    const today = new Date();
+    const noticeDate = new Date(dateString);
+    const diffTime = today.getTime() - noticeDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays <= 3; // 3일 이내면 true
+};
 
 function UserNoticePage() {
     const router = useRouter();
-    const [notices, setNotices] = useState<NoticeItem[]>([]);
+    const [notices, setNotices] = useState<Notice[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [total, setTotal] = useState(0);
 
@@ -48,19 +58,18 @@ function UserNoticePage() {
 
     return (
         <View className={"flex-1"}>
-            <Title title="공지사항" showBackButton={true} onBackPress={() => router.back()} />
+            <Title
+                title="공지사항"
+                showBackButton={true}
+                onBackPress={() => router.back()}
+                className={"mb-6"}
+            />
             <ScrollView className={"flex-1"}>
                 <View
                     className={twMerge(
                         ["hidden", "md:flex"],
                         ["flex-row", "items-center", "px-4", "py-3"],
-                        [
-                            "border-divider",
-                            "border-b",
-                            "bg-primary-main",
-                            "bg-background-light",
-                            "rounded-t-xl",
-                        ],
+                        ["border-divider", "border-b", "bg-primary-main", "rounded-t-xl"],
                     )}>
                     <TextComponent
                         className={twMerge(
@@ -76,6 +85,7 @@ function UserNoticePage() {
                         )}>
                         제목
                     </TextComponent>
+
                     <TextComponent
                         className={twMerge(
                             ["w-24"],
@@ -84,66 +94,126 @@ function UserNoticePage() {
                         등록일
                     </TextComponent>
                 </View>
-                {isLoading && (
-                    <View className={"py-20"}>
+
+                {isLoading ? (
+                    <View className="py-20 justify-center items-center">
                         <LoadingIndicator />
                     </View>
-                )}
-                {notices.length === 0 && (
-                    <View className={twMerge("py-20", "justify-center", "items-center")}>
-                        <TextComponent className={"text-text-secondary"}>
+                ) : notices.length === 0 ? (
+                    <View className="py-40 justify-center items-center">
+                        <TextComponent className="text-text-secondary">
                             등록된 공지사항이 없습니다.
                         </TextComponent>
                     </View>
+                ) : (
+                    notices.map((item, index) => {
+                        const isNew = checkIsNewNotice(item.createdAt); // 🆕 [추가] 3일 이내 판별
+
+                        return (
+                            <View
+                                key={item.id}
+                                className={twMerge(
+                                    ["my-2", "md:my-0"],
+                                    [
+                                        "flex-col",
+                                        "md:flex-row",
+                                        "md:items-center",
+                                        "px-4",
+                                        "py-4",
+                                        "md:py-3",
+                                    ],
+                                    [
+                                        "transition-all",
+                                        "bg-bg-paper",
+                                        "border-b",
+                                        "border-divider",
+                                        "hover:bg-bg-subtle",
+                                        "rounded-xl",
+                                        "md:rounded-none",
+                                    ],
+                                    index === notices.length - 1 && [
+                                        "md:rounded-b-xl",
+                                        "border-b-0",
+                                    ],
+                                )}>
+                                <TextComponent
+                                    className={twMerge(
+                                        ["hidden", "md:flex", "w-12"],
+                                        ["text-center", "text-text-secondary"],
+                                    )}>
+                                    {item.id}
+                                </TextComponent>
+
+                                <Pressable
+                                    className={twMerge("flex-1", "justify-center", "px-2")}
+                                    onPress={() => router.push(`/my-page/notice/${item.id}`)}>
+                                    {/* 🆕 [추가] 모바일 전용 뱃지 (제목 위쪽 배치) */}
+                                    {isNew && (
+                                        // 👇 self-start 클래스를 추가하여 가로로 꽉 차는 현상을 막아줍니다!
+                                        <View className="mb-1.5 md:hidden self-start">
+                                            <Badge>
+                                                NEW
+                                            </Badge>
+                                        </View>
+                                    )}
+
+                                    <View className="flex-row items-center gap-2">
+                                        <TextComponent
+                                            className={twMerge([
+                                                "font-bold",
+                                                "transition-all",
+                                                "hover:text-primary-main",
+                                                "text-[15px] md:text-base", // 🛠️ [수정] 모바일에서 제목 크기 조절
+                                            ])}
+                                            numberOfLines={1}>
+                                            {item.title}
+                                        </TextComponent>
+
+                                        {/* 🆕 [추가] 데스크탑 전용 뱃지 (제목 옆 배치) */}
+                                        {isNew && (
+                                            <View className="hidden md:flex">
+                                                <Badge color="primary" size="small">
+                                                    NEW
+                                                </Badge>
+                                            </View>
+                                        )}
+                                    </View>
+
+                                    {/* 🛠️ [추가] 본문 미리보기 (모바일: 2줄) */}
+                                    <TextComponent
+                                        className="text-sm text-text-secondary mt-1.5 md:hidden"
+                                        numberOfLines={2}>
+                                        {item.content || "본문 내용이 없습니다."}
+                                    </TextComponent>
+
+                                    {/* 🛠️ [추가] 본문 미리보기 (데스크탑: 1줄) */}
+                                    <TextComponent
+                                        className="text-sm text-text-secondary mt-1 hidden md:flex"
+                                        numberOfLines={1}>
+                                        {item.content || "본문 내용이 없습니다."}
+                                    </TextComponent>
+
+                                    {/* 🛠️ [추가] 작성일 (모바일: 본문 아래 배치) */}
+                                    <TextComponent className="text-[11px] text-text-subtle mt-2.5 md:hidden">
+                                        {item.createdAt.substring(0, 10).replace(/-/g, ".")}
+                                    </TextComponent>
+                                </Pressable>
+
+                                {/* 🛠️ [수정] 작성일 (데스크탑: 우측 고정, 텍스트 크기 text-xs 로 축소) */}
+                                <TextComponent
+                                    className={twMerge("w-24", [
+                                        "text-xs", // 👈 기존 text-sm 에서 변경
+                                        "text-text-secondary",
+                                        "text-center",
+                                        "hidden",
+                                        "md:flex", // 데스크탑에서만 렌더링
+                                    ])}>
+                                    {item.createdAt.substring(0, 10).replace(/-/g, ".")}
+                                </TextComponent>
+                            </View>
+                        );
+                    })
                 )}
-                {notices.map((item, index) => (
-                    <View
-                        key={item.id}
-                        className={twMerge(
-                            ["my-1", "md:my-0"],
-                            ["flex-col", "md:flex-row", "md:items-center", "px-4", "py-3"],
-                            [
-                                "transition-all",
-                                "bg-background-paper",
-                                "border-b",
-                                "border-background-default",
-                                "hover:bg-background-light",
-                                "rounded-xl",
-                                "md:rounded-none",
-                            ],
-                            index === notices.length - 1 && ["md:rounded-b-xl", "border-b-0"],
-                        )}>
-                        <TextComponent
-                            className={twMerge(
-                                ["hidden", "md:flex", "w-12"],
-                                ["text-center", "text-text-secondary"],
-                            )}>
-                            {item.id}
-                        </TextComponent>
-                        <Pressable
-                            className={twMerge("flex-1", "justify-center", "px-2")}
-                            onPress={() => router.push(`/my-page/notice/${item.id}`)}>
-                            <TextComponent
-                                className={twMerge([
-                                    "font-bold",
-                                    "transition-all",
-                                    "hover:text-primary-main",
-                                    ["pb-2", "md:pb-0"],
-                                ])}
-                                numberOfLines={1}>
-                                {item.title}
-                            </TextComponent>
-                        </Pressable>
-                        <TextComponent
-                            className={twMerge("w-24", [
-                                "text-sm",
-                                "text-text-secondary",
-                                "text-center",
-                            ])}>
-                            {item.createdAt.substring(0, 10)}
-                        </TextComponent>
-                    </View>
-                ))}
             </ScrollView>
 
             <Pagination
