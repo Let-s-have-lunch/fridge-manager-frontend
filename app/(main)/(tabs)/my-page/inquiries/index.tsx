@@ -89,9 +89,10 @@ function UserInquiryPage() {
                     onBackPress={() => router.back()}
                     className="h-auto py-1 flex-1"
                 />
+                {/* 👉 수정된 부분: bg-primary -> bg-primary-main hover:bg-primary-hover 적용 */}
                 <Pressable
                     onPress={() => setModalVisible(true)}
-                    className="bg-primary px-4 py-2.5 rounded-xl active:opacity-80">
+                    className="bg-primary-main hover:bg-primary-hover transition-colors px-4 py-2.5 rounded-xl active:opacity-80">
                     <TextComponent className="text-white font-bold text-sm">문의하기</TextComponent>
                 </Pressable>
             </View>
@@ -108,7 +109,7 @@ function UserInquiryPage() {
                         <Pressable
                             key={item.id}
                             onPress={() => router.push(`/my-page/inquiries/${item.id}`)}
-                            className="bg-bg-subtle/30 border border-divider rounded-2xl p-4 mb-3 active:opacity-70">
+                            className="bg-bg-subtle/30 hover:bg-bg-subtle transition-colors border border-divider rounded-2xl p-4 mb-3 active:opacity-70">
                             <View className="flex-row justify-between items-center mb-2">
                                 <TextComponent className="text-xs text-text-secondary">
                                     {item.createdAt}
@@ -144,7 +145,7 @@ function UserInquiryPage() {
                         </TextComponent>
 
                         <TextInput
-                            className="bg-bg-subtle/30 border border-divider rounded-xl p-3 text-text-default text-base mb-3"
+                            className="bg-bg-subtle/30 border border-divider rounded-xl p-3 text-text-default text-base mb-3 focus:border-primary-main"
                             placeholder="제목을 입력해주세요."
                             placeholderTextColor="#9ca3af"
                             value={title}
@@ -152,7 +153,7 @@ function UserInquiryPage() {
                         />
 
                         <TextInput
-                            className="bg-bg-subtle/30 border border-divider rounded-xl p-3 text-text-default text-base min-h-[150px] mb-4 textAlign-top"
+                            className="bg-bg-subtle/30 border border-divider rounded-xl p-3 text-text-default text-base min-h-[150px] mb-4 textAlign-top focus:border-primary-main"
                             placeholder="내용을 입력해주세요."
                             placeholderTextColor="#9ca3af"
                             multiline
@@ -161,17 +162,23 @@ function UserInquiryPage() {
                         />
 
                         <View className="flex-row justify-end gap-2">
+                            {/* 👉 수정된 부분: 취소 버튼 호버 효과 추가 */}
                             <Pressable
                                 onPress={() => setModalVisible(false)}
-                                className="px-4 py-2.5 rounded-xl bg-bg-subtle border border-divider">
+                                className="px-4 py-2.5 rounded-xl bg-bg-subtle border border-divider hover:bg-divider transition-colors active:opacity-80">
                                 <TextComponent className="text-text-secondary font-bold text-sm">
                                     취소
                                 </TextComponent>
                             </Pressable>
+
+                            {/* 👉 수정된 부분: bg-primary -> bg-primary-main hover:bg-primary-hover 적용 */}
                             <Pressable
                                 onPress={handleCreateInquiry}
                                 disabled={isSubmitting}
-                                className="px-4 py-2.5 rounded-xl bg-primary">
+                                className={twMerge(
+                                    "px-4 py-2.5 rounded-xl bg-primary-main hover:bg-primary-hover transition-colors active:opacity-80",
+                                    isSubmitting && "opacity-50",
+                                )}>
                                 <TextComponent className="text-white font-bold text-sm">
                                     등록
                                 </TextComponent>

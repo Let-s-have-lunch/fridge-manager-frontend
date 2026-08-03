@@ -1,15 +1,19 @@
+import React from "react";
 import { useRouter } from "expo-router";
 import { AdminNoticeInputType, adminNoticeSchema } from "@/schemas/admin/adminSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import adminApi from "@/api/admin/adminApi";
-import { Alert, Platform, ScrollView, TextInput, View } from "react-native";
+import { Alert, Platform, ScrollView, TextInput, View, useColorScheme } from "react-native";
 import { twMerge } from "tailwind-merge";
+import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import Button from "@/components/common/button/Button";
 
 function AdminNoticeCreatePage() {
     const router = useRouter();
+    const colorScheme = useColorScheme();
+    const isDark = colorScheme === "dark";
 
     const {
         control,
@@ -44,21 +48,20 @@ function AdminNoticeCreatePage() {
     };
 
     return (
-        <View className="flex-1 bg-bg-paper p-6">
-            <View className="mb-6">
-                <TextComponent className="text-xl font-bold text-text-default">
-                    공지사항 등록
-                </TextComponent>
-                <TextComponent className="text-sm text-text-secondary mt-1">
-                    서비스에 새로운 공지사항을 등록합니다.
-                </TextComponent>
-            </View>
+        <View className="flex-1 w-full">
+            {/* 상단 타이틀 영역 (다른 어드민 페이지와 통일) */}
+            <Title
+                title="공지사항 등록"
+                description="서비스에 새로운 공지사항을 등록합니다."
+                className="h-auto pb-4 mb-6"
+            />
 
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-                <View className="bg-bg-subtle p-5 rounded-2xl border border-divider">
+            <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+                {/* 입력 폼 카드 컨테이너 (깔끔한 카드 형태로 통일) */}
+                <View className="bg-bg-paper border border-divider rounded-2xl p-6 shadow-sm">
                     {/* 제목 입력 */}
-                    <View className="mb-4">
-                        <TextComponent className="text-sm font-bold text-text-secondary mb-2">
+                    <View className="mb-5">
+                        <TextComponent className="text-sm font-bold text-text-default mb-2">
                             제목
                         </TextComponent>
                         <Controller
@@ -70,24 +73,26 @@ function AdminNoticeCreatePage() {
                                     onChangeText={onChange}
                                     onBlur={onBlur}
                                     placeholder="공지사항 제목을 입력해주세요."
-                                    placeholderTextColor="#777777"
+                                    placeholderTextColor={isDark ? "#9C948E" : "#BDBDBD"}
                                     className={twMerge(
-                                        "bg-bg-paper border rounded-xl px-4 py-3 text-text-default",
-                                        errors.title ? "border-red-500" : "border-divider",
+                                        "bg-bg-subtle/30 border rounded-xl px-4 py-3 text-text-default transition-colors",
+                                        errors.title
+                                            ? "border-error-point bg-error-bg"
+                                            : "border-divider focus:border-primary-main",
                                     )}
                                 />
                             )}
                         />
                         {errors.title && (
-                            <TextComponent className="text-red-500 text-xs mt-1.5 ml-1">
+                            <TextComponent className="text-error-point text-xs mt-1.5 ml-1">
                                 {errors.title.message}
                             </TextComponent>
                         )}
                     </View>
 
                     {/* 내용 입력 */}
-                    <View className="mb-4">
-                        <TextComponent className="text-sm font-bold text-text-secondary mb-2">
+                    <View className="mb-6">
+                        <TextComponent className="text-sm font-bold text-text-default mb-2">
                             내용
                         </TextComponent>
                         <Controller
@@ -102,31 +107,41 @@ function AdminNoticeCreatePage() {
                                     numberOfLines={8}
                                     textAlignVertical="top"
                                     placeholder="공지사항 상세 내용을 입력해주세요."
-                                    placeholderTextColor="#777777"
+                                    placeholderTextColor={isDark ? "#9C948E" : "#BDBDBD"}
                                     className={twMerge(
-                                        "bg-bg-paper border rounded-xl px-4 py-3 text-text-default h-48",
-                                        errors.content ? "border-red-500" : "border-divider",
+                                        "bg-bg-subtle/30 border rounded-xl px-4 py-3 text-text-default h-52 transition-colors",
+                                        errors.content
+                                            ? "border-error-point bg-error-bg"
+                                            : "border-divider focus:border-primary-main",
                                     )}
                                 />
                             )}
                         />
                         {errors.content && (
-                            <TextComponent className="text-red-500 text-xs mt-1.5 ml-1">
+                            <TextComponent className="text-error-point text-xs mt-1.5 ml-1">
                                 {errors.content.message}
                             </TextComponent>
                         )}
                     </View>
 
-                    <View className="flex-row justify-end items-center gap-3 mt-6">
-                        <Button size="small" onPress={() => router.push("/admin/notices")}>
-                            취소
+                    {/* 하단 버튼 그룹 (물감 팔레트 호버/포인트 반영) */}
+                    <View className="flex-row justify-end items-center gap-3 pt-4 border-t border-divider">
+                        <Button
+                            size="small"
+                            onPress={() => router.push("/admin/notices")}
+                            className="bg-bg-subtle border border-divider hover:bg-secondary-contrast active:opacity-85 transition-colors">
+                            <TextComponent className="text-text-secondary font-medium text-xs">
+                                취소
+                            </TextComponent>
                         </Button>
                         <Button
                             size="small"
                             onPress={handleSubmit(onSubmit)}
                             disabled={isSubmitting}
-                            className="bg-primary-main">
-                            {isSubmitting ? "저장 중..." : "저장"}
+                            className="bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors">
+                            <TextComponent className="text-white font-bold text-xs">
+                                {isSubmitting ? "저장 중..." : "저장"}
+                            </TextComponent>
                         </Button>
                     </View>
                 </View>

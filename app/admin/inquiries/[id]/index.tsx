@@ -1,17 +1,28 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { InquiryUserItemType } from "@/types/inquiry";
-import { Alert, Platform, Pressable, ScrollView, TextInput, View } from "react-native";
+import {
+    Alert,
+    Platform,
+    Pressable,
+    ScrollView,
+    TextInput,
+    View,
+    useColorScheme,
+} from "react-native";
 import adminInquiryApi from "@/api/admin/adminInquiryApi";
-import { twMerge } from "tailwind-merge";
+import { Feather } from "@expo/vector-icons";
 import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import ExpireBadge from "@/components/common/badge/Badge";
 
 function AdminInquiryDetailPage() {
     const router = useRouter();
     const { id } = useLocalSearchParams<{ id: string }>();
     const inquiryId = Number(id);
+    const colorScheme = useColorScheme();
+    const isDark = colorScheme === "dark";
 
     const [inquiry, setInquiry] = useState<InquiryUserItemType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +51,7 @@ function AdminInquiryDetailPage() {
     }, [inquiryId, router]);
 
     useEffect(() => {
-        loadInquiryDetail();
+        loadInquiryDetail().then(() => {});
     }, [loadInquiryDetail]);
 
     // 답변 등록 또는 수정 핸들러
@@ -62,7 +73,7 @@ function AdminInquiryDetailPage() {
             } else {
                 Alert.alert("성공", "답변이 성공적으로 저장되었습니다.");
             }
-            loadInquiryDetail().then(() => {})
+            loadInquiryDetail().then(() => {});
         } catch (error) {
             console.log(error);
             if (Platform.OS === "web") {
@@ -78,7 +89,7 @@ function AdminInquiryDetailPage() {
     // 답변 삭제 핸들러
     const handleDeleteAnswer = async () => {
         const confirmDelete =
-            Platform.OS === "web" ? window.confirm("정말 답변을 삭제하시겠습니까?") : true; // 모바일 환경 처리 분기
+            Platform.OS === "web" ? window.confirm("정말 답변을 삭제하시겠습니까?") : true;
 
         if (Platform.OS !== "web") {
             Alert.alert("확인", "정말 답변을 삭제하시겠습니까?", [
@@ -93,7 +104,7 @@ function AdminInquiryDetailPage() {
         }
 
         if (confirmDelete) {
-            executeDelete().then(() => {})
+            executeDelete().then(() => {});
         }
     };
 
@@ -120,7 +131,7 @@ function AdminInquiryDetailPage() {
 
     if (isLoading) {
         return (
-            <View className="flex-1 bg-bg-paper p-6 justify-center items-center">
+            <View className="flex-1 bg-bg-paper justify-center items-center">
                 <LoadingIndicator />
             </View>
         );
@@ -128,7 +139,7 @@ function AdminInquiryDetailPage() {
 
     if (!inquiry) {
         return (
-            <View className="flex-1 bg-bg-paper p-6 justify-center items-center">
+            <View className="flex-1 bg-bg-paper justify-center items-center">
                 <TextComponent className="text-text-secondary">
                     존재하지 않는 문의글입니다.
                 </TextComponent>
@@ -137,98 +148,109 @@ function AdminInquiryDetailPage() {
     }
 
     return (
-        <ScrollView
-            className="flex-1 bg-bg-paper p-4 md:p-6 w-full"
-            showsVerticalScrollIndicator={false}>
+        <View className="flex-1 w-full">
             {/* 상단 타이틀 영역 */}
-            <View className="mb-6">
-                <Title
-                    title="1:1 문의 상세"
-                    description="문의 내용을 확인하고 답변을 작성합니다."
-                    showBackButton={true}
-                    onBackPress={() => router.back()}
-                    className="h-auto py-1"
-                />
-            </View>
+            <Title
+                title="1:1 문의 상세"
+                description="문의 내용을 확인하고 답변을 작성합니다."
+                showBackButton={true}
+                onBackPress={() => router.back()}
+                className="h-auto pb-4 mb-6"
+            />
 
-            {/* 문의글 정보 카드 */}
-            <View className="bg-bg-subtle/30 border border-divider rounded-2xl p-5 mb-6">
-                <View className="flex-row justify-between items-center mb-4">
-                    <View className="flex-row items-center gap-2">
-                        <TextComponent className="text-xs text-text-secondary font-medium">
-                            No. {inquiry.id}
-                        </TextComponent>
-                        <TextComponent className="text-xs text-text-secondary">|</TextComponent>
-                        <TextComponent className="text-xs text-text-secondary font-medium">
-                            작성자: {inquiry.user?.nickname || "탈퇴 회원"}
-                        </TextComponent>
-                    </View>
-                    <View
-                        className={twMerge(
-                            "px-2.5 py-1 rounded-full",
-                            inquiry.answer ? "bg-emerald-500/10" : "bg-blue-500/10",
-                        )}>
-                        <TextComponent
-                            className={twMerge(
-                                "text-xs font-bold",
-                                inquiry.answer ? "text-emerald-600" : "text-blue-600",
-                            )}>
-                            {inquiry.answer ? "답변완료" : "답변대기"}
-                        </TextComponent>
-                    </View>
-                </View>
-
-                <TextComponent className="text-lg font-bold text-text-default mb-3">
-                    {inquiry.title}
-                </TextComponent>
-                <TextComponent className="text-xs text-text-secondary mb-4">
-                    작성일: {inquiry.createdAt}
-                </TextComponent>
-
-                {/* 문의 내용 본문 */}
-                <View className="bg-bg-paper p-4 rounded-xl border border-divider min-h-[120px]">
-                    <TextComponent className="text-text-default leading-relaxed">
-                        {inquiry.content}
-                    </TextComponent>
-                </View>
-            </View>
-
-            {/* 관리자 답변 작성 영역 */}
-            <View className="bg-bg-subtle/30 border border-divider rounded-2xl p-5 mb-10">
-                <TextComponent className="font-bold text-text-default text-base mb-3">
-                    관리자 답변
-                </TextComponent>
-                <TextInput
-                    className="bg-bg-paper border border-divider rounded-xl p-4 text-text-default text-base min-h-[120px] mb-4 textAlign-top"
-                    placeholder="답변 내용을 입력해주세요."
-                    placeholderTextColor="#9ca3af"
-                    multiline
-                    value={answerText}
-                    onChangeText={setAnswerText}
-                    editable={!isSubmitting}
-                />
-                <View className="flex-row justify-end gap-3">
-                    {inquiry.answer && (
-                        <Pressable
-                            onPress={handleDeleteAnswer}
-                            disabled={isSubmitting}
-                            className="px-5 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 active:opacity-80">
-                            <TextComponent className="text-red-600 font-bold text-sm">
-                                답변 삭제
+            <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+                {/* 단일 통합 카드 컨테이너 (문의 내용과 답변 스레드가 하나로 연결됨) */}
+                <View className="bg-bg-paper border border-divider rounded-2xl p-6 shadow-sm mb-10">
+                    {/* 1. 헤더 (ID, 작성자, 뱃지) */}
+                    <View className="flex-row justify-between items-center pb-4 mb-5 border-b border-divider">
+                        <View className="flex-row items-center gap-2">
+                            <TextComponent className="text-xs text-text-secondary font-medium">
+                                No. {inquiry.id}
                             </TextComponent>
-                        </Pressable>
-                    )}
-                    <Pressable
-                        onPress={handleSaveAnswer}
-                        disabled={isSubmitting}
-                        className="px-5 py-2.5 rounded-xl bg-primary active:opacity-80">
-                        <TextComponent className="text-white font-bold text-sm">
-                            {inquiry.answer ? "답변 수정" : "답변 등록"}
+                            <TextComponent className="text-xs text-text-secondary">|</TextComponent>
+                            <TextComponent className="text-xs text-text-secondary font-medium">
+                                작성자: {inquiry.user?.nickname || "탈퇴 회원"}
+                            </TextComponent>
+                        </View>
+                        <ExpireBadge
+                            status={inquiry.answer ? "safe" : "warning"}
+                            className="px-2.5 py-1"
+                            textClasses="text-[10px]">
+                            {inquiry.answer ? "답변완료" : "답변대기"}
+                        </ExpireBadge>
+                    </View>
+
+                    {/* 2. 문의글 제목 및 작성일 */}
+                    <TextComponent className="text-lg font-bold text-text-default mb-2">
+                        {inquiry.title}
+                    </TextComponent>
+                    <TextComponent className="text-xs text-text-secondary mb-5">
+                        작성일: {inquiry.createdAt}
+                    </TextComponent>
+
+                    {/* 3. 문의 내용 본문 */}
+                    <View className="bg-bg-subtle/30 p-4 rounded-xl border border-divider min-h-[100px] mb-8">
+                        <TextComponent className="text-text-default leading-relaxed">
+                            {inquiry.content}
                         </TextComponent>
-                    </Pressable>
+                    </View>
+
+                    {/* 4. 관리자 답변 스레드 영역 (하나의 카드 안에서 자연스럽게 파생된 답변 기능) */}
+                    <View className="pt-6 border-t border-divider">
+                        <View className="flex-row items-center gap-2 mb-2">
+                            <View className="w-6 h-6 rounded-full bg-primary-main items-center justify-center">
+                                <Feather name="corner-down-right" size={12} color="#FFFFFF" />
+                            </View>
+                            <TextComponent className="font-bold text-text-default text-base">
+                                관리자 답변
+                            </TextComponent>
+                        </View>
+
+                        <TextComponent className="text-xs text-text-secondary mb-4 ml-8">
+                            등록된 답변은 사용자 화면에 즉시 반영됩니다.
+                        </TextComponent>
+
+                        <View className="ml-0 md:ml-8">
+                            <TextInput
+                                className="bg-bg-subtle/40 border border-divider rounded-xl p-4 text-text-default text-base min-h-[140px] mb-4 focus:border-primary-main transition-colors"
+                                placeholder="답변 내용을 상세히 입력해주세요."
+                                placeholderTextColor={isDark ? "#9C948E" : "#BDBDBD"}
+                                multiline
+                                textAlignVertical="top"
+                                value={answerText}
+                                onChangeText={setAnswerText}
+                                editable={!isSubmitting}
+                            />
+
+                            <View className="flex-row justify-end gap-3">
+                                {inquiry.answer && (
+                                    <Pressable
+                                        onPress={handleDeleteAnswer}
+                                        disabled={isSubmitting}
+                                        className="px-5 py-2.5 rounded-xl border border-error-point bg-error-bg hover:bg-error-point/10 active:opacity-85 transition-colors">
+                                        <TextComponent className="text-error-point font-bold text-xs">
+                                            답변 삭제
+                                        </TextComponent>
+                                    </Pressable>
+                                )}
+                                <Pressable
+                                    onPress={handleSaveAnswer}
+                                    disabled={isSubmitting}
+                                    className="px-6 py-2.5 rounded-xl bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors shadow-sm">
+                                    <TextComponent className="text-white font-bold text-xs">
+                                        {isSubmitting
+                                            ? "저장 중..."
+                                            : inquiry.answer
+                                                ? "답변 수정하기"
+                                                : "답변 등록하기"}
+                                    </TextComponent>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 }
 

@@ -8,7 +8,7 @@ import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import Pagination from "@/components/common/pagination/Paginnation";
-import { Badge } from "@react-navigation/elements";
+import ExpireBadge from "@/components/common/badge/Badge";
 
 function AdminInquiryListPage() {
     const router = useRouter();
@@ -51,125 +51,121 @@ function AdminInquiryListPage() {
     return (
         <View className="flex-1 w-full">
             {/* 상단 타이틀 영역 */}
-                <Title
-                    title="1:1 문의 관리"
-                    description="사용자의 문의글을 확인하고 관리합니다."
-                    className="h-auto pb-4 mb-6 "
-                />
+            <Title
+                title="1:1 문의 관리"
+                description={`사용자의 문의글을 확인하고 관리합니다. (총 ${total}건)`}
+                className="h-auto pb-4 mb-6"
+            />
 
-            {/* 테이블 컨테이너 */}
-            <View className="flex-1  border border-divider rounded-2xl overflow-hidden flex flex-col">
-                {/* 테이블 헤더 (웹 환경 대응) */}
-                <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-primary-main">
-                    <TextComponent className="w-16 font-bold text-text-secondary text-center">
-                        ID
-                    </TextComponent>
-                    <TextComponent className="flex-1 font-bold text-text-secondary px-4">
-                        제목
-                    </TextComponent>
-                    <TextComponent className="w-32 font-bold text-text-secondary text-center">
-                        작성일
-                    </TextComponent>
-                    <TextComponent className="w-28 font-bold text-text-secondary text-center">
-                        작성자
-                    </TextComponent>
-                    <TextComponent className="w-28 font-bold text-text-secondary text-center">
-                        상태
-                    </TextComponent>
-                </View>
-
-                {/* 본문 리스트 영역 */}
-                <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
-                    {isLoading ? (
-                        <View className="py-20 justify-center items-center">
-                            <LoadingIndicator />
-                        </View>
-                    ) : list.length === 0 ? (
-                        <View className="py-20 justify-center items-center">
-                            <TextComponent className="text-text-secondary">
-                                등록된 문의글이 없습니다.
-                            </TextComponent>
-                        </View>
-                    ) : (
-                        <View className="w-full pb-4 md:pb-0">
-                            {list.map((item, index) => (
-                                <View key={item.id} className="w-full">
-                                    {/* 모바일 전용 카드형 UI */}
-                                    <Pressable
-                                        onPress={() => router.push(`/admin/inquiries/${item.id}`)}
-                                        className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm">
-                                        <View className="flex-row justify-between items-center mb-2">
-                                            <TextComponent className="text-xs text-text-secondary font-medium">
-                                                No. {item.id} | {item.user?.nickname || "탈퇴 회원"}
-                                            </TextComponent>
-                                            <Badge color={item.answer ? "success" : "info"}>
-                                                {item.answer ? "답변완료" : "답변대기"}
-                                            </Badge>
-                                        </View>
-                                        <TextComponent
-                                            className="font-bold text-text-default text-base mb-1"
-                                            numberOfLines={1}>
-                                            {item.title}
-                                        </TextComponent>
-                                        <TextComponent className="text-xs text-text-secondary">
-                                            {item.createdAt ? item.createdAt.substring(0, 10) : ""}
-                                        </TextComponent>
-                                    </Pressable>
-
-                                    {/* 웹/태블릿 전용 테이블 Row UI */}
-                                    <Pressable
-                                        onPress={() => router.push(`/admin/inquiries/${item.id}`)}
-                                        className={twMerge(
-                                            "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-b border-divider",
-                                            index === list.length - 1 && "border-b-0",
-                                        )}>
-                                        <TextComponent className="w-16 text-center text-text-secondary">
-                                            {item.id}
-                                        </TextComponent>
-                                        <TextComponent
-                                            className="flex-1 font-bold text-text-default px-4"
-                                            numberOfLines={1}>
-                                            {item.title}
-                                        </TextComponent>
-                                        <TextComponent className="w-32 text-sm text-text-secondary text-center">
-                                            {item.createdAt ? item.createdAt.substring(0, 10) : ""}
-                                        </TextComponent>
-                                        <TextComponent className="w-28 text-sm text-text-secondary text-center">
-                                            {item.user?.nickname || "탈퇴 회원"}
-                                        </TextComponent>
-                                        <View
-                                            className={twMerge(
-                                                "px-2.5 py-1 rounded-full",
-                                                item.answer
-                                                    ? "bg-emerald-500/10"
-                                                    : "bg-blue-500/10",
-                                            )}>
-                                            <TextComponent
-                                                className={twMerge(
-                                                    "text-xs font-bold",
-                                                    item.answer
-                                                        ? "text-emerald-600"
-                                                        : "text-blue-600",
-                                                )}>
-                                                {item.answer ? "답변완료" : "답변대기"}
-                                            </TextComponent>
-                                        </View>
-                                    </Pressable>
-                                </View>
-                            ))}
-                        </View>
-                    )}
-                </ScrollView>
+            {/* 테이블 헤더 (웹 환경 대응) */}
+            <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-primary-main rounded-t-xl">
+                <TextComponent className="w-16 font-bold text-primary-contrast text-center">
+                    ID
+                </TextComponent>
+                <TextComponent className="flex-1 font-bold text-primary-contrast px-4">
+                    제목
+                </TextComponent>
+                <TextComponent className="w-32 font-bold text-primary-contrast text-center">
+                    작성일
+                </TextComponent>
+                <TextComponent className="w-28 font-bold text-primary-contrast text-center">
+                    작성자
+                </TextComponent>
+                <TextComponent className="w-28 font-bold text-primary-contrast text-center">
+                    상태
+                </TextComponent>
             </View>
 
+            {/* 본문 리스트 영역 */}
+            <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+                {isLoading ? (
+                    <View className="py-20 justify-center items-center border border-divider border-t-0 bg-bg-paper rounded-b-xl">
+                        <LoadingIndicator />
+                    </View>
+                ) : list.length === 0 ? (
+                    <View className="py-20 justify-center items-center border border-divider border-t-0 bg-bg-paper rounded-b-xl">
+                        <TextComponent className="text-text-secondary">
+                            등록된 문의글이 없습니다.
+                        </TextComponent>
+                    </View>
+                ) : (
+                    <View className="w-full pb-4 md:pb-0">
+                        {list.map((item, index) => (
+                            <View key={item.id} className="w-full">
+                                {/* 📱 모바일 전용 카드형 UI (행 호버 제거 및 active 투명도만 적용) */}
+                                <Pressable
+                                    onPress={() => router.push(`/admin/inquiries/${item.id}`)}
+                                    className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm active:opacity-75 transition-opacity">
+                                    <View className="flex-row justify-between items-center mb-2">
+                                        <TextComponent className="text-xs text-text-secondary font-medium">
+                                            No. {item.id} | {item.user?.nickname || "탈퇴 회원"}
+                                        </TextComponent>
+
+                                        {/* ExpireBadge 컴포넌트 적용 (모바일 뷰) */}
+                                        <ExpireBadge
+                                            status={item.answer ? "safe" : "warning"}
+                                            className="px-2 py-0.5 rounded-md"
+                                            textClasses="text-[10px]">
+                                            {item.answer ? "답변완료" : "답변대기"}
+                                        </ExpireBadge>
+                                    </View>
+                                    <TextComponent
+                                        className="font-bold text-text-default text-base mb-1"
+                                        numberOfLines={1}>
+                                        {item.title}
+                                    </TextComponent>
+                                    <TextComponent className="text-xs text-text-secondary">
+                                        {item.createdAt ? item.createdAt.substring(0, 10) : ""}
+                                    </TextComponent>
+                                </Pressable>
+
+                                {/* 💻 웹/태블릿 전용 테이블 Row UI (행 호버 완전 제거) */}
+                                <Pressable
+                                    onPress={() => router.push(`/admin/inquiries/${item.id}`)}
+                                    className={twMerge(
+                                        "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-x border-b border-divider active:opacity-75 transition-opacity",
+                                        index === list.length - 1 && "rounded-b-xl",
+                                    )}>
+                                    <TextComponent className="w-16 text-center text-text-secondary">
+                                        {item.id}
+                                    </TextComponent>
+                                    <TextComponent
+                                        className="flex-1 font-bold text-text-default px-4"
+                                        numberOfLines={1}>
+                                        {item.title}
+                                    </TextComponent>
+                                    <TextComponent className="w-32 text-sm text-text-secondary text-center">
+                                        {item.createdAt ? item.createdAt.substring(0, 10) : ""}
+                                    </TextComponent>
+                                    <TextComponent className="w-28 text-sm text-text-secondary text-center">
+                                        {item.user?.nickname || "탈퇴 회원"}
+                                    </TextComponent>
+
+                                    <View className="w-28 items-center">
+                                        <ExpireBadge
+                                            status={item.answer ? "safe" : "warning"}
+                                            className="px-2.5 py-1"
+                                            textClasses="text-[10px]">
+                                            {item.answer ? "답변완료" : "답변대기"}
+                                        </ExpireBadge>
+                                    </View>
+                                </Pressable>
+                            </View>
+                        ))}
+                    </View>
+                )}
+            </ScrollView>
+
             {/* 페이지네이션 컴포넌트 */}
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPage}
-                onPageChange={(newPage: number) =>
-                    router.setParams({ page: String(newPage), size: String(pageSize) })
-                }
-            />
+            <View className="mt-4">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPage}
+                    onPageChange={(newPage: number) =>
+                        router.setParams({ page: String(newPage), size: String(pageSize) })
+                    }
+                />
+            </View>
         </View>
     );
 }

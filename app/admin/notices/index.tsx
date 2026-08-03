@@ -7,7 +7,7 @@ import { AdminNotice } from "@/types/admin";
 import { Alert, Platform, Pressable, ScrollView, View } from "react-native";
 import TextComponent from "@/components/common/text/TextComponent";
 import Pagination from "@/components/common/pagination/Paginnation";
-import Title from "@/components/common/title/Title"; // ✅ Title 컴포넌트 임포트 경로 확인
+import Title from "@/components/common/title/Title";
 
 function AdminNoticeListPage() {
     const [list, setList] = useState<AdminNotice[]>([]);
@@ -53,24 +53,24 @@ function AdminNoticeListPage() {
             {/* 상단 Title 컴포넌트 및 공지 등록 버튼 영역 */}
             <Title
                 title="공지사항 관리"
-                description="등록된 공지사항 목록을 확인하고 관리합니다."
+                description={`등록된 공지사항 목록을 확인하고 관리합니다. (총 ${total}건)`}
                 className="h-auto pb-4 mb-6">
                 <Pressable
                     onPress={() => router.push("/admin/notices/create")}
-                    className="bg-primary-main px-4 py-2.5 rounded-xl items-center shrink-0">
+                    className="bg-primary-main hover:bg-primary-point px-4 py-2.5 rounded-xl items-center shrink-0 active:opacity-85 transition-colors">
                     <TextComponent className="font-bold text-white">공지 등록</TextComponent>
                 </Pressable>
             </Title>
 
-            {/* 웹 전용 테이블 헤더 */}
-            <View className="hidden md:flex flex-row items-center px-4 py-3 border-b border-divider bg-primary-main rounded-t-xl">
-                <TextComponent className="w-16 font-bold text-text-secondary text-center">
+            {/* 웹 전용 테이블 헤더 (사용자 관리 페이지와 동일한 둥근 모서리 및 보더 구조 적용) */}
+            <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-primary-main rounded-t-xl">
+                <TextComponent className="w-16 font-bold text-primary-contrast text-center">
                     ID
                 </TextComponent>
-                <TextComponent className="flex-1 font-bold text-text-secondary px-4">
+                <TextComponent className="flex-1 font-bold text-primary-contrast px-4">
                     제목
                 </TextComponent>
-                <TextComponent className="w-32 font-bold text-text-secondary text-center">
+                <TextComponent className="w-32 font-bold text-primary-contrast text-center">
                     등록일
                 </TextComponent>
             </View>
@@ -78,23 +78,23 @@ function AdminNoticeListPage() {
             {/* 본문 리스트 영역 */}
             <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
                 {isLoading ? (
-                    <View className="py-20 justify-center items-center">
+                    <View className="py-20 justify-center items-center border border-divider border-t-0 bg-bg-paper rounded-b-xl">
                         <LoadingIndicator />
                     </View>
                 ) : list.length === 0 ? (
-                    <View className="py-20 justify-center items-center">
+                    <View className="py-20 justify-center items-center border border-divider border-t-0 bg-bg-paper rounded-b-xl">
                         <TextComponent className="text-text-secondary">
                             등록된 공지사항이 없습니다.
                         </TextComponent>
                     </View>
                 ) : (
-                    <View className="w-full pb-4">
+                    <View className="w-full pb-4 md:pb-0">
                         {list.map((item, index) => (
                             <View key={item.id} className="w-full">
                                 {/* 모바일 전용 카드형 UI */}
                                 <Pressable
                                     onPress={() => router.push(`/admin/notices/${item.id}`)}
-                                    className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm">
+                                    className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm mx-2 active:opacity-75 transition-opacity">
                                     <View className="flex-row justify-between items-center mb-2">
                                         <TextComponent className="text-xs text-text-secondary font-medium">
                                             No. {item.id}
@@ -114,7 +114,7 @@ function AdminNoticeListPage() {
                                 <Pressable
                                     onPress={() => router.push(`/admin/notices/${item.id}`)}
                                     className={twMerge(
-                                        "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-x border-b border-divider",
+                                        "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-x border-b border-divider active:opacity-75 transition-opacity",
                                         index === list.length - 1 && "rounded-b-xl",
                                     )}>
                                     <TextComponent className="w-16 text-center text-text-secondary">
@@ -136,13 +136,15 @@ function AdminNoticeListPage() {
             </ScrollView>
 
             {/* 페이지네이션 컴포넌트 연동 */}
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(newPage: number) =>
-                    router.setParams({ page: String(newPage), size: String(pageSize) })
-                }
-            />
+            <View className="mt-4">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(newPage: number) =>
+                        router.setParams({ page: String(newPage), size: String(pageSize) })
+                    }
+                />
+            </View>
         </View>
     );
 }
