@@ -29,13 +29,6 @@ export default function MainDesktopHeader() {
         }
     };
 
-    const sortOrder = useHomeStore(state => state.sortOrder);
-    const setSortOrder = useHomeStore(state => state.setSortOrder);
-
-    const handleSortToggle = () => {
-        const nextOrder = sortOrder === "asc" ? "desc" : "asc";
-        setSortOrder(nextOrder);
-    };
 
     const [selectedFridge, setSelectedFridge] = useState("집 냉장고");
     const [isFridgeOpen, setIsFridgeOpen] = useState(false);
@@ -65,11 +58,11 @@ export default function MainDesktopHeader() {
                             <Pressable
                                 onPress={() => setIsFridgeOpen(prev => !prev)}
                                 className={twMerge(
-                                    "px-2 py-0.5",
+                                    "px-2 py-0.5 ",
                                     "flex-row items-center",
                                     "rounded-full border border-[#A18F8F]",
                                 )}>
-                                <TextComponent className="mr-1 text-[11px] font-medium text-text-default">
+                                <TextComponent className="mr-1 ml-1 text-[12px] font-medium text-text-default">
                                     {selectedFridge}
                                 </TextComponent>
                                 <Ionicons
@@ -79,10 +72,6 @@ export default function MainDesktopHeader() {
                                 />
                             </Pressable>
                         </View>
-
-                        <TextComponent className="text-[11px] text-text-secondary mt-0.5">
-                            오늘도 신선한 하루되세요!
-                        </TextComponent>
                     </View>
                 </View>
 
@@ -129,17 +118,16 @@ export default function MainDesktopHeader() {
                     </Pressable>
 
                     <Pressable
-                        onPress={handleSortToggle}
+                        onPress={() => {}}
                         className={twMerge(
-                            "w-10 h-10 rounded-full",
+                            "w-10",
+                            "h-10",
+                            "rounded-full",
                             "bg-bg-default",
-                            "items-center justify-center",
+                            "items-center",
+                            "justify-center",
                         )}>
-                        <Ionicons
-                            name={sortOrder === "asc" ? "arrow-down" : "arrow-up"}
-                            size={20}
-                            color="#A18F8F"
-                        />
+                        <Ionicons name="swap-vertical" size={22} color="#A18F8F" />
                     </Pressable>
                 </View>
             </View>

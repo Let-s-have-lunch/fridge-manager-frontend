@@ -5,8 +5,6 @@ import MainFooter from "@/components/layout/main/MainFooter";
 import { twMerge } from "tailwind-merge";
 import MainHeader from "@/components/layout/main/MainHeader";
 import MainDesktopHeader from "@/components/layout/main/MainDesktopHeader";
-import { useAuthStore } from "@/stores/auth/useAuthStore";
-
 export default function MainLayout() {
     const { showMainHeader, showDesktopHeader, showMainFooter } = useLayoutStore();
 
