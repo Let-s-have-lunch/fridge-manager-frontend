@@ -1,3 +1,5 @@
+import { Category } from "@/types/category";
+
 export const Storage = {
     refrigerated: "REFRIGERATED",
     frozen: "FROZEN",
@@ -26,7 +28,7 @@ export type AddMethodType = (typeof AddMethod)[keyof typeof AddMethod];
 export const Status = {
     stored: "STORED",
     consumed: "CONSUMED",
-    discarded: "DISCARD",
+    discarded: "DISCARDED",
 }
 
 export type StatusType = (typeof Status)[keyof typeof Status];
@@ -47,4 +49,5 @@ export interface Product {
     price: number | null;
     addMethod: AddMethodType;
     status: StatusType;
+    category: Category;
 }
