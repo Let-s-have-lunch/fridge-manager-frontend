@@ -58,15 +58,17 @@ export default function HomeScreen() {
 
     return (
         <>
-            <View className={"gap-5"}>
-            <CategoryTabs value={category} onChange={setCategory} />
-            <FlatList
-                data={products}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <ProductCard product={item} />
-                )}
-            />
+            <View className={"flex-1 gap-5"}>
+                <CategoryTabs value={category} onChange={setCategory} />
+                <FlatList
+                    data={products}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => <ProductCard product={item} />}
+                    contentContainerStyle={{
+                        paddingBottom: 32,
+                    }}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
         </>
 

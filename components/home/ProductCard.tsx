@@ -11,12 +11,6 @@ interface ProductCardProps {
     onPress?: () => void;
 }
 
-interface Category {
-    id: number;
-    name: string;
-    icon: CategoryIconKey;
-}
-
 const storageLabel: Record<StorageType, string> = {
     REFRIGERATED: "냉장",
     FROZEN: "냉동",
