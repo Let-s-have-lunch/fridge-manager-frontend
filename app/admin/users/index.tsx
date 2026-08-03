@@ -16,7 +16,7 @@ import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import Pagination from "@/components/common/pagination/Paginnation";
-import adminApi from "@/api/admin/adminApi";
+import adminUserApi from "@/api/admin/adminUserApi";
 import { AdminUser } from "@/types/admin";
 import EditUserModal from "@/components/domain/admin/EditUserModal";
 
@@ -41,7 +41,7 @@ export default function AdminUserManagement() {
         async (targetPage: number, targetSize: number) => {
             try {
                 setIsLoading(true);
-                const response = await adminApi.getUserList(targetPage, targetSize);
+                const response = await adminUserApi.getUserList(targetPage, targetSize); // ✅ adminUserApi 사용
                 setUsers(response.list);
                 setTotalCount(response.total);
             } catch (error) {
@@ -70,7 +70,7 @@ export default function AdminUserManagement() {
     // 1. 회원 상세 정보 확인
     const handleViewDetail = async (userId: number) => {
         try {
-            const detail: AdminUser = await adminApi.getUserDetail(userId);
+            const detail: AdminUser = await adminUserApi.getUserDetail(userId); // ✅ adminUserApi 사용
             const message = `ID: ${detail.id}\n닉네임: ${detail.nickname}\n이메일: ${detail.email}\n권한: ${detail.role}\n가입일: ${new Date(detail.createdAt).toLocaleDateString()}`;
 
             if (Platform.OS === "web") {
@@ -92,7 +92,7 @@ export default function AdminUserManagement() {
     const handleToggleRole = async (userId: number, currentRole: "USER" | "ADMIN") => {
         const newRole = currentRole === "ADMIN" ? "USER" : "ADMIN";
         try {
-            await adminApi.updateUser(userId, { role: newRole });
+            await adminUserApi.updateUser(userId, { role: newRole }); // ✅ adminUserApi 사용
             setUsers(prev => prev.map(u => (u.id === userId ? { ...u, role: newRole } : u)));
         } catch (e) {
             if (Platform.OS === "web") {
@@ -111,7 +111,7 @@ export default function AdminUserManagement() {
             const confirmed = window.confirm(message);
             if (confirmed) {
                 try {
-                    await adminApi.deleteUser(userId);
+                    await adminUserApi.deleteUser(userId); // ✅ adminUserApi 사용
                     setUsers(prev => prev.filter(u => u.id !== userId));
                     setTotalCount(prev => prev - 1);
                     window.alert("회원이 삭제되었습니다.");
@@ -129,7 +129,7 @@ export default function AdminUserManagement() {
                 style: "destructive",
                 onPress: async () => {
                     try {
-                        await adminApi.deleteUser(userId);
+                        await adminUserApi.deleteUser(userId); // ✅ adminUserApi 사용
                         setUsers(prev => prev.filter(u => u.id !== userId));
                         setTotalCount(prev => prev - 1);
                         Alert.alert("성공", "회원이 삭제되었습니다.");
@@ -156,7 +156,7 @@ export default function AdminUserManagement() {
                 className="h-auto pb-4 mb-6"
             />
 
-            {/* 테이블 헤더 (공지사항 스타일: 상단 둥근 모서리 및 테두리 정렬) */}
+            {/* 테이블 헤더 */}
             <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-primary-main rounded-t-xl">
                 <TextComponent className="w-16 font-bold text-primary-contrast text-center">
                     ID
@@ -178,7 +178,7 @@ export default function AdminUserManagement() {
                 </TextComponent>
             </View>
 
-            {/* 본문 리스트 영역 (공지사항 스타일: 데이터 크기에 딱 맞게 축소 및 마지막 행 하단 둥글게 처리) */}
+            {/* 본문 리스트 영역 */}
             <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
                 {isLoading ? (
                     <View className="py-20 justify-center items-center border border-divider border-t-0 bg-bg-paper rounded-b-xl">
@@ -230,7 +230,7 @@ export default function AdminUserManagement() {
                                         </TextComponent>
                                     </Pressable>
 
-                                    {/* 모바일 액션 버튼 그룹 (커스텀 물감 팔레트 호버 적용) */}
+                                    {/* 모바일 액션 버튼 그룹 */}
                                     <View className="flex-row justify-end items-center gap-2 pt-3 border-t border-divider">
                                         <TouchableOpacity
                                             onPress={() => handleToggleRole(user.id, user.role)}
@@ -256,7 +256,7 @@ export default function AdminUserManagement() {
                                     </View>
                                 </View>
 
-                                {/* 💻 웹/태블릿 전용 테이블 Row UI (행 전체 호버 완전 제거, 버튼에만 커스텀 포인트/물감 팔레트 호버 적용) */}
+                                {/* 💻 웹/태블릿 전용 테이블 Row UI */}
                                 <Pressable
                                     onPress={() => handleViewDetail(user.id)}
                                     className={twMerge(
@@ -280,7 +280,7 @@ export default function AdminUserManagement() {
                                         {new Date(user.createdAt).toLocaleDateString()}
                                     </TextComponent>
 
-                                    {/* 권한 뱃지 버튼 (커스텀 point 물감 반영) */}
+                                    {/* 권한 뱃지 버튼 */}
                                     <View className="w-24 items-center">
                                         <TouchableOpacity
                                             onPress={() => handleToggleRole(user.id, user.role)}
@@ -302,7 +302,7 @@ export default function AdminUserManagement() {
                                         </TouchableOpacity>
                                     </View>
 
-                                    {/* 액션 버튼 그룹 (커스텀 point 및 error-bg 물감 반영) */}
+                                    {/* 액션 버튼 그룹 */}
                                     <View className="w-28 flex-row justify-center gap-1.5">
                                         <TouchableOpacity
                                             onPress={() => handleOpenEdit(user)}

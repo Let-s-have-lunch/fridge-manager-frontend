@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import adminApi from "@/api/admin/adminApi";
+import adminNoticeApi from "@/api/admin/adminNoticeApi"; // ✅ 변경된 공지사항 API import
 import { twMerge } from "tailwind-merge";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { AdminNotice } from "@/types/admin";
@@ -23,7 +23,7 @@ function AdminNoticeListPage() {
         async (targetPage: number, targetSize: number) => {
             try {
                 setIsLoading(true);
-                const result = await adminApi.getNoticeList(targetPage, targetSize);
+                const result = await adminNoticeApi.getNoticeList(targetPage, targetSize); // ✅ adminNoticeApi 사용
                 setList(result.list);
                 setTotal(result.total);
             } catch (error) {
@@ -62,7 +62,7 @@ function AdminNoticeListPage() {
                 </Pressable>
             </Title>
 
-            {/* 웹 전용 테이블 헤더 (사용자 관리 페이지와 동일한 둥근 모서리 및 보더 구조 적용) */}
+            {/* 웹 전용 테이블 헤더 */}
             <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-primary-main rounded-t-xl">
                 <TextComponent className="w-16 font-bold text-primary-contrast text-center">
                     ID

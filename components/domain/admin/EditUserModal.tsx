@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextComponent from "@/components/common/text/TextComponent";
-import adminApi from "@/api/admin/adminApi";
+import adminUserApi from "@/api/admin/adminUserApi"; // ✅ 변경된 유저 관리 API import
 import { AdminUser } from "@/types/admin";
 import { UpdateUserInputType, updateUserSchema } from "@/schemas/user/updateUserSchema";
 
@@ -85,7 +85,7 @@ export default function EditUserModal({ visible, user, onClose, onSuccess }: Edi
                 updateData.password = data.password;
             }
 
-            await adminApi.updateUser(user.id, updateData);
+            await adminUserApi.updateUser(user.id, updateData); // ✅ adminUserApi 사용
 
             const successMsg = "회원 정보가 수정되었습니다.";
             Platform.OS === "web" ? window.alert(successMsg) : Alert.alert("성공", successMsg);

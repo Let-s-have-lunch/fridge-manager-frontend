@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import adminApi from "@/api/admin/adminApi";
+import adminNoticeApi from "@/api/admin/adminNoticeApi"; // ✅ 변경된 공지사항 API import
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { AdminNotice } from "@/types/admin";
-import { Alert, Platform, Pressable, ScrollView, TextInput, View, useColorScheme } from "react-native";
+import {
+    Alert,
+    Platform,
+    Pressable,
+    ScrollView,
+    TextInput,
+    View,
+    useColorScheme,
+} from "react-native";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import Title from "@/components/common/title/Title";
@@ -31,7 +39,7 @@ function AdminNoticeDetailPage() {
         const fetchNotice = async () => {
             try {
                 setIsLoading(true);
-                const data = await adminApi.getNoticeById(noticeId);
+                const data = await adminNoticeApi.getNoticeById(noticeId); // ✅ adminNoticeApi 사용
                 setNotice(data);
                 setTitle(data.title);
                 setContent(data.content);
@@ -63,7 +71,7 @@ function AdminNoticeDetailPage() {
 
         try {
             setIsSubmitting(true);
-            const updated = await adminApi.updateNotice(noticeId, { title, content });
+            const updated = await adminNoticeApi.updateNotice(noticeId, { title, content }); // ✅ adminNoticeApi 사용
             setNotice(updated);
             setIsEditing(false);
             if (Platform.OS === "web") alert("공지사항이 수정되었습니다.");
@@ -81,7 +89,7 @@ function AdminNoticeDetailPage() {
     const handleDelete = () => {
         const confirmDelete = async () => {
             try {
-                await adminApi.deleteNotice(noticeId);
+                await adminNoticeApi.deleteNotice(noticeId); // ✅ adminNoticeApi 사용
                 if (Platform.OS === "web") {
                     alert("공지사항이 삭제되었습니다.");
                     router.back();
@@ -133,7 +141,7 @@ function AdminNoticeDetailPage() {
             />
 
             <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
-                {/* 본문 카드 박스 (다른 어드민 페이지의 카드 컴포넌트 룩앤필과 일치화) */}
+                {/* 본문 카드 박스 */}
                 <View className="bg-bg-paper border border-divider rounded-2xl p-6 shadow-sm mb-6">
                     {/* 등록일 및 ID 표시 */}
                     <View className="flex-row justify-between items-center pb-4 mb-4 border-b border-divider">
@@ -189,7 +197,7 @@ function AdminNoticeDetailPage() {
                     )}
                 </View>
 
-                {/* 하단 버튼 영역 (물감 팔레트 및 호버/액티브 인터랙션 적용) */}
+                {/* 하단 버튼 영역 */}
                 <View className="flex-row justify-end gap-3 pb-6">
                     {isEditing ? (
                         <>
@@ -211,7 +219,6 @@ function AdminNoticeDetailPage() {
                         </>
                     ) : (
                         <>
-                            {/* 삭제 버튼: error 물감 시스템 활용 */}
                             <Pressable
                                 onPress={handleDelete}
                                 className="px-5 py-3 rounded-xl border border-error-point bg-error-bg hover:bg-error-point/10 active:opacity-85 transition-colors">
@@ -219,7 +226,6 @@ function AdminNoticeDetailPage() {
                                     삭제
                                 </TextComponent>
                             </Pressable>
-                            {/* 수정 버튼: primary 물감 시스템 활용 */}
                             <Pressable
                                 onPress={() => setIsEditing(true)}
                                 className="px-5 py-3 rounded-xl bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors">
