@@ -16,7 +16,7 @@ export default function HomeScreen() {
     const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
 
     const { products, setProducts } = useHomeStore();
-
+    const keyword = useHomeStore(state => state.keyword);
     const { isLoggedIn } = useAuthStore();
 
     const loadFridges = useCallback(async () => {
@@ -44,7 +44,6 @@ export default function HomeScreen() {
         const loadProducts = async () => {
             try {
                 const list = await productApi.getProductList(selectedFridgeId);
-                console.log("API 결과", list);
                 setProducts(list);
             } catch (error) {
                 console.error(error);
@@ -54,22 +53,24 @@ export default function HomeScreen() {
     },[isLoggedIn, selectedFridgeId, setProducts])
 
     const [category, setCategory] = useState<Category>("전체");
-    const [keyword, setKeyword] = useState("");
+
+
 
     const filteredProducts = products.filter(product => {
-        switch (category) {
-            case "냉장":
-                return product.storageType === "REFRIGERATED";
+        // 보관방식 필터
+        const storageMatch =
+            category === "전체"
+                ? true
+                : category === "냉장"
+                  ? product.storageType === "REFRIGERATED"
+                  : category === "냉동"
+                    ? product.storageType === "FROZEN"
+                    : product.storageType === "ROOM_TEMP";
 
-            case "냉동":
-                return product.storageType === "FROZEN";
+        // 검색 필터
+        const keywordMatch = product.name.toLowerCase().includes(keyword.toLowerCase());
 
-            case "실온":
-                return product.storageType === "ROOM_TEMP";
-
-            default:
-                return true; // 전체
-        }
+        return storageMatch && keywordMatch;
     });
 
     return (
@@ -87,11 +88,5 @@ export default function HomeScreen() {
                 />
             </View>
         </>
-
-        // <MainHeader />
-        // <CategoryTab />
-        // <View className={"flex-1"}>
-        //     {/*<FoodList/>*/}
-        // </View>
     );
 }
