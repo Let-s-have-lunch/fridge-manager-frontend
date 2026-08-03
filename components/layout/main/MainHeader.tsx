@@ -1,80 +1,21 @@
-import { useRef, useState } from "react";
-import { Alert, Pressable, View } from "react-native";
+import React from "react";
+import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
-import Input from "@/components/common/input/Input";
-import { getAnimalIcon } from "@/constants/profile";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
-import { useHomeStore } from "@/stores/home/productStore";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import FridgeSettingSheet from "@/components/home/header/FridgeSettingSheet";
 import HeaderProfile from "@/components/home/header/HeaderProfile";
 import FridgeDropdown from "@/components/home/header/FridgeDropdown";
 import SearchBar from "@/components/home/header/SearchBar";
-import FridgeSheet from "@/components/home/header/FridgeSheet";
-import fridgeApi from "@/api/user/fridgeApi";
-import DeleteFridgeSheet from "@/components/home/header/DeleteFridgeSheet";
+import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
+import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 새로 만든 훅 임포트
 
 export default function MainHeader() {
     const user = useAuthStore(state => state.user);
     const userName = user?.nickname ?? "";
     const userId = user?.id;
 
-    const fridges = useHomeStore(state => state.fridges);
-    const setFridges = useHomeStore(state => state.setFridges);
-    const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
-    const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
-
-    const keyword = useHomeStore(state => state.keyword);
-    const setKeyword = useHomeStore(state => state.setKeyword);
-
-    const category = useHomeStore(state => state.category);
-
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isFridgeOpen, setIsFridgeOpen] = useState(false);
-
-    const bottomSheetRef = useRef<BottomSheetModal>(null);
-    const handleSearchToggle = () => {
-        setIsSearchOpen(prev => !prev);
-
-        if (isSearchOpen) {
-            setKeyword("");
-        }
-    };
-    const handleOpenSetting = () => {
-        setIsFridgeOpen(false);
-
-        setTimeout(() => {
-            bottomSheetRef.current?.present();
-        }, 200);
-    };
-    const handleOpenAddFridge = () => {
-        bottomSheetRef.current?.dismiss();
-        setTimeout(() => {
-            addFridgeRef.current?.present();
-        }, 200);
-    };
-    const handleOpenEditFridge = () => {
-        bottomSheetRef.current?.dismiss();
-
-        setTimeout(() => {
-            editFridgeRef.current?.present();
-        }, 200);
-    };
-    const handleOpenDeleteFridge = () => {
-        bottomSheetRef.current?.dismiss();
-
-        setTimeout(() => {
-            deleteFridgeRef.current?.present();
-        }, 200);
-    };
-
-    const addFridgeRef = useRef<BottomSheetModal>(null);
-
-    // 현재 선택된 냉장고
-    const selectedFridge = fridges.find(fridge => fridge.id === selectedFridgeId);
-    const editFridgeRef = useRef<BottomSheetModal>(null);
-    const deleteFridgeRef = useRef<BottomSheetModal>(null);
+    // 👈 붕어빵 틀(Hook)에서 필요한 기능만 쏙 빼옵니다!
+    const fridge = useFridgeHeader();
 
     return (
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
@@ -82,79 +23,47 @@ export default function MainHeader() {
                 <HeaderProfile
                     userId={userId}
                     userName={userName}
-                    fridgeName={selectedFridge?.name ?? "냉장고"}
-                    isFridgeOpen={isFridgeOpen}
-                    onPress={() => setIsFridgeOpen(prev => !prev)}
+                    fridgeName={fridge.selectedFridge?.name ?? "냉장고"}
+                    isFridgeOpen={fridge.isFridgeOpen}
+                    onPress={() => fridge.setIsFridgeOpen(prev => !prev)}
                 />
                 <View className="flex-row items-start">
                     <Pressable
-                        onPress={handleSearchToggle}
+                        onPress={fridge.handleSearchToggle}
                         className={twMerge(
-                            "w-10",
-                            "h-10",
-                            "rounded-full",
-                            "bg-bg-default",
-                            "items-center",
-                            "justify-center",
-                            "mr-3",
+                            "w-10 h-10 rounded-full bg-bg-default items-center justify-center mr-3",
                         )}>
                         <Ionicons
-                            name={isSearchOpen ? "close" : "search"}
+                            name={fridge.isSearchOpen ? "close" : "search"}
                             size={21}
                             color="#A18F8F"
                         />
                     </Pressable>
 
-                    <Pressable
-                        onPress={() => {}}
-                        className={twMerge(
-                            "w-10",
-                            "h-10",
-                            "rounded-full",
-                            "bg-bg-default",
-                            "items-center",
-                            "justify-center",
-                        )}>
+                    <Pressable className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
                         <Ionicons name="swap-vertical" size={22} color="#A18F8F" />
                     </Pressable>
                 </View>
             </View>
-            {isSearchOpen && <SearchBar keyword={keyword} onChangeKeyword={setKeyword} />}
+
+            {fridge.isSearchOpen && (
+                <SearchBar keyword={fridge.keyword} onChangeKeyword={fridge.setKeyword} />
+            )}
+
             <FridgeDropdown
-                visible={isFridgeOpen}
-                fridges={fridges}
-                selectedFridgeId={selectedFridgeId}
-                onClose={() => setIsFridgeOpen(false)}
+                visible={fridge.isFridgeOpen}
+                fridges={fridge.fridges}
+                selectedFridgeId={fridge.selectedFridgeId}
+                onClose={() => fridge.setIsFridgeOpen(false)}
                 onSelect={id => {
-                    setSelectedFridgeId(id);
-                    setIsFridgeOpen(false);
+                    fridge.setSelectedFridgeId(id);
+                    fridge.setIsFridgeOpen(false);
                 }}
-                onOpenSetting={handleOpenSetting}
-            />
-            <FridgeSettingSheet
-                ref={bottomSheetRef}
-                onClose={() => bottomSheetRef.current?.dismiss()}
-                onAddFridge={handleOpenAddFridge}
-                onEditFridge={handleOpenEditFridge}
-                onDeleteFridge={handleOpenDeleteFridge}
-            />
-            <FridgeSheet
-                ref={addFridgeRef}
-                mode="create"
-                onClose={() => addFridgeRef.current?.dismiss()}
-            />
-            <FridgeSheet
-                ref={editFridgeRef}
-                mode="edit"
-                fridge={selectedFridge}
-                onClose={() => editFridgeRef.current?.dismiss()}
+                onOpenSetting={fridge.handleOpenSetting}
             />
 
-            <DeleteFridgeSheet
-                ref={deleteFridgeRef}
-                fridge={selectedFridge}
-                onClose={() => deleteFridgeRef.current?.dismiss()}
-            />
+            {/* 👈 모달들을 한 줄로 깔끔하게 정리! */}
+            <FridgeHeaderModals {...fridge} />
         </View>
     );
 }
