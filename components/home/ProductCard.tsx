@@ -1,10 +1,9 @@
 import { Image, Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import TextComponent from "@/components/common/text/TextComponent";
-import ExpireBadge, { ExpireStatusType } from "@/components/common/badge/Badge";
+import ExpireBadge, { ExpireStatusType } from "@/components/common/badge/ExpireBadge";
 import { Product, StorageType } from "@/types/product";
-import { CategoryIconKey, categoryIcons } from "@/constants/categoryIcons";
+import { categoryIcons } from "@/constants/categoryIcons";
 
 interface ProductCardProps {
     product: Product;
