@@ -4,7 +4,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import Input from "@/components/common/input/Input";
 import { getAnimalIcon } from "@/constants/profile";
-import { useHomeStore } from "@/stores/home/productStore";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useHomeStore } from "@/stores/home/productStore";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";

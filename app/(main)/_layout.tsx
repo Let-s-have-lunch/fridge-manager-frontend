@@ -9,14 +9,6 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function MainLayout() {
     const { showMainHeader, showDesktopHeader, showMainFooter } = useLayoutStore();
-    const user = useAuthStore(state => state.user);
-
-    const handleSearch = (keyword: string) => {
-        console.log("검색어 입력됨:", keyword);
-    };
-    const handleSort = (order: "asc" | "desc") => {
-        console.log("정렬 순서 변경됨:", order);
-    };
 
     return (
         /* 바깥쪽 전체 배경 판 */
@@ -24,12 +16,7 @@ export default function MainLayout() {
             {/* 1. 모바일용 헤더 (768px 미만 && showMainHeader가 true일 때만 노출) */}
             {showMainHeader && (
                 <View className="md:hidden w-full">
-                    <MainHeader
-                        userId={user?.id}
-                        userName={user?.nickname ?? ""}
-                        onSearch={handleSearch}
-                        onSortToggle={handleSort}
-                    />
+                    <MainHeader />
                 </View>
             )}
 
