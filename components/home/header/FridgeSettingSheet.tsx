@@ -21,6 +21,13 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                 snapPoints={snapPoints}
                 handleComponent={() => null}
                 enablePanDownToClose
+                backgroundComponent={props => (
+                    <View
+                        {...props}
+                        className="rounded-t-[32px] bg-bg-paper" // 👈 다크모드 시 자동으로 #3A3532 적용
+                        style={[props.style]}
+                    />
+                )}
                 backdropComponent={props => (
                     <BottomSheetBackdrop
                         {...props}
@@ -51,7 +58,6 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                         <MenuItem
                             icon="add"
                             color="#8AA9B9"
-                            bg="#F7F3EE"
                             title="냉장고 추가"
                             subTitle="새로운 냉장고를 추가해요"
                             onPress={onAddFridge}
@@ -59,7 +65,6 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                         <MenuItem
                             icon="create-outline"
                             color="#8AA9B9"
-                            bg="#F7F3EE"
                             title="냉장고 수정"
                             subTitle="냉장고 이름을 수정해요"
                             onPress={onEditFridge}
@@ -68,7 +73,6 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                         <MenuItem
                             icon="trash-outline"
                             color="#EB7868"
-                            bg="#F7F3EE"
                             title="냉장고 삭제"
                             subTitle="냉장고를 삭제해요"
                             onPress={onDeleteFridge}
@@ -77,7 +81,7 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                     </View>
 
                     <Pressable
-                        className="mx-5 mt-8 mb-8 h-14 items-center justify-center rounded-[22px] bg-[#F3EFEA]"
+                        className="mx-5 mt-8 mb-8 h-14 items-center justify-center rounded-[22px] bg-button-subtle"
                         onPress={onClose}>
                         <Text className="text-lg font-semibold text-text-default">닫기</Text>
                     </Pressable>
