@@ -1,63 +1,57 @@
 import { View, ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
+import { StyleColorType, StyleSizeType } from "@/types/style";
 
-export type ExpireStatusType = "expired" | "soon" | "warning" | "safe";
-
-interface ExpireBadgeProps extends ViewProps {
-    status: ExpireStatusType;
-    textClasses?: string;
+interface BadgeProps extends ViewProps {
+    color?: StyleColorType;
+    size?: StyleSizeType;
+    textClass?: string;
 }
 
-function ExpireBadge({ status, className, textClasses, children, ...props }: ExpireBadgeProps) {
-    // 상태에 따른 컨테이너(배경 및 테두리) 색상 클래스
-    const getContainerClasses = () => {
-        switch (status) {
-            case "expired":
-                return "bg-expire-expired-bg border border-expire-expired-text";
-            case "soon":
-                return "bg-expire-soon-bg border border-expire-soon-text";
-            case "warning":
-                return "bg-expire-warning-bg border border-expire-warning-text";
-            case "safe":
-                return "bg-expire-safe-bg border border-expire-safe-text";
-            default:
-                return "bg-transparent border border-transparent";
-        }
+function Badge({
+    color = "primary",
+    size = "small",
+    textClass,
+    className,
+    children,
+    ...props
+}: BadgeProps) {
+    const getBgColorClasses = (color: StyleColorType) => {
+        return `bg-${color}-main border border-${color}-main`;
+    };
+    const getTextColorClasses = (color: StyleColorType) => {
+        return `text-${color}-contrast`;
     };
 
-    // 상태에 따른 텍스트 색상 클래스
-    const getTextColorClasses = () => {
-        switch (status) {
-            case "expired":
-                return "text-expire-expired-text";
-            case "soon":
-                return "text-expire-soon-text";
-            case "warning":
-                return "text-expire-warning-text";
-            case "safe":
-                return "text-expire-safe-text";
-            default:
-                return "text-text-default";
-        }
+    const CONTAINER_SIZE_STYLES = {
+        small: "px-2 py-0.5",
+        medium: "px-2.5 py-1",
+        large: "px-3 py-1.5",
+    };
+
+    const TEXT_SIZE_STYLES = {
+        small: "text-[11px]",
+        medium: "text-sm",
+        large: "text-base",
     };
 
     return (
         <View
             className={twMerge(
-                // 이미지 비율에 맞춘 기본 레이아웃 및 패딩
-                ["justify-center", "items-center", "flex-row"],
-                ["rounded-full px-3 py-1.5"],
-                getContainerClasses(),
+                "rounded-full items-center justify-center",
+                getBgColorClasses(color),
+                CONTAINER_SIZE_STYLES[size],
                 className,
             )}
             {...props}>
             {typeof children === "string" ? (
                 <TextComponent
                     className={twMerge(
-                        "font-bold text-sm", // 기본 폰트 스타일 (필요시 조절 가능)
-                        getTextColorClasses(),
-                        textClasses,
+                        "text-[11px] font-bold",
+                        getTextColorClasses(color),
+                        TEXT_SIZE_STYLES[size],
+                        textClass,
                     )}>
                     {children}
                 </TextComponent>
@@ -68,4 +62,4 @@ function ExpireBadge({ status, className, textClasses, children, ...props }: Exp
     );
 }
 
-export default ExpireBadge;
+export default Badge;

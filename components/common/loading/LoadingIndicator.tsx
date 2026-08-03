@@ -33,7 +33,7 @@ function LoadingIndicator({
     }
 
     return (
-        <View className={twMerge(["py-20", "justify-center", "items-center"], className)}>
+        <View className={twMerge(["py-40", "justify-center", "items-center"], className)}>
             <ActivityIndicator size={size} color={color} {...props} />
         </View>
     );

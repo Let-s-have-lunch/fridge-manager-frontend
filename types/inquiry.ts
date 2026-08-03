@@ -1,24 +1,19 @@
-export interface InquiryUserItemType {
+import { User } from "@/types/user";
+
+export interface Inquiry {
     id: number;
+    createdAt: string;
+    updatedAt: string;
     title: string;
     content: string;
-    createdAt: string;
-    user: {
-        id: number;
-        nickname: string;
-    };
-    answer?: {
-        id: number;
-        content: string;
-        createdAt: string;
-    } | null;
+    answer: string | null;
+    answeredAt: string | null;
+    userId: number;
 }
 
-export interface InquiryListResponseType {
-    list: InquiryUserItemType[];
-    total: number;
+export type InquiryUser = Pick<User, "id" | "nickname" | "email">;
+
+export interface InquiryUserItemType extends Inquiry {
+    user: InquiryUser;
 }
 
-export interface InquiryAnswerRequestType {
-    content: string;
-}

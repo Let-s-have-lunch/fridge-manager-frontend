@@ -1,25 +1,44 @@
-import axiosInstance from "../axiosInstance";
+import { PaginationResponseType } from "@/types/common";
+import { Inquiry, InquiryUserItemType } from "@/types/inquiry";
+import axiosInstance from "@/api/axiosInstance";
+import { InquiryInputType } from "@/schemas/user/inquirySchema";
 
-const inquiryApi = {
-    // 내 1:1 문의 목록 조회
-    fetchMyInquiries: async () => {
-        const response = await axiosInstance.get("/inquiries/list");
-        const result = response.data.data || response.data;
-        if (Array.isArray(result)) return result;
-        return result?.list || result?.inquiries || [];
-    },
-
-    // 1:1 문의 상세 조회
-    fetchInquiryDetail: async (id: number) => {
-        const response = await axiosInstance.get(`/inquiries/${id}`);
-        return response.data.data || response.data;
-    },
-
-    // 1:1 문의 작성
-    createInquiry: async (data: { title: string; content: string }) => {
-        const response = await axiosInstance.post("/inquiries/create", data);
-        return response.data.data || response.data;
-    },
+const fetchMyInquiryList = async (
+    page: number,
+    size: number,
+): Promise<PaginationResponseType<InquiryUserItemType>> => {
+    const response = await axiosInstance.get("/inquiries/list", {
+        params: {
+            page,
+            size,
+        },
+    });
+    return response.data.data;
 };
 
-export default inquiryApi;
+const getMyInquiryById = async (inquiryId: number): Promise<InquiryUserItemType> => {
+    const response = await axiosInstance.get(`/inquiries/${inquiryId}`);
+    return response.data.data;
+};
+
+const createInquiry = async (input: InquiryInputType): Promise<Inquiry> => {
+    const response = await axiosInstance.post("/inquiries/create", input);
+    return response.data.data;
+};
+
+const updateInquiry = async (inquiryId: number, input: InquiryInputType): Promise<Inquiry> => {
+    const response = await axiosInstance.patch(`/inquiries/${inquiryId}`, input);
+    return response.data.data;
+};
+
+const deleteInquiry = async (inquiryId: number): Promise<void> => {
+    await axiosInstance.delete(`/inquiries/${inquiryId}`);
+};
+
+export default {
+    fetchMyInquiryList,
+    getMyInquiryById,
+    createInquiry,
+    updateInquiry,
+    deleteInquiry,
+};
