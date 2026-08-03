@@ -10,9 +10,10 @@ import {
     ScrollView,
     Alert,
     Image,
+    ActivityIndicator,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { LoginUserInputType, loginUserSchema } from "@/schemas/user/loginUserSchema";
 import userApi from "@/api/user/userApi";
@@ -23,6 +24,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import InputGroup from "@/components/common/input/InputGroup";
 import Input from "@/components/common/input/Input";
+import Button from "@/components/common/button/Button";
 
 export default function AuthLoginPage() {
     const router = useRouter();
@@ -205,18 +207,18 @@ export default function AuthLoginPage() {
                             </View>
 
                             {/* 4. 로그인 버튼 */}
-                            <TouchableOpacity
+                            <Button
+                                size={"large"}
+                                fullWidth
+                                className={`mt-2 ${isSubmitting ? "opacity-60" : ""}`}
                                 onPress={handleSubmit(onSubmit)}
-                                disabled={isSubmitting}
-                                className={`rounded-3xl py-4 items-center justify-center ${isSubmitting ? "bg-primary-main/70" : "bg-primary-main"}`}>
+                                disabled={isSubmitting}>
                                 {isSubmitting ? (
-                                    <LoadingIndicator />
+                                    <ActivityIndicator color="white" />
                                 ) : (
-                                    <TextComponent className="text-bg-paper font-bold text-lg tracking-wide">
-                                        로그인
-                                    </TextComponent>
+                                    "로그인"
                                 )}
-                            </TouchableOpacity>
+                            </Button>
                         </View>
 
                         {/* 5. 회원가입 유도 영역 */}

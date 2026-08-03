@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     ScrollView,
     Alert,
+    ActivityIndicator,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -23,6 +24,7 @@ import InputGroup from "@/components/common/input/InputGroup";
 import Input from "@/components/common/input/Input";
 import Label from "@/components/common/label/Label";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
+import Button from "@/components/common/button/Button";
 
 export default function AuthRegisterPage() {
     const router = useRouter();
@@ -386,18 +388,18 @@ export default function AuthRegisterPage() {
                             )}
 
                             {/* 가입하기 버튼 */}
-                            <TouchableOpacity
+                            <Button
+                                size={"large"}
+                                fullWidth
+                                className={`mt-2 ${isSubmitting ? "opacity-60" : ""}`}
                                 onPress={handleSubmit(onSubmit)}
-                                disabled={isSubmitting}
-                                className={`mt-2 w-full py-3.5 rounded-2xl bg-primary-main items-center ${isSubmitting ? "opacity-60" : ""}`}>
+                                disabled={isSubmitting}>
                                 {isSubmitting ? (
-                                    <LoadingIndicator color="#ffffff" />
+                                    <ActivityIndicator color="white" />
                                 ) : (
-                                    <TextComponent className="text-base font-bold text-white tracking-wide">
-                                        가입하기
-                                    </TextComponent>
+                                    "가입하기"
                                 )}
-                            </TouchableOpacity>
+                            </Button>
 
                             {/* 로그인으로 돌아가기 */}
                             <View className="flex-row justify-center mt-4">
