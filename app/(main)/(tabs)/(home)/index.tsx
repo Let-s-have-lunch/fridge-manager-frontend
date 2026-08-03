@@ -7,6 +7,7 @@ import productApi from "@/api/user/productApi";
 import { Text } from "react-native";
 import { useHomeStore } from "@/stores/home/productStore";
 import CategoryTabs, { Category } from "@/components/home/CategoryTabs";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 export default function HomeScreen() {
     useSetupLayout({ showMainHeader: true });
@@ -20,6 +21,8 @@ export default function HomeScreen() {
     const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
 
     const [products, setProducts] = useState<Product[]>([]);
+
+    const { isLoggedIn } = useAuthStore();
 
     const loadFridges = useCallback(async () => {
         try {
@@ -35,8 +38,9 @@ export default function HomeScreen() {
     },[setFridges, setSelectedFridgeId]);
 
     useEffect(() => {
+        if (!isLoggedIn) return;
         loadFridges().then(() => {});
-    }, [loadFridges]);
+    }, [isLoggedIn, loadFridges]);
 
     const loadProducts = async (fridgeId: number) => {
         try {
@@ -48,10 +52,11 @@ export default function HomeScreen() {
     };
 
     useEffect(() => {
-        if (selectedFridgeId === null) return;
+        if (!isLoggedIn || selectedFridgeId === null) return;
 
         loadProducts(selectedFridgeId).then(() => {});
-    }, [selectedFridgeId]);
+    }, [isLoggedIn, selectedFridgeId]);
+
     useSetupLayout({ showMainHeader: true, showDesktopHeader: true });
     const [category, setCategory] = useState<Category>("전체");
     const [keyword, setKeyword] = useState("");
