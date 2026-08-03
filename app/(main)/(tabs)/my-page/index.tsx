@@ -12,7 +12,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import { getAnimalIcon } from "@/constants/profile";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-import Badge from "@/components/common/badge/Badge";
+import Badge from "@/components/common/badge/ExpireBadge";
 
 export default function MyPageScreen() {
     useSetupLayout({ showDesktopHeader: true });
