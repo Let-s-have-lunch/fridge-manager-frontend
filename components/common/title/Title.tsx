@@ -31,7 +31,7 @@ function Title({
         // 1. 최상위 View를 1번 코드처럼 flex-row items-center로 묶어 세로 정렬을 완벽하게 맞춤
         <View
             className={twMerge(
-                "w-full h-14 flex-row items-center justify-between px-[20px] bg-transparent border-b border-divider relative",
+                "w-full h-14 flex-row items-center justify-between px-[20px] bg-transparent relative",
                 className,
             )}>
             {/* 2. 좌측 영역 (뒤로가기 버튼 + [좌측 정렬일 경우의 타이틀]) */}
