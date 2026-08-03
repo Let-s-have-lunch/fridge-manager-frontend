@@ -11,19 +11,12 @@ export interface AdminUser {
     deletedAt?: string | null;
 }
 
-export interface AdminUserListResponse {
-    page: number;
-    size: number;
-    total: number;
-    list: AdminUser[];
-}
-
 // 2. 대시보드 관련 타입
 export interface DashboardSummaryResponse {
     recentUsers: Pick<AdminUser, "id" | "nickname" | "email" | "role" | "createdAt">[];
 }
 
-// 3. 공지사항 관련 타입 (기존 Notice 타입을 확장하거나 재사용)
+// 3. 공지사항 관련 타입
 export interface AdminNotice {
     id: number;
     title: string;
@@ -32,9 +25,14 @@ export interface AdminNotice {
     updatedAt: string;
 }
 
-export interface AdminNoticeListResponse {
+// 4. 공통 페이지네이션 타입
+export interface PaginationResponse<T> {
     page: number;
     size: number;
     total: number;
-    list: AdminNotice[];
+    list: T[];
 }
+
+// 5. 목록 응답 타입들 재사용 (여기서 중복 선언을 해결합니다)
+export type AdminUserListResponse = PaginationResponse<AdminUser>;
+export type AdminNoticeListResponse = PaginationResponse<AdminNotice>;

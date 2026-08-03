@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { AdminNoticeInputType, adminNoticeSchema } from "@/schemas/admin/adminSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import adminApi from "@/api/admin/adminApi";
+import adminNoticeApi from "@/api/admin/adminNoticeApi"; // ✅ 변경된 공지사항 API import
 import { Alert, Platform, ScrollView, TextInput, View, useColorScheme } from "react-native";
 import { twMerge } from "tailwind-merge";
 import Title from "@/components/common/title/Title";
@@ -30,7 +30,7 @@ function AdminNoticeCreatePage() {
 
     const onSubmit = async (input: AdminNoticeInputType) => {
         try {
-            await adminApi.createNotice(input);
+            await adminNoticeApi.createNotice(input); // ✅ adminNoticeApi 사용
 
             if (Platform.OS === "web") {
                 alert("공지사항이 성공적으로 등록되었습니다.");

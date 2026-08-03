@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity, Alert, useColorScheme } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
-import adminApi from "@/api/admin/adminApi";
 import { DashboardSummaryResponse } from "@/types/admin";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import adminUserApi from "@/api/admin/adminUserApi";
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -20,7 +19,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const data = await adminApi.getSummary();
+                const data = await adminUserApi.getSummary(); // ✅ adminUserApi로 호출
                 setSummary(data);
             } catch (error) {
                 console.error("대시보드 데이터 조회 실패:", error);
