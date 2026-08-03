@@ -28,9 +28,9 @@ export default function MenuItem({ icon, color, bg, title, subTitle, onPress, is
             </View>
 
             <View className="flex-1">
-                <Text className="text-[18px] font-bold text-text-default">{title}</Text>
+                <Text className="text-[17px] font-bold text-text-default">{title}</Text>
 
-                <Text className="mt-1 text-[15px] text-text-secondary">{subTitle}</Text>
+                <Text className="mt-1 text-[14px] text-text-secondary">{subTitle}</Text>
             </View>
 
             <Ionicons name="chevron-forward" size={22} color="#9A9A9A" />
