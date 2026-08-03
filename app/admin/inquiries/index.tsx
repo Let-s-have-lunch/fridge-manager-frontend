@@ -92,16 +92,16 @@ function AdminInquiryListPage() {
                     <View className="w-full pb-4 md:pb-0">
                         {list.map((item, index) => (
                             <View key={item.id} className="w-full">
-                                {/* 📱 모바일 전용 카드형 UI (행 호버 제거 및 active 투명도만 적용) */}
+                                {/* 📱 모바일 전용 카드형 UI */}
                                 <Pressable
                                     onPress={() => router.push(`/admin/inquiries/${item.id}`)}
-                                    className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm active:opacity-75 transition-opacity">
+                                    className="md:hidden p-4 bg-bg-paper border border-divider rounded-xl my-1.5 shadow-sm active:opacity-70 transition-colors">
                                     <View className="flex-row justify-between items-center mb-2">
                                         <TextComponent className="text-xs text-text-secondary font-medium">
                                             No. {item.id} | {item.user?.nickname || "탈퇴 회원"}
                                         </TextComponent>
 
-                                        {/* ExpireBadge 컴포넌트 적용 (모바일 뷰) */}
+                                        {/* 👉 ExpireBadge 컴포넌트 적용 (모바일 뷰) */}
                                         <ExpireBadge
                                             status={item.answer ? "safe" : "warning"}
                                             className="px-2 py-0.5 rounded-md"
@@ -119,11 +119,11 @@ function AdminInquiryListPage() {
                                     </TextComponent>
                                 </Pressable>
 
-                                {/* 💻 웹/태블릿 전용 테이블 Row UI (행 호버 완전 제거) */}
+                                {/* 💻 웹/태블릿 전용 테이블 Row UI */}
                                 <Pressable
                                     onPress={() => router.push(`/admin/inquiries/${item.id}`)}
                                     className={twMerge(
-                                        "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-x border-b border-divider active:opacity-75 transition-opacity",
+                                        "hidden md:flex flex-row items-center px-4 py-3.5 bg-bg-paper border-x border-b border-divider transition-colors duration-200",
                                         index === list.length - 1 && "rounded-b-xl",
                                     )}>
                                     <TextComponent className="w-16 text-center text-text-secondary">
