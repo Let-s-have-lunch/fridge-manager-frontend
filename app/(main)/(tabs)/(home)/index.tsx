@@ -14,9 +14,13 @@ export default function HomeScreen() {
     const setFridges = useHomeStore(state => state.setFridges);
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
     const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
+    const keyword = useHomeStore(state => state.keyword);
+    const category = useHomeStore(state => state.category);
+    const setCategory = useHomeStore(state => state.setCategory);
+    const sortType = useHomeStore(state => state.sortType);
 
     const { products, setProducts } = useHomeStore();
-    const keyword = useHomeStore(state => state.keyword);
+
     const { isLoggedIn } = useAuthStore();
 
     const loadFridges = useCallback(async () => {
@@ -52,8 +56,6 @@ export default function HomeScreen() {
         loadProducts().then(() => {});
     },[isLoggedIn, selectedFridgeId, setProducts])
 
-    const [category, setCategory] = useState<Category>("전체");
-
 
 
     const filteredProducts = products.filter(product => {
@@ -73,12 +75,21 @@ export default function HomeScreen() {
         return storageMatch && keywordMatch;
     });
 
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+        if (sortType === "EXPIRE") {
+            return a.dDay - b.dDay;
+        }
+
+        return a.category.name.localeCompare(b.category.name, "ko");
+    });
+
+
     return (
         <>
             <View className={"flex-1 gap-5"}>
                 <CategoryTabs value={category} onChange={setCategory} />
                 <FlatList
-                    data={filteredProducts}
+                    data={sortedProducts}
                     keyExtractor={item => item.id.toString()}
                     renderItem={({ item }) => <ProductCard product={item} />}
                     contentContainerStyle={{

@@ -3,7 +3,9 @@ import { Fridge } from "@/types/fridge";
 import { create } from "zustand";
 import { Product } from "@/types/product";
 
-type SortType = "category" | "expiration";
+export type CategoryFilter = "전체" | "냉장" | "냉동" | "실온";
+
+export type SortType = "EXPIRE" | "CATEGORY";
 
 interface HomeState {
     keyword: string;
@@ -29,7 +31,7 @@ interface HomeState {
 export const useHomeStore = create<HomeState>(set => ({
     keyword: "",
     category: "전체",
-    sortType: "expiration",
+    sortType: "EXPIRE",
 
     fridges: [],
     selectedFridgeId: null,
@@ -37,8 +39,8 @@ export const useHomeStore = create<HomeState>(set => ({
     products: [],
     isLoading: false,
 
-    setKeyword: keyword => set({ keyword }),
     setCategory: category => set({ category }),
+    setKeyword: keyword => set({ keyword }),
     setSortType: sortType => set({ sortType }),
 
     setFridges: fridges => set({ fridges }),

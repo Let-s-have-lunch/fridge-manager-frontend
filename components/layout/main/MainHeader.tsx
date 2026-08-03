@@ -14,6 +14,7 @@ import SearchBar from "@/components/home/header/SearchBar";
 import FridgeSheet from "@/components/home/header/FridgeSheet";
 import fridgeApi from "@/api/user/fridgeApi";
 import DeleteFridgeSheet from "@/components/home/header/DeleteFridgeSheet";
+import SortSheet from "@/components/home/header/SortSheet";
 
 export default function MainHeader() {
     const user = useAuthStore(state => state.user);
@@ -76,6 +77,11 @@ export default function MainHeader() {
     const editFridgeRef = useRef<BottomSheetModal>(null);
     const deleteFridgeRef = useRef<BottomSheetModal>(null);
 
+    const sortSheetRef = useRef<BottomSheetModal>(null);
+
+    const sortType = useHomeStore(state => state.sortType);
+    const setSortType = useHomeStore(state => state.setSortType);
+
     return (
         <View className="bg-bg-subtle px-6 pt-5 pb-4">
             <View className="flex-row justify-between">
@@ -106,7 +112,7 @@ export default function MainHeader() {
                     </Pressable>
 
                     <Pressable
-                        onPress={() => {}}
+                        onPress={() => sortSheetRef.current?.present()}
                         className={twMerge(
                             "w-10",
                             "h-10",
@@ -155,6 +161,16 @@ export default function MainHeader() {
                 fridge={selectedFridge}
                 onClose={() => deleteFridgeRef.current?.dismiss()}
             />
+
+            <SortSheet
+                ref={sortSheetRef}
+                selected={sortType}
+                onSelect={type => {
+                    setSortType(type);
+                    sortSheetRef.current?.dismiss();
+                }}
+            />
         </View>
     );
 }
+
