@@ -20,12 +20,15 @@ export default {
                     default: "var(--bg-default)",
                     paper: "var(--bg-paper)",
                     subtle: "var(--bg-subtle)",
+                    button: "var(--bg-button)",
                 },
 
                 text: {
                     default: "var(--text-default)",
                     secondary: "var(--text-secondary)",
                     subtle: "var(--text-subtle)",
+                    contrast: "var(--text-contrast)",
+
                 },
 
                 divider: "var(--divider)",
@@ -69,6 +72,19 @@ export default {
                     contrast: "var(--info-contrast)",
                 },
 
+                menu: {
+                    bg: "var(--menu-bg)",
+                    icon: "var(--menu-icon)",
+                    danger: {
+                        bg: "var(--menu-danger-bg)",
+                        icon: "var(--menu-danger-icon)",
+                    },
+                },
+
+                button: {
+                    subtle: "var(--button-subtle)",
+                },
+
                 expire: {
                     expired: {
                         bg: "var(--expire-expired-bg)",
@@ -95,7 +111,8 @@ export default {
         {
             // 기존 3단어 조합 (예: bg-primary-main)
             pattern:
-                /(bg|text|border)-(primary|secondary|error|success|warning|info|text)-(main|contrast|secondary|point|subtle|bg|border)/,
+                /(bg|text|border)-(primary|secondary|error|success|warning|info|text|menu|button)-(main|contrast|secondary|point|subtle|bg|icon|danger)/,
+
         },
         {
             // 👉 [추가된 부분]: expire 전용 4단어 조합 정규식 추가! (예: bg-expire-expired-bg)

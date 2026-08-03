@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const fridgeSchema = z.object({
+export const createFridgeSchema = z.object({
     name: z
         .string()
         .trim()
@@ -8,4 +8,4 @@ export const fridgeSchema = z.object({
         .max(10, "10자 이내로 입력해주세요."),
 });
 
-export type FridgeInputType = z.infer<typeof fridgeSchema>;
+export type FridgeInputType = z.infer<typeof createFridgeSchema>;
