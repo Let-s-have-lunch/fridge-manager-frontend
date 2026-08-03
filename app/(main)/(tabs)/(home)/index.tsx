@@ -56,12 +56,28 @@ export default function HomeScreen() {
     const [category, setCategory] = useState<Category>("전체");
     const [keyword, setKeyword] = useState("");
 
+    const filteredProducts = products.filter(product => {
+        switch (category) {
+            case "냉장":
+                return product.storageType === "REFRIGERATED";
+
+            case "냉동":
+                return product.storageType === "FROZEN";
+
+            case "실온":
+                return product.storageType === "ROOM_TEMP";
+
+            default:
+                return true; // 전체
+        }
+    });
+
     return (
         <>
             <View className={"flex-1 gap-5"}>
                 <CategoryTabs value={category} onChange={setCategory} />
                 <FlatList
-                    data={products}
+                    data={filteredProducts}
                     keyExtractor={item => item.id.toString()}
                     renderItem={({ item }) => <ProductCard product={item} />}
                     contentContainerStyle={{
