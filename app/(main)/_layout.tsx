@@ -5,6 +5,7 @@ import MainFooter from "@/components/layout/main/MainFooter";
 import { twMerge } from "tailwind-merge";
 import MainHeader from "@/components/layout/main/MainHeader";
 import MainDesktopHeader from "@/components/layout/main/MainDesktopHeader";
+
 export default function MainLayout() {
     const { showMainHeader, showDesktopHeader, showMainFooter } = useLayoutStore();
 
@@ -29,7 +30,7 @@ export default function MainLayout() {
                     "flex-1",
                     "w-full",
                     "max-w-6xl",
-                    "p-6",
+                    "px-6 pt-6",
                     "self-center",
                     "bg-bg-default",
                 ])}>
