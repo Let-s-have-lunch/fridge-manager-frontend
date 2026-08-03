@@ -8,7 +8,8 @@ import { StatusBar } from "expo-status-bar";
 import AuthProvider from "@/components/domain/auth/AuthProvider";
 import { View } from "react-native";
 
-import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function RootLayout() {
     const { theme } = useThemeStore();
@@ -19,15 +20,20 @@ export default function RootLayout() {
     }, [theme, setColorScheme]);
 
     return (
-        <SafeAreaProvider>
-            <StatusBar style={theme === "dark" ? "light" : "dark"} />
-            <SafeAreaView className="flex-1 ">
-                <AuthProvider>
-                    <View className="flex-1">
-                        <Slot />
-                    </View>
-                </AuthProvider>
-            </SafeAreaView>
-        </SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+                <SafeAreaProvider>
+                    <StatusBar style={theme === "dark" ? "light" : "dark"} />
+
+                    <SafeAreaView className="flex-1">
+                        <AuthProvider>
+                            <View className="flex-1">
+                                <Slot />
+                            </View>
+                        </AuthProvider>
+                    </SafeAreaView>
+                </SafeAreaProvider>
+            </BottomSheetModalProvider>
+        </GestureHandlerRootView>
     );
 }

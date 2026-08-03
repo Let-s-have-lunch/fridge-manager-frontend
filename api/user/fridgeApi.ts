@@ -1,6 +1,6 @@
 import axiosInstance from "@/api/axiosInstance";
 import { Fridge } from "@/types/fridge";
-import { FridgeInputType } from "@/schemas/user/createFridge";
+import { FridgeInputType } from "@/schemas/user/createFridgeSchema";
 
 
 const getFridgeList = async (): Promise<Fridge[]> => {
