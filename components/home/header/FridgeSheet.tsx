@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo,} from "react";
 import { Alert, Pressable, Text, TextInput, View } from "react-native";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import fridgeApi from "@/api/user/fridgeApi";
@@ -6,8 +6,9 @@ import { useHomeStore } from "@/stores/home/productStore";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFridgeSchema, FridgeInputType } from "@/schemas/user/createFridgeSchema";
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { Fridge } from "@/types/fridge";
+import { useThemeStore } from "@/stores/theme/useThemeStore";
 
 interface FridgeSheetProps {
     mode: "create" | "edit";
@@ -32,6 +33,9 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 name: "",
             },
         });
+
+        const theme = useThemeStore(state => state.theme);
+        const isDarkMode = theme === "dark";
 
         useEffect(() => {
             if (mode === "edit" && fridge) {
@@ -88,12 +92,18 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 snapPoints={snapPoints}
                 handleComponent={() => null}
                 enablePanDownToClose
+                backgroundStyle={{
+                    backgroundColor: isDarkMode ? "#3A3532" : "#FFFFFF",
+                    borderTopLeftRadius: 32,
+                    borderTopRightRadius: 32,
+                }}
                 backdropComponent={props => (
                     <BottomSheetBackdrop
                         {...props}
                         appearsOnIndex={0}
                         disappearsOnIndex={-1}
                         pressBehavior="close"
+                        opacity={0.3}
                     />
                 )}>
                 <BottomSheetView className="flex-1 bg-bg-paper rounded-t-[32px]">
@@ -104,7 +114,7 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                         </View>
 
                         {/* 제목 */}
-                        <Text className="mb-8 text-center text-[24px] font-bold text-text-default">
+                        <Text className="mb-8 text-center text-[23px] font-bold text-text-default">
                             {mode === "create" ? "냉장고 추가" : "냉장고 수정"}
                         </Text>
 

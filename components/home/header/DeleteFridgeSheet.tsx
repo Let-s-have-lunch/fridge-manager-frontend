@@ -1,11 +1,11 @@
 import { forwardRef, useMemo } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-
 import fridgeApi from "@/api/user/fridgeApi";
 import { Fridge } from "@/types/fridge";
 import { useHomeStore } from "@/stores/home/productStore";
 import { isAxiosError } from "axios";
+import { useThemeStore } from "@/stores/theme/useThemeStore";
 
 interface DeleteFridgeSheetProps {
     fridge?: Fridge;
@@ -19,6 +19,9 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
         const fridges = useHomeStore(state => state.fridges);
         const setFridges = useHomeStore(state => state.setFridges);
         const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
+
+        const theme = useThemeStore(state => state.theme);
+        const isDarkMode = theme === "dark";
 
         const handleDelete = async () => {
             if (!fridge) return;
@@ -56,12 +59,18 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                 snapPoints={snapPoints}
                 handleComponent={() => null}
                 enablePanDownToClose
+                backgroundStyle={{
+                    backgroundColor: isDarkMode ? "#3A3532" : "#FFFFFF",
+                    borderTopLeftRadius: 32,
+                    borderTopRightRadius: 32,
+                }}
                 backdropComponent={props => (
                     <BottomSheetBackdrop
                         {...props}
                         appearsOnIndex={0}
                         disappearsOnIndex={-1}
                         pressBehavior="close"
+                        opacity={0.3}
                     />
                 )}>
                 <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper">
@@ -70,11 +79,11 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                             <View className="mt-2.5 h-1.5 w-14 rounded-full bg-divider" />
                         </View>
 
-                        <Text className="text-center text-[24px] font-bold text-text-default">
+                        <Text className="text-center text-[23px] font-bold text-text-default">
                             냉장고 삭제
                         </Text>
 
-                        <Text className="mt-6 text-center text-[16px] text-text-secondary">
+                        <Text className="mt-5 text-center text-[14px] text-text-secondary">
                             "{fridge?.name}" 냉장고를 정말 삭제하시겠습니까?
                         </Text>
 
@@ -82,13 +91,17 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                             <Pressable
                                 onPress={onClose}
                                 className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
-                                <Text className="text-[18px] font-semibold text-text-default">취소</Text>
+                                <Text className="text-[18px] font-semibold text-text-default">
+                                    취소
+                                </Text>
                             </Pressable>
 
                             <Pressable
                                 onPress={handleDelete}
                                 className="flex-1 h-14 items-center justify-center rounded-[18px] bg-error-point">
-                                <Text className="text-[18px] font-semibold text-text-contrast">삭제</Text>
+                                <Text className="text-[18px] font-semibold text-text-contrast">
+                                    삭제
+                                </Text>
                             </Pressable>
                         </View>
                     </View>
