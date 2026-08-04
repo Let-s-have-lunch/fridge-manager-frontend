@@ -2,11 +2,14 @@ import { useSetupLayout } from "@/hooks/useSetupLayout";
 import { useCallback, useEffect, useState } from "react";
 import fridgeApi from "@/api/user/fridgeApi";
 import productApi from "@/api/user/productApi";
-import { FlatList, View } from "react-native";
+import { FlatList, View, Pressable } from "react-native";
 import { useHomeStore } from "@/stores/home/productStore";
 import CategoryTabs, { Category } from "@/components/home/CategoryTabs";
 import ProductCard from "@/components/home/ProductCard";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { twMerge } from "tailwind-merge";
 
 export default function HomeScreen() {
     useSetupLayout({ showMainHeader: true, showDesktopHeader: true });
@@ -22,6 +25,7 @@ export default function HomeScreen() {
     const { products, setProducts } = useHomeStore();
 
     const { isLoggedIn } = useAuthStore();
+    const router = useRouter();
 
     const loadFridges = useCallback(async () => {
         try {
@@ -40,8 +44,7 @@ export default function HomeScreen() {
         if (!isLoggedIn) return;
         loadFridges().then(() => {});
     }, [isLoggedIn, loadFridges]);
-    
-    
+
     useEffect(() => {
         if (!isLoggedIn || selectedFridgeId === null) return;
 
@@ -54,9 +57,7 @@ export default function HomeScreen() {
             }
         };
         loadProducts().then(() => {});
-    },[isLoggedIn, selectedFridgeId, setProducts])
-
-
+    }, [isLoggedIn, selectedFridgeId, setProducts]);
 
     const filteredProducts = products.filter(product => {
         // 보관방식 필터
@@ -83,7 +84,6 @@ export default function HomeScreen() {
         return a.category.name.localeCompare(b.category.name, "ko");
     });
 
-
     return (
         <>
             <View className={"flex-1 gap-5"}>
@@ -98,6 +98,27 @@ export default function HomeScreen() {
                     showsVerticalScrollIndicator={false}
                 />
             </View>
+
+            <Pressable
+                onPress={() => router.push("/product/register")}
+                className={twMerge(
+                    ["absolute bottom-6 right-5 h-16 w-16"],
+                    ["items-center justify-center"],
+                    ["rounded-full"],
+                    ["bg-primary-main"],
+                )}
+                style={{
+                    shadowColor: "#000",
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.18,
+                    shadowRadius: 8,
+                    elevation: 8, // Android
+                }}>
+                <Ionicons name={"add"} size={43} color={"white"} />
+            </Pressable>
         </>
     );
 }

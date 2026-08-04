@@ -9,23 +9,24 @@ export type SortType = "EXPIRE" | "CATEGORY";
 
 interface HomeState {
     keyword: string;
-    category: Category;
-    sortType: SortType;
-
-    fridges: Fridge[];
-    selectedFridgeId: number | null;
-
-    products: Product[];
-    isLoading: boolean;
-
     setKeyword: (keyword: string) => void;
+
+    category: Category;
     setCategory: (category: Category) => void;
+
+    sortType: SortType;
     setSortType: (sortType: SortType) => void;
 
+    fridges: Fridge[];
     setFridges: (fridges: Fridge[]) => void;
+
+    selectedFridgeId: number | null;
     setSelectedFridgeId: (id: number | null) => void;
 
+    products: Product[];
     setProducts: (products: Product[]) => void;
+
+    isLoading: boolean;
 }
 
 export const useHomeStore = create<HomeState>(set => ({
@@ -48,4 +49,3 @@ export const useHomeStore = create<HomeState>(set => ({
 
     setProducts: products => set({ products }),
 }));
-
