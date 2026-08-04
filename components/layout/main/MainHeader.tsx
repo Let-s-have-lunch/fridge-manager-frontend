@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
@@ -7,11 +7,10 @@ import HeaderProfile from "@/components/home/header/HeaderProfile";
 import FridgeDropdown from "@/components/home/header/FridgeDropdown";
 import SearchBar from "@/components/home/header/SearchBar";
 import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
-import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 새로 만든 훅 임포트
-import FridgeSheet from "@/components/home/header/FridgeSheet";
-import fridgeApi from "@/api/user/fridgeApi";
-import DeleteFridgeSheet from "@/components/home/header/DeleteFridgeSheet";
-import SortSheet from "@/components/home/header/SortSheet";
+import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 공통 훅
+import SortSheet from "@/components/home/header/SortSheet"; // 👈 팀원이 추가한 정렬 모달
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useHomeStore } from "@/stores/home/productStore";
 
 export default function MainHeader() {
     const user = useAuthStore(state => state.user);
@@ -21,8 +20,8 @@ export default function MainHeader() {
     // 👈 붕어빵 틀(Hook)에서 필요한 기능만 쏙 빼옵니다!
     const fridge = useFridgeHeader();
 
+    // 👇 팀원이 추가한 정렬 관련 상태 및 Ref
     const sortSheetRef = useRef<BottomSheetModal>(null);
-
     const sortType = useHomeStore(state => state.sortType);
     const setSortType = useHomeStore(state => state.setSortType);
 
@@ -37,6 +36,7 @@ export default function MainHeader() {
                     onPress={() => fridge.setIsFridgeOpen(prev => !prev)}
                 />
                 <View className="flex-row items-start">
+                    {/* 검색 버튼 */}
                     <Pressable
                         onPress={fridge.handleSearchToggle}
                         className={twMerge(
@@ -49,6 +49,7 @@ export default function MainHeader() {
                         />
                     </Pressable>
 
+                    {/* 🛠️ [수정됨] 정렬 버튼: 중복된 Pressable을 하나로 합쳤습니다 */}
                     <Pressable
                         onPress={() => sortSheetRef.current?.present()}
                         className={twMerge(
@@ -59,7 +60,6 @@ export default function MainHeader() {
                             "items-center",
                             "justify-center",
                         )}>
-                    <Pressable className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
                         <Ionicons name="swap-vertical" size={22} color="#A18F8F" />
                     </Pressable>
                 </View>
@@ -81,12 +81,7 @@ export default function MainHeader() {
                 onOpenSetting={fridge.handleOpenSetting}
             />
 
-            <DeleteFridgeSheet
-                ref={deleteFridgeRef}
-                fridge={selectedFridge}
-                onClose={() => deleteFridgeRef.current?.dismiss()}
-            />
-
+            {/* 👇 팀원이 추가한 정렬 모달 렌더링 */}
             <SortSheet
                 ref={sortSheetRef}
                 selected={sortType}
@@ -95,9 +90,9 @@ export default function MainHeader() {
                     sortSheetRef.current?.dismiss();
                 }}
             />
-            {/* 👈 모달들을 한 줄로 깔끔하게 정리! */}
+
+            {/* 👈 모달들을 한 줄로 깔끔하게 정리 (DeleteFridgeSheet도 이 안에 잘 들어있습니다!) */}
             <FridgeHeaderModals {...fridge} />
         </View>
     );
 }
-
