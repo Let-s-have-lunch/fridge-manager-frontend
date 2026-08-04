@@ -6,6 +6,9 @@ import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import inquiryApi from "@/api/user/inquiryApi";
+import adminInquiryApi from "@/api/admin/adminInquiryApi";
+import InquiryApi from "@/api/user/inquiryApi";
+import { InquiryUserItemType } from "@/types/inquiry";
 
 interface InquiryDetailType {
     id: number;
@@ -20,14 +23,14 @@ function UserInquiryDetailPage() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const inquiryId = Number(id);
 
-    const [inquiry, setInquiry] = useState<InquiryDetailType | null>(null);
+    const [inquiry, setInquiry] = useState<InquiryUserItemType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const loadDetail = useCallback(async () => {
         if (!inquiryId) return;
         try {
             setIsLoading(true);
-            const data = await inquiryApi.fetchInquiryDetail(inquiryId);
+            const data = await InquiryApi.getMyInquiryById(inquiryId);
             setInquiry(data);
         } catch (error) {
             console.log(error);

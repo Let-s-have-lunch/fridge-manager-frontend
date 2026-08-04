@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import adminNoticeApi from "@/api/admin/adminNoticeApi"; // ✅ 변경된 공지사항 API import
+import adminNoticeApi from "@/api/admin/adminNoticeApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import { AdminNotice } from "@/types/admin";
 import {
@@ -39,7 +39,7 @@ function AdminNoticeDetailPage() {
         const fetchNotice = async () => {
             try {
                 setIsLoading(true);
-                const data = await adminNoticeApi.getNoticeById(noticeId); // ✅ adminNoticeApi 사용
+                const data = await adminNoticeApi.getNoticeById(noticeId);
                 setNotice(data);
                 setTitle(data.title);
                 setContent(data.content);
@@ -58,7 +58,7 @@ function AdminNoticeDetailPage() {
             }
         };
 
-        fetchNotice();
+        fetchNotice().then(() => {});
     }, [noticeId, router]);
 
     // 수정 요청 처리
@@ -71,7 +71,7 @@ function AdminNoticeDetailPage() {
 
         try {
             setIsSubmitting(true);
-            const updated = await adminNoticeApi.updateNotice(noticeId, { title, content }); // ✅ adminNoticeApi 사용
+            const updated = await adminNoticeApi.updateNotice(noticeId, { title, content });
             setNotice(updated);
             setIsEditing(false);
             if (Platform.OS === "web") alert("공지사항이 수정되었습니다.");
@@ -89,7 +89,7 @@ function AdminNoticeDetailPage() {
     const handleDelete = () => {
         const confirmDelete = async () => {
             try {
-                await adminNoticeApi.deleteNotice(noticeId); // ✅ adminNoticeApi 사용
+                await adminNoticeApi.deleteNotice(noticeId);
                 if (Platform.OS === "web") {
                     alert("공지사항이 삭제되었습니다.");
                     router.back();
@@ -129,7 +129,7 @@ function AdminNoticeDetailPage() {
 
     return (
         <View className="flex-1 w-full">
-            {/* 상단 타이틀 영역 (다른 어드민 페이지와 통일) */}
+            {/* 상단 타이틀 영역 */}
             <Title
                 title={isEditing ? "공지사항 수정" : "공지사항 상세"}
                 description={
@@ -143,31 +143,40 @@ function AdminNoticeDetailPage() {
             <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
                 {/* 본문 카드 박스 */}
                 <View className="bg-bg-paper border border-divider rounded-2xl p-6 shadow-sm mb-6">
-                    {/* 등록일 및 ID 표시 */}
-                    <View className="flex-row justify-between items-center pb-4 mb-4 border-b border-divider">
-                        <TextComponent className="text-xs text-text-secondary font-medium">
-                            No. {notice.id}
-                        </TextComponent>
+                    {/* 1. 최상단: 제목 라인 (굵고 큰 폰트 + 하단 보더 라인) */}
+                    <View className="pb-4 mb-4 border-b border-divider">
+                        {isEditing ? (
+                            <TextInput
+                                className="w-full bg-bg-subtle/30 border border-divider rounded-lg px-3 py-2 text-text-default text-lg font-bold focus:border-primary-main"
+                                value={title}
+                                onChangeText={setTitle}
+                                placeholder="제목을 입력하세요"
+                                placeholderTextColor={isDark ? "#9C948E" : "#BDBDBD"}
+                            />
+                        ) : (
+                            <TextComponent
+                                className="text-lg font-bold text-text-default"
+                                numberOfLines={1}>
+                                {notice.title}
+                            </TextComponent>
+                        )}
+                    </View>
+
+                    {/* 2. 그 아래: No., 등록일 라인 (보더 없음) */}
+                    <View className="flex-row justify-between items-center mb-6">
+                        <View className="flex-row items-center gap-2">
+                            <TextComponent className="text-xs text-text-secondary font-medium">
+                                No. {notice.id}
+                            </TextComponent>
+                        </View>
                         <TextComponent className="text-xs text-text-secondary">
                             등록일: {notice.createdAt ? notice.createdAt.substring(0, 10) : ""}
                         </TextComponent>
                     </View>
 
-                    {/* 수정 모드 vs 조회 모드 분기 */}
-                    {isEditing ? (
-                        <View className="gap-4">
-                            <View>
-                                <TextComponent className="text-sm font-bold text-text-default mb-2">
-                                    제목
-                                </TextComponent>
-                                <TextInput
-                                    className="bg-bg-subtle/30 border border-divider rounded-xl px-4 py-3 text-text-default text-base font-bold focus:border-primary-main transition-colors"
-                                    value={title}
-                                    onChangeText={setTitle}
-                                    placeholder="제목을 입력하세요"
-                                    placeholderTextColor={isDark ? "#9C948E" : "#BDBDBD"}
-                                />
-                            </View>
+                    {/* 3. 내용 본문 또는 수정용 내용 입력 영역 */}
+                    <View className="min-h-[200px]">
+                        {isEditing ? (
                             <View>
                                 <TextComponent className="text-sm font-bold text-text-default mb-2">
                                     내용
@@ -182,19 +191,12 @@ function AdminNoticeDetailPage() {
                                     textAlignVertical="top"
                                 />
                             </View>
-                        </View>
-                    ) : (
-                        <View className="gap-4">
-                            <TextComponent className="text-xl font-bold text-text-default">
-                                {notice.title}
+                        ) : (
+                            <TextComponent className="text-text-default leading-6 whitespace-pre-wrap">
+                                {notice.content}
                             </TextComponent>
-                            <View className="pt-4 border-t border-divider min-h-[200px]">
-                                <TextComponent className="text-text-default leading-6 whitespace-pre-wrap">
-                                    {notice.content}
-                                </TextComponent>
-                            </View>
-                        </View>
-                    )}
+                        )}
+                    </View>
                 </View>
 
                 {/* 하단 버튼 영역 */}
