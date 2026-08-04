@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Pressable, View, Image } from "react-native";
 import { twMerge } from "tailwind-merge";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,7 +10,10 @@ import Input from "@/components/common/input/Input";
 import { USER_NAV_LIST } from "@/constants/menu";
 import FridgeDropdown from "@/components/home/header/FridgeDropdown";
 import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
-import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 새로 만든 훅 임포트
+import { useFridgeHeader } from "@/hooks/useFridgeHeader";
+import SortSheet from "@/components/home/header/SortSheet"; // 👈 정렬 모달 임포트
+import { BottomSheetModal } from "@gorhom/bottom-sheet"; // 👈 바텀시트 타입 임포트
+import { useHomeStore } from "@/stores/home/productStore"; // 👈 정렬 상태 스토어 임포트
 
 export default function MainDesktopHeader() {
     const router = useRouter();
@@ -22,6 +25,11 @@ export default function MainDesktopHeader() {
 
     // 👈 붕어빵 틀(Hook)에서 똑같이 기능 쏙 빼오기
     const fridge = useFridgeHeader();
+
+    // 👇 데스크탑 헤더에도 정렬 관련 상태 및 리모컨(Ref) 추가
+    const sortSheetRef = useRef<BottomSheetModal>(null);
+    const sortType = useHomeStore(state => state.sortType);
+    const setSortType = useHomeStore(state => state.setSortType);
 
     return (
         <View className="bg-bg-subtle pt-5 pb-4 items-center w-full ">
@@ -50,7 +58,6 @@ export default function MainDesktopHeader() {
                                     "px-2 py-0.5 flex-row items-center",
                                     "rounded-full border border-[#A18F8F]",
                                 )}>
-                                {/* 👈 하드코딩된 이름 대신 상태에서 가져오기 */}
                                 <TextComponent className="mr-1 ml-1 text-[12px] font-medium text-text-default">
                                     {fridge.selectedFridge?.name ?? "냉장고"}
                                 </TextComponent>
@@ -101,7 +108,10 @@ export default function MainDesktopHeader() {
                         />
                     </Pressable>
 
-                    <Pressable className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
+                    {/* 🛠️ 빈 버튼이었던 정렬 버튼에 리모컨(present) 동작 추가 */}
+                    <Pressable
+                        onPress={() => sortSheetRef.current?.present()}
+                        className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
                         <Ionicons name="swap-vertical" size={22} color="#A18F8F" />
                     </Pressable>
                 </View>
@@ -146,7 +156,15 @@ export default function MainDesktopHeader() {
                 </View>
             </View>
 
-            {/* 6. 모달 렌더링 */}
+            {/* 6. 모달 렌더링 영역 (정렬 모달 추가) */}
+            <SortSheet
+                ref={sortSheetRef}
+                selected={sortType}
+                onSelect={type => {
+                    setSortType(type);
+                    sortSheetRef.current?.dismiss();
+                }}
+            />
             <FridgeHeaderModals {...fridge} />
         </View>
     );
