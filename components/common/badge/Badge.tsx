@@ -20,9 +20,6 @@ function Badge({
     const getBgColorClasses = (color: StyleColorType) => {
         return `bg-${color}-main border border-${color}-main`;
     };
-    const getTextColorClasses = (color: StyleColorType) => {
-        return `text-${color}-contrast`;
-    };
 
     const CONTAINER_SIZE_STYLES = {
         small: "px-2 py-0.5",
@@ -48,8 +45,7 @@ function Badge({
             {typeof children === "string" ? (
                 <TextComponent
                     className={twMerge(
-                        "text-[11px] font-bold",
-                        getTextColorClasses(color),
+                        "font-bold text-white",
                         TEXT_SIZE_STYLES[size],
                         textClass,
                     )}>

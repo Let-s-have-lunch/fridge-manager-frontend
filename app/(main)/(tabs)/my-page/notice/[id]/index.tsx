@@ -1,84 +1,112 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
-import Title from "@/components/common/title/Title";
-import TextComponent from "@/components/common/text/TextComponent";
-import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import noticeApi from "@/api/user/noticeApi";
-import { NoticeDetailType } from "@/api/user/inquiryApi";
+import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
+import { Notice } from "@/types/notice";
+import { Alert, Platform, Pressable, ScrollView, View, useColorScheme } from "react-native";
+import { twMerge } from "tailwind-merge";
+import TextComponent from "@/components/common/text/TextComponent";
+import Title from "@/components/common/title/Title";
 
 function UserNoticeDetailPage() {
-    const router = useRouter();
     const { id } = useLocalSearchParams<{ id: string }>();
+    const router = useRouter();
     const noticeId = Number(id);
+    const colorScheme = useColorScheme();
+    const isDark = colorScheme === "dark";
 
-    const [notice, setNotice] = useState<NoticeDetailType | null>(null);
+    const [notice, setNotice] = useState<Notice | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const loadDetail = useCallback(async () => {
-        if (!noticeId || isNaN(noticeId)) return;
-        try {
-            setIsLoading(true);
-            setErrorMessage(null);
-            const data = await noticeApi.fetchNoticeDetail(noticeId);
-            setNotice(data);
-        } catch (error: any) {
-            console.log("공지사항 상세 조회 에러:", error);
-            setErrorMessage("공지사항을 불러오는 중 오류가 발생했습니다.");
-        } finally {
-            setIsLoading(false);
-        }
-    }, [noticeId]);
-
+    // 상세 정보 불러오기
     useEffect(() => {
-        loadDetail().then(() => {})
-    }, [loadDetail]);
+        if (!noticeId || isNaN(noticeId)) return;
+
+        const fetchNotice = async () => {
+            try {
+                setIsLoading(true);
+                const data = await noticeApi.getNoticeById(noticeId);
+                setNotice(data);
+            } catch (error) {
+                console.log(error);
+                if (Platform.OS === "web") {
+                    alert("공지사항을 불러오지 못했습니다.");
+                    router.back();
+                } else {
+                    Alert.alert("오류", "공지사항을 불러오지 못했습니다.", [
+                        { text: "확인", onPress: () => router.back() },
+                    ]);
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchNotice().then(() => {});
+    }, [noticeId, router]);
 
     if (isLoading) {
         return (
-            <View className="flex-1 bg-bg-paper p-6 justify-center items-center">
+            <View className="flex-1 bg-bg-paper justify-center items-center">
                 <LoadingIndicator />
             </View>
         );
     }
 
-    if (errorMessage || !notice) {
-        return (
-            <View className="flex-1 bg-bg-paper p-6 justify-center items-center">
-                <TextComponent className="text-text-secondary text-base mb-4">
-                    {errorMessage || "존재하지 않는 공지사항입니다."}
-                </TextComponent>
-            </View>
-        );
-    }
+    if (!notice) return null;
 
     return (
-        <View className="flex-1 bg-bg-paper">
-            <ScrollView className="flex-1 p-4 md:p-6 w-full" showsVerticalScrollIndicator={false}>
-                <View className="mb-6">
-                    <Title
-                        title="공지사항 상세"
-                        description="공지 내용을 상세히 확인합니다."
-                        showBackButton={true}
-                        onBackPress={() => router.back()}
-                        className="h-auto py-1"
-                    />
-                </View>
+        <View className="flex-1 w-full">
+            {/* 상단 타이틀 영역 (어드민과 동일) */}
+            <Title
+                title="공지사항 상세"
+                description="등록된 공지사항의 상세 내용입니다."
+                showBackButton={true}
+                onBackPress={() => router.back()}
+                className="h-auto pb-4 mb-6"
+            />
 
-                <View className="bg-bg-subtle/30 border border-divider rounded-2xl p-5 mb-6">
-                    <TextComponent className="text-xs text-text-secondary mb-2">
-                        작성일: {notice.createdAt}
-                    </TextComponent>
-                    <TextComponent className="text-lg font-bold text-text-default mb-4">
-                        {notice.title}
-                    </TextComponent>
+            <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
+                {/* 본문 카드 박스 (어드민과 완전히 동일한 구조 및 클래스명) */}
+                <View className="bg-bg-paper border border-divider rounded-2xl p-6 shadow-sm mb-6">
+                    {/* 1. 최상단: 제목 라인 (굵고 큰 폰트 + 하단 보더 라인) */}
+                    <View className="pb-4 mb-4 border-b border-divider">
+                        <TextComponent
+                            className="text-lg font-bold text-text-default"
+                            numberOfLines={1}>
+                            {notice.title}
+                        </TextComponent>
+                    </View>
 
-                    <View className="bg-bg-paper p-4 rounded-xl border border-divider min-h-[200px]">
-                        <TextComponent className="text-text-default leading-relaxed">
+                    {/* 2. 그 아래: No., 등록일 라인 (보더 없음) */}
+                    <View className="flex-row justify-between items-center mb-6">
+                        <View className="flex-row items-center gap-2">
+                            <TextComponent className="text-xs text-text-secondary font-medium">
+                                No. {notice.id}
+                            </TextComponent>
+                        </View>
+                        <TextComponent className="text-xs text-text-secondary">
+                            등록일: {notice.createdAt ? notice.createdAt.substring(0, 10) : ""}
+                        </TextComponent>
+                    </View>
+
+                    {/* 3. 내용 본문 영역 */}
+                    <View className="min-h-[200px]">
+                        <TextComponent className="text-text-default leading-6 whitespace-pre-wrap">
                             {notice.content}
                         </TextComponent>
                     </View>
+                </View>
+
+                {/* 하단 버튼 영역 (어드민 스타일을 유지하되 사용자용 '목록으로' 버튼 배치) */}
+                <View className="flex-row justify-end gap-3 pb-6">
+                    <Pressable
+                        onPress={() => router.back()}
+                        className="px-5 py-3 rounded-xl bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors">
+                        <TextComponent className="font-bold text-white text-xs">
+                            목록으로
+                        </TextComponent>
+                    </Pressable>
                 </View>
             </ScrollView>
         </View>

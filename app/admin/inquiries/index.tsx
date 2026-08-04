@@ -8,7 +8,7 @@ import Title from "@/components/common/title/Title";
 import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import Pagination from "@/components/common/pagination/Paginnation";
-import ExpireBadge from "@/components/common/badge/Badge";
+import Badge from "@/components/common/badge/Badge";
 
 function AdminInquiryListPage() {
     const router = useRouter();
@@ -101,13 +101,12 @@ function AdminInquiryListPage() {
                                             No. {item.id} | {item.user?.nickname || "탈퇴 회원"}
                                         </TextComponent>
 
-                                        {/* 👉 ExpireBadge 컴포넌트 적용 (모바일 뷰) */}
-                                        <ExpireBadge
-                                            status={item.answer ? "safe" : "warning"}
-                                            className="px-2 py-0.5 rounded-md"
-                                            textClasses="text-[10px]">
+                                        {/* 뱃지 적용: success / info 조합 */}
+                                        <Badge
+                                            color={item.answer ? "success" : "info"}
+                                            size="small">
                                             {item.answer ? "답변완료" : "답변대기"}
-                                        </ExpireBadge>
+                                        </Badge>
                                     </View>
                                     <TextComponent
                                         className="font-bold text-text-default text-base mb-1"
@@ -142,12 +141,11 @@ function AdminInquiryListPage() {
                                     </TextComponent>
 
                                     <View className="w-28 items-center">
-                                        <ExpireBadge
-                                            status={item.answer ? "safe" : "warning"}
-                                            className="px-2.5 py-1"
-                                            textClasses="text-[10px]">
+                                        <Badge
+                                            color={item.answer ? "success" : "secondary"}
+                                            size="small">
                                             {item.answer ? "답변완료" : "답변대기"}
-                                        </ExpireBadge>
+                                        </Badge>
                                     </View>
                                 </Pressable>
                             </View>
