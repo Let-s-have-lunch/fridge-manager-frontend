@@ -12,7 +12,7 @@ const createCategory = async (input: CategoryInputType): Promise<Category> => {
     return response.data.data;
 };
 
-const updateCategory = async (input: CategoryInputType, categoryId: number): Promise<Category> => {
+const updateCategory = async (categoryId: number, input: CategoryInputType): Promise<Category> => {
     const response = await axiosInstance.put(`/categories/${categoryId}`, input);
     return response.data.data;
 };
