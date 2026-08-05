@@ -1,5 +1,13 @@
-import { forwardRef, useMemo } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { forwardRef, useMemo, useState, useRef, useImperativeHandle } from "react";
+import {
+    Alert,
+    Pressable,
+    Text,
+    View,
+    Modal,
+    TouchableWithoutFeedback,
+    useWindowDimensions,
+} from "react-native";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import fridgeApi from "@/api/user/fridgeApi";
 import { Fridge } from "@/types/fridge";
@@ -14,6 +22,34 @@ interface DeleteFridgeSheetProps {
 
 const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
     ({ fridge, onClose }, ref) => {
+        const { width } = useWindowDimensions();
+        const isMd = width >= 768;
+
+        // 1. 상태 및 Ref 관리
+        const [isModalVisible, setIsModalVisible] = useState(false);
+        const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+        // 2. 부모의 ref.current.present() 호출 가로채기
+        useImperativeHandle(ref, () => {
+            return {
+                present: () => {
+                    if (isMd) {
+                        setIsModalVisible(true);
+                    } else {
+                        bottomSheetRef.current?.present();
+                    }
+                },
+                dismiss: () => {
+                    setIsModalVisible(false);
+                    bottomSheetRef.current?.dismiss();
+                },
+                close: () => {
+                    setIsModalVisible(false);
+                    bottomSheetRef.current?.close();
+                },
+            } as unknown as BottomSheetModal;
+        }, [isMd]);
+
         const snapPoints = useMemo(() => ["38%"], []);
 
         const fridges = useHomeStore(state => state.fridges);
@@ -22,6 +58,14 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
 
         const theme = useThemeStore(state => state.theme);
         const isDarkMode = theme === "dark";
+        const bgColor = isDarkMode ? "#3A3532" : "#FFFFFF"; // --bg-paper
+
+        // 공통 닫기 핸들러
+        const handleClose = () => {
+            setIsModalVisible(false);
+            bottomSheetRef.current?.dismiss();
+            onClose();
+        };
 
         const handleDelete = async () => {
             if (!fridge) return;
@@ -39,7 +83,7 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                 setFridges(fridgeList);
                 setSelectedFridgeId(fridgeList[0]?.id ?? null);
 
-                onClose();
+                handleClose(); // 👈 기존 onClose 대신 공통 닫기 함수 호출
             } catch (error) {
                 if (isAxiosError(error)) {
                     Alert.alert(
@@ -53,14 +97,74 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
             }
         };
 
+        // 3. 내용물 분리 (디자인 변경 없이 그대로 분리)
+        const DeleteContent = () => (
+            <>
+                {/* Handle - 모바일에서만 노출 */}
+                {!isMd && (
+                    <View className="items-center mb-6">
+                        <View className="mt-2.5 h-1.5 w-14 rounded-full bg-divider" />
+                    </View>
+                )}
+
+                <Text className="text-center text-[23px] font-bold text-text-default">
+                    냉장고 삭제
+                </Text>
+
+                <Text className="mt-5 text-center text-[14px] text-text-secondary">
+                    "{fridge?.name}" 냉장고를 정말 삭제하시겠습니까?
+                </Text>
+
+                <View className="mt-6 flex-row gap-4">
+                    <Pressable
+                        onPress={handleClose}
+                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
+                        <Text className="text-[18px] font-semibold text-text-default">취소</Text>
+                    </Pressable>
+
+                    <Pressable
+                        onPress={handleDelete}
+                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-error-point">
+                        <Text className="text-[18px] font-semibold text-text-contrast">삭제</Text>
+                    </Pressable>
+                </View>
+            </>
+        );
+
+        // 4. 화면 크기에 따른 조건부 렌더링
+        if (isMd) {
+            // 태블릿/PC 환경: 중앙 모달 렌더링
+            return (
+                <Modal
+                    visible={isModalVisible}
+                    transparent={true}
+                    animationType="fade"
+                    onRequestClose={handleClose}>
+                    <TouchableWithoutFeedback onPress={handleClose}>
+                        <View className="flex-1 items-center justify-center bg-black/50">
+                            <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
+                                <View
+                                    style={{ backgroundColor: bgColor }}
+                                    className="w-full max-w-[400px] rounded-[32px] px-6 pt-8 pb-8 shadow-lg">
+                                    <DeleteContent />
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </Modal>
+            );
+        }
+
+        // 모바일 환경: 팀원이 짠 기존 바텀 시트 렌더링
         return (
             <BottomSheetModal
-                ref={ref}
+                ref={bottomSheetRef}
+                onDismiss={() => setIsModalVisible(false)}
                 snapPoints={snapPoints}
                 handleComponent={() => null}
                 enablePanDownToClose
                 backgroundStyle={{
-                    backgroundColor: isDarkMode ? "#3A3532" : "#FFFFFF",
+                    backgroundColor: bgColor,
                     borderTopLeftRadius: 32,
                     borderTopRightRadius: 32,
                 }}
@@ -75,35 +179,7 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                 )}>
                 <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper">
                     <View className="flex-1 px-6 pb-8">
-                        <View className="items-center mb-6">
-                            <View className="mt-2.5 h-1.5 w-14 rounded-full bg-divider" />
-                        </View>
-
-                        <Text className="text-center text-[23px] font-bold text-text-default">
-                            냉장고 삭제
-                        </Text>
-
-                        <Text className="mt-5 text-center text-[14px] text-text-secondary">
-                            "{fridge?.name}" 냉장고를 정말 삭제하시겠습니까?
-                        </Text>
-
-                        <View className="mt-6 flex-row gap-4">
-                            <Pressable
-                                onPress={onClose}
-                                className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
-                                <Text className="text-[18px] font-semibold text-text-default">
-                                    취소
-                                </Text>
-                            </Pressable>
-
-                            <Pressable
-                                onPress={handleDelete}
-                                className="flex-1 h-14 items-center justify-center rounded-[18px] bg-error-point">
-                                <Text className="text-[18px] font-semibold text-text-contrast">
-                                    삭제
-                                </Text>
-                            </Pressable>
-                        </View>
+                        <DeleteContent />
                     </View>
                 </BottomSheetView>
             </BottomSheetModal>
