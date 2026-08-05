@@ -1,10 +1,10 @@
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import fridgeApi from "@/api/user/fridgeApi";
 import productApi from "@/api/user/productApi";
 import { FlatList, View, Pressable } from "react-native";
 import { useHomeStore } from "@/stores/home/productStore";
-import CategoryTabs, { Category } from "@/components/home/CategoryTabs";
+import CategoryTabs from "@/components/home/CategoryTabs";
 import ProductCard from "@/components/home/ProductCard";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Ionicons } from "@expo/vector-icons";
