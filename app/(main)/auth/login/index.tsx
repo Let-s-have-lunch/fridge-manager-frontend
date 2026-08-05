@@ -8,7 +8,6 @@ import {
     View,
     TouchableOpacity,
     ScrollView,
-    Alert,
     Image,
     ActivityIndicator,
 } from "react-native";
@@ -21,7 +20,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
 
 import TextComponent from "@/components/common/text/TextComponent";
-import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import InputGroup from "@/components/common/input/InputGroup";
 import Input from "@/components/common/input/Input";
 import Button from "@/components/common/button/Button";
@@ -30,7 +28,6 @@ export default function AuthLoginPage() {
     const router = useRouter();
     const { login } = useAuthStore();
 
-    const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -53,7 +50,7 @@ export default function AuthLoginPage() {
             if (result.user && result.token) {
                 login(result.user, result.token);
             }
-            router.replace("/")
+            router.replace("/");
         } catch (error) {
             console.log(error);
 
@@ -89,7 +86,8 @@ export default function AuthLoginPage() {
                     <View
                         className="flex-1 w-full px-6 pt-6 pb-10 justify-center"
                         style={{ maxWidth: 480 }}>
-                        {/* 1. 상단 로고 영역 (마진을 더 주어 냉장고 카드를 위로 올리고 입력창과 간격 확보) */}
+
+                        {/* 1. 상단 로고 영역 */}
                         <View className="items-center mt-0 mb-16">
                             <View
                                 className="bg-bg-paper w-[130px] h-[130px] rounded-[32px] items-center justify-center overflow-hidden"
@@ -181,36 +179,11 @@ export default function AuthLoginPage() {
                                 </TextComponent>
                             )}
 
-                            {/* 3. 로그인 상태 유지 & 비밀번호 찾기 (px 제거하여 입력창 양 끝선과 일치시킴) */}
-                            <View className="flex-row justify-between items-center mt-2 mb-8">
-                                <TouchableOpacity
-                                    className="flex-row items-center"
-                                    onPress={() => setKeepLoggedIn(!keepLoggedIn)}
-                                    activeOpacity={0.7}>
-                                    <View
-                                        className={`w-[22px] h-[22px] border rounded-md items-center justify-center mr-2 ${keepLoggedIn ? "bg-primary-main border-primary-main" : "border-divider bg-bg-paper"}`}>
-                                        {keepLoggedIn && (
-                                            <Feather name="check" size={14} color="white" />
-                                        )}
-                                    </View>
-                                    <TextComponent className="text-text-subtle text-[15px]">
-                                        로그인 상태 유지
-                                    </TextComponent>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => router.push("/auth/forgot-password")}>
-                                    <TextComponent className="text-primary-point text-[15px] font-bold">
-                                        비밀번호 찾기
-                                    </TextComponent>
-                                </TouchableOpacity>
-                            </View>
-
-                            {/* 4. 로그인 버튼 */}
+                            {/* 3. 로그인 버튼 (삭제된 영역을 대신해 상단 여백 mt-8 추가) */}
                             <Button
                                 size={"large"}
                                 fullWidth
-                                className={`mt-2 ${isSubmitting ? "opacity-60" : ""}`}
+                                className={`mt-8 ${isSubmitting ? "opacity-60" : ""}`}
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSubmitting}>
                                 {isSubmitting ? (
@@ -221,7 +194,7 @@ export default function AuthLoginPage() {
                             </Button>
                         </View>
 
-                        {/* 5. 회원가입 유도 영역 */}
+                        {/* 4. 회원가입 유도 영역 */}
                         <View className="flex-row justify-center items-center mt-8">
                             <TextComponent className="text-text-subtle text-[15px] mr-2">
                                 계정이 없으신가요?

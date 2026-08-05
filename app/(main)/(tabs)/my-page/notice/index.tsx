@@ -64,7 +64,11 @@ function UserNoticePage() {
                 onBackPress={() => router.back()}
                 className={"mb-6"}
             />
-            <ScrollView className={"flex-1"}>
+            {/* 👇 스크롤바 숨김 처리 적용됨 */}
+            <ScrollView
+                className={"flex-1"}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}>
                 <View
                     className={twMerge(
                         ["hidden", "md:flex"],
@@ -151,9 +155,7 @@ function UserNoticePage() {
                                     {isNew && (
                                         // 👇 self-start 클래스를 추가하여 가로로 꽉 차는 현상을 막아줍니다!
                                         <View className="mb-1.5 md:hidden self-start">
-                                            <Badge>
-                                                NEW
-                                            </Badge>
+                                            <Badge>NEW</Badge>
                                         </View>
                                     )}
 

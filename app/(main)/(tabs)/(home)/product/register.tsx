@@ -17,6 +17,8 @@ export default function RegisterScreen() {
                 paddingTop: 16,
                 paddingBottom: 40,
             }}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             keyboardShouldPersistTaps="handled">
             {/* Header */}
             <View className="mb-8 flex-row items-center">

@@ -115,7 +115,11 @@ function UserInquiryPage() {
                 </Button>
             </Title>
 
-            <ScrollView className="flex-1 px-4 md:px-6">
+            {/* 👇 스크롤바 숨김 처리 적용됨 */}
+            <ScrollView
+                className="flex-1 px-4 md:px-6"
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}>
                 <View
                     className={twMerge(
                         "hidden md:flex",
