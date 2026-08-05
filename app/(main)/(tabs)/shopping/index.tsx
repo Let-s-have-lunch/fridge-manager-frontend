@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
@@ -55,8 +55,10 @@ export default function ShoppingCalendarScreen() {
 
     const ROW_GAP = 8;
 
-    // 6줄 + 줄 사이 간격 5개
-    const cellHeight = calendarHeight > 0 ? (calendarHeight - ROW_GAP * 5) / 6 : 80;
+    // 💡 수정됨: 소수점 오차를 방지(Math.floor)하고, 모바일을 위한 최소 높이(70)를 보장(Math.max)합니다.
+    const calculatedCellHeight =
+        calendarHeight > 0 ? Math.floor((calendarHeight - ROW_GAP * 5) / 6) : 80;
+    const cellHeight = Math.max(calculatedCellHeight, 70);
 
     // 💡 월 이동 핸들러
     const handlePrevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
@@ -101,7 +103,7 @@ export default function ShoppingCalendarScreen() {
     ];
 
     return (
-        <View className="flex-1 bg-bg-default pt-5">
+        <View className="flex-1 bg-bg-default py-5">
             {/* 1. 달력 상단: 연/월 표시 및 이동 버튼 */}
             <View className="flex-row justify-center items-center mb-9">
                 <TouchableOpacity onPress={handlePrevMonth} className="p-2" activeOpacity={0.7}>
@@ -123,8 +125,9 @@ export default function ShoppingCalendarScreen() {
                 </TouchableOpacity>
             </View>
 
-            {/* 2. 달력 헤더: 요일 표시 */}
-            <View className="flex-row justify-between mb-3">
+            {/* 2. 달력 헤더: 요일 표시 
+                💡 수정됨: 하단 그리드의 pt-2를 제거하는 대신 헤더의 하단 여백을 mb-3에서 mb-5로 늘림 */}
+            <View className="flex-row justify-between mb-5">
                 {WEEKDAYS.map((day, idx) => (
                     <View
                         key={idx}
@@ -136,13 +139,16 @@ export default function ShoppingCalendarScreen() {
                 ))}
             </View>
 
-            <View
-                className="flex-1 pt-2"
+            {/* 3. 달력 그리드 영역
+                💡 수정됨: View를 ScrollView로 변경하고 방해되던 pt-2를 제거 */}
+            <ScrollView
+                className="flex-1"
                 onLayout={e => {
                     setCalendarHeight(e.nativeEvent.layout.height);
-                }}>
-                {/* 3. 달력 그리드: 날짜 버튼들 */}
-                <View className="flex-row flex-wrap justify-between h-full">
+                }}
+                contentContainerStyle={{ paddingBottom: 20 }} // 모바일 스크롤 시 넉넉한 하단 여백
+                showsVerticalScrollIndicator={false}>
+                <View className="flex-row flex-wrap justify-between">
                     {calendarGrid.map((day, idx) => {
                         const isCurrentMonth = day.getMonth() === month;
                         const isSunday = day.getDay() === 0;
@@ -176,7 +182,7 @@ export default function ShoppingCalendarScreen() {
                                 }}
                                 activeOpacity={0.7}
                                 style={{
-                                    height: cellHeight,
+                                    height: cellHeight, // 계산된 최소 높이 적용
                                     marginBottom: isLastRow ? 0 : ROW_GAP,
                                 }}
                                 className={`w-[13%] rounded-[10px] items-start justify-start p-2 ${
@@ -195,7 +201,7 @@ export default function ShoppingCalendarScreen() {
                         );
                     })}
                 </View>
-            </View>
+            </ScrollView>
         </View>
     );
 }
