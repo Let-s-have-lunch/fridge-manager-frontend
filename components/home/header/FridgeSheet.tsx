@@ -1,5 +1,14 @@
-import { forwardRef, useEffect, useMemo,} from "react";
-import { Alert, Pressable, Text, TextInput, View } from "react-native";
+import { forwardRef, useEffect, useMemo, useState, useRef, useImperativeHandle } from "react";
+import {
+    Alert,
+    Pressable,
+    Text,
+    TextInput,
+    View,
+    Modal,
+    TouchableWithoutFeedback,
+    useWindowDimensions,
+} from "react-native";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import fridgeApi from "@/api/user/fridgeApi";
 import { useHomeStore } from "@/stores/home/productStore";
@@ -18,8 +27,33 @@ interface FridgeSheetProps {
 
 const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
     ({ mode, fridge, onClose }, ref) => {
+        const { width } = useWindowDimensions();
+        const isMd = width >= 768;
+
+        const [isModalVisible, setIsModalVisible] = useState(false);
+        const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+        useImperativeHandle(ref, () => {
+            return {
+                present: () => {
+                    if (isMd) {
+                        setIsModalVisible(true);
+                    } else {
+                        bottomSheetRef.current?.present();
+                    }
+                },
+                dismiss: () => {
+                    setIsModalVisible(false);
+                    bottomSheetRef.current?.dismiss();
+                },
+                close: () => {
+                    setIsModalVisible(false);
+                    bottomSheetRef.current?.close();
+                },
+            } as unknown as BottomSheetModal;
+        }, [isMd]);
+
         const snapPoints = useMemo(() => ["55%"], []);
-        // const [name, setName] = useState("");
 
         const {
             control,
@@ -36,22 +70,27 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
 
         const theme = useThemeStore(state => state.theme);
         const isDarkMode = theme === "dark";
+        const bgColor = isDarkMode ? "#3A3532" : "#FFFFFF";
 
         useEffect(() => {
             if (mode === "edit" && fridge) {
-                reset({
-                    name: fridge.name,
-                });
+                reset({ name: fridge.name });
             } else {
-                reset({
-                    name: "",
-                });
+                reset({ name: "" });
             }
         }, [mode, fridge, reset]);
+
         const name = watch("name");
 
         const setFridges = useHomeStore(state => state.setFridges);
         const setSelectedFridgeId = useHomeStore(state => state.setSelectedFridgeId);
+
+        const handleClose = () => {
+            setIsModalVisible(false);
+            bottomSheetRef.current?.dismiss();
+            onClose();
+        };
+
         const onSubmit = async (data: FridgeInputType) => {
             try {
                 let selectedId: number;
@@ -70,7 +109,7 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 setSelectedFridgeId(selectedId);
 
                 reset();
-                onClose();
+                handleClose();
             } catch (error) {
                 if (isAxiosError(error)) {
                     Alert.alert(
@@ -85,15 +124,106 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
         };
         const disabled = !(name ?? "").trim();
 
+        const FormContent = () => (
+            <>
+                {/* Handle - 모바일에서만 노출 */}
+                {!isMd && (
+                    <View className="items-center mb-6">
+                        <View className="mt-2.5 h-1.5 w-14 rounded-full bg-divider" />
+                    </View>
+                )}
+
+                {/* 제목 */}
+                <Text className="mb-8 text-center text-[23px] font-bold text-text-default">
+                    {mode === "create" ? "냉장고 추가" : "냉장고 수정"}
+                </Text>
+
+                {/* 라벨 */}
+                <Text className="mb-3 text-[16px] font-semibold text-text-default">
+                    냉장고 이름
+                </Text>
+
+                <Controller
+                    control={control}
+                    name="name"
+                    render={({ field }) => (
+                        <TextInput
+                            value={field.value}
+                            onChangeText={field.onChange}
+                            maxLength={10}
+                            placeholder="냉장고 이름을 입력해주세요"
+                            placeholderTextColor="#B6B6B6"
+                            className="h-14 rounded-[18px] border border-divider px-5 text-[16px] text-text-default"
+                        />
+                    )}
+                />
+                {errors.name && (
+                    <Text className="mt-2 text-sm text-error-point">{errors.name.message}</Text>
+                )}
+
+                {/* 글자수 */}
+                <Text className="mt-2 text-right text-text-secondary">
+                    {(name ?? "").length} / 10
+                </Text>
+
+                <View className="mt-2 flex-row gap-4">
+                    <Pressable
+                        onPress={handleClose}
+                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
+                        <Text className="text-[18px] font-semibold text-text-default">취소</Text>
+                    </Pressable>
+
+                    <Pressable
+                        disabled={disabled}
+                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-primary-main"
+                        onPress={handleSubmit(onSubmit)}>
+                        <Text className="text-[18px] font-semibold text-text-contrast">저장</Text>
+                    </Pressable>
+                </View>
+            </>
+        );
+
+        if (isMd) {
+            return (
+                <Modal
+                    visible={isModalVisible}
+                    transparent={true}
+                    animationType="fade"
+                    onRequestClose={() => {
+                        reset();
+                        handleClose();
+                    }}>
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            reset();
+                            handleClose();
+                        }}>
+                        <View className="flex-1 items-center justify-center bg-black/50">
+                            <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
+                                <View
+                                    style={{ backgroundColor: bgColor }}
+                                    className="w-full max-w-[400px] rounded-[32px] px-6 pt-8 pb-8 shadow-lg">
+                                    <FormContent />
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </Modal>
+            );
+        }
+
         return (
             <BottomSheetModal
-                ref={ref}
-                onDismiss={reset}
+                ref={bottomSheetRef}
+                onDismiss={() => {
+                    reset();
+                    setIsModalVisible(false);
+                }}
                 snapPoints={snapPoints}
                 handleComponent={() => null}
                 enablePanDownToClose
                 backgroundStyle={{
-                    backgroundColor: isDarkMode ? "#3A3532" : "#FFFFFF",
+                    backgroundColor: bgColor,
                     borderTopLeftRadius: 32,
                     borderTopRightRadius: 32,
                 }}
@@ -107,65 +237,8 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                     />
                 )}>
                 <BottomSheetView className="flex-1 bg-bg-paper rounded-t-[32px]">
-                    <View className={"flex-1 px-6 pb-8"}>
-                        {/* Handle */}
-                        <View className="items-center mb-6">
-                            <View className="mt-2.5 h-1.5 w-14 rounded-full bg-divider" />
-                        </View>
-
-                        {/* 제목 */}
-                        <Text className="mb-8 text-center text-[23px] font-bold text-text-default">
-                            {mode === "create" ? "냉장고 추가" : "냉장고 수정"}
-                        </Text>
-
-                        {/* 라벨 */}
-                        <Text className="mb-3 text-[16px] font-semibold text-text-default">
-                            냉장고 이름
-                        </Text>
-
-                        <Controller
-                            control={control}
-                            name="name"
-                            render={({ field }) => (
-                                <TextInput
-                                    value={field.value}
-                                    onChangeText={field.onChange}
-                                    maxLength={10}
-                                    placeholder="냉장고 이름을 입력해주세요"
-                                    placeholderTextColor="#B6B6B6"
-                                    className="h-14 rounded-[18px] border border-divider px-5 text-[16px] text-text-default"
-                                />
-                            )}
-                        />
-                        {errors.name && (
-                            <Text className="mt-2 text-sm text-error-point">
-                                {errors.name.message}
-                            </Text>
-                        )}
-
-                        {/* 글자수 */}
-                        <Text className="mt-2 text-right text-text-secondary">
-                            {(name ?? "").length} / 10
-                        </Text>
-
-                        <View className="mt-2 flex-row gap-4">
-                            <Pressable
-                                onPress={onClose}
-                                className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
-                                <Text className="text-[18px] font-semibold text-text-default">
-                                    취소
-                                </Text>
-                            </Pressable>
-
-                            <Pressable
-                                disabled={disabled}
-                                className="flex-1 h-14 items-center justify-center rounded-[18px] bg-primary-main"
-                                onPress={handleSubmit(onSubmit)}>
-                                <Text className="text-[18px] font-semibold text-text-contrast">
-                                    저장
-                                </Text>
-                            </Pressable>
-                        </View>
+                    <View className="flex-1 px-6 pb-8">
+                        <FormContent />
                     </View>
                 </BottomSheetView>
             </BottomSheetModal>
