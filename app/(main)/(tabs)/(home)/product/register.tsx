@@ -19,7 +19,6 @@ import DropdownSelect from "@/components/common/input/DropdownSelect";
 import productApi from "@/api/user/productApi";
 import { useHomeStore } from "@/stores/home/productStore";
 
-// 드롭다운 옵션 목록
 const CATEGORY_OPTIONS = ["채소", "과일", "육류", "수산물", "유제품", "기타"];
 const UNIT_OPTIONS = ["개", "g", "kg", "L"];
 const STORAGE_METHOD_OPTIONS = ["냉장", "냉동", "실온"];
