@@ -36,8 +36,8 @@ export default function TopConsumptionCard({ products }: Props) {
                                     <Image
                                         source={imageSource}
                                         style={{
-                                            width: 84,
-                                            height: 84,
+                                            width: 70,
+                                            height: 70,
                                         }}
                                         resizeMode="contain"
                                     />
