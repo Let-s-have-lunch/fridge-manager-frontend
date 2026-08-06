@@ -31,7 +31,6 @@ export default function RegisterScreen() {
     // 선택된 냉장고 ID
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
 
-    // 오늘 날짜 구하기 (YYYY-MM-DD)
     const todayString = new Date().toISOString().split("T")[0];
 
     // 입력 상태 관리
