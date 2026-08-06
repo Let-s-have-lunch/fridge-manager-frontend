@@ -236,11 +236,13 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                         opacity={0.3}
                     />
                 )}>
-                <BottomSheetView className="flex-1 bg-bg-paper rounded-t-[32px]">
-                    <View className="flex-1 px-6 pb-8">
-                        <FormContent />
-                    </View>
-                </BottomSheetView>
+                <View className={"flex-1"}>
+                    <BottomSheetView className="flex-1 bg-bg-paper rounded-t-[32px]">
+                        <View className="flex-1 px-6 pb-8">
+                            <FormContent />
+                        </View>
+                    </BottomSheetView>
+                </View>
             </BottomSheetModal>
         );
     },

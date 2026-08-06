@@ -177,11 +177,13 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                         opacity={0.3}
                     />
                 )}>
-                <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper">
-                    <View className="flex-1 px-6 pb-8">
-                        <DeleteContent />
-                    </View>
-                </BottomSheetView>
+                <View className={"flex-1"}>
+                    <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper">
+                        <View className="flex-1 px-6 pb-8">
+                            <DeleteContent />
+                        </View>
+                    </BottomSheetView>
+                </View>
             </BottomSheetModal>
         );
     },
