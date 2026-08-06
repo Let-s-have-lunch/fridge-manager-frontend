@@ -9,6 +9,7 @@ import { twMerge } from "tailwind-merge";
 import { Fridge } from "@/types/fridge";
 import TextComponent from "@/components/common/text/TextComponent";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import { Ionicons } from "@expo/vector-icons";
 
 interface FridgeDropdownProps {
     visible: boolean;
@@ -91,12 +92,15 @@ export default function FridgeDropdown({
 
                             <View className="border-t border-divider" />
 
+                            {/* 냉장고 설정 버튼 */}
                             <Pressable
-                                className="px-4 py-3 active:bg-bg-subtle"
+                                className="flex-row items-center justify-between px-4 py-3 active:bg-bg-subtle"
                                 onPress={onOpenSetting}>
                                 <TextComponent className="text-[15px] font-semibold text-text-default">
                                     냉장고 설정
                                 </TextComponent>
+
+                                <Ionicons name="chevron-forward" size={18} color="#999" />
                             </Pressable>
                         </View>
                     </TouchableWithoutFeedback>
