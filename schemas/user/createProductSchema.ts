@@ -13,7 +13,7 @@ export const productSchema = z.object({
     quantity: z.number().int().positive("수량은 0보다 커야 합니다."),
     unit: z.enum(Unit),
     price: z.number().int().nonnegative("가격은 0 이상이어야 합니다.").optional(), // 💡 일반 사용자도 가격 입력 가능!
-    expirationDate: z.string(),
+    expirationDate: z.string().regex(/^\d{8}$/, "유통기한은 8자리 숫자(YYYYMMDD)로 입력해주세요"),
     status: z.enum(Status),
 });
 
