@@ -1,13 +1,13 @@
 import axiosInstance from "@/api/axiosInstance";
-import { Product } from "@/types/product";
-import { ProductInputType } from "@/schemas/user/createProductSchema";
+import { Product, ProductDetailItemType, ProductListItemType } from "@/types/product";
+import { ProductInputType } from "@/schemas/user/productSchema";
 
-const getProductList = async (fridgeId: number): Promise<Product[]> => {
+const getProductList = async (fridgeId: number): Promise<ProductListItemType[]> => {
     const response = await axiosInstance.get(`/products/fridge/${fridgeId}`);
     return response.data.data;
 };
 
-const getProductById = async (productId: number): Promise<Product> => {
+const getProductById = async (productId: number): Promise<ProductDetailItemType> => {
     const response = await axiosInstance.get(`/products/${productId}`);
     return response.data.data;
 };
@@ -29,17 +29,6 @@ const deleteProduct = async (productId: number): Promise<void> => {
     await axiosInstance.delete(`/products/${productId}`);
 };
 
-const createProductsByReceipt = async (
-    fridgeId: number,
-    receiptImage: File | Blob,
-): Promise<Product[]> => {
-    const formData = new FormData();
-
-    formData.append("receiptImage", receiptImage);
-
-    const response = await axiosInstance.post(`/products/fridge/${fridgeId}/receipt`, formData,);
-    return response.data.data;
-};
 
 export default {
     getProductList,
@@ -47,5 +36,4 @@ export default {
     createProduct,
     updateProduct,
     deleteProduct,
-    createProductsByReceipt,
 };

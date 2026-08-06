@@ -1,7 +1,7 @@
 import { Category } from "@/components/home/CategoryTabs";
 import { Fridge } from "@/types/fridge";
 import { create } from "zustand";
-import { Product } from "@/types/product";
+import { Product, ProductListItemType } from "@/types/product";
 
 export type CategoryFilter = "전체" | "냉장" | "냉동" | "실온";
 
@@ -23,8 +23,8 @@ interface HomeState {
     selectedFridgeId: number | null;
     setSelectedFridgeId: (id: number | null) => void;
 
-    products: Product[];
-    setProducts: (products: Product[]) => void;
+    products: ProductListItemType[];
+    setProducts: (products: ProductListItemType[]) => void;
 
     isLoading: boolean;
 }

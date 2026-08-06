@@ -2,12 +2,13 @@ import { Image, Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import ExpireBadge, { ExpireStatusType } from "@/components/common/badge/ExpireBadge";
-import { Product, StorageType } from "@/types/product";
+import { ProductListItemType, StorageType } from "@/types/product";
 import { categoryIcons } from "@/constants/categoryIcons";
 
 interface ProductCardProps {
-    product: Product;
+    product: ProductListItemType;
     onPress?: () => void;
+    onEdit?: () => void; // 👈 수정 버튼을 위한 prop 추가
 }
 
 const storageLabel: Record<StorageType, string> = {
@@ -32,12 +33,11 @@ const getDDayLabel = (dDay: number) => {
 const formatDate = (date: string) =>
     new Date(date).toLocaleDateString("ko-KR").replace(/\.\s/g, ".");
 
-export default function ProductCard({ product, onPress }: ProductCardProps) {
+export default function ProductCard({ product, onPress, onEdit }: ProductCardProps) {
     return (
         <Pressable
             onPress={onPress}
             className="mb-4 flex-row items-center rounded-[28px] bg-bg-paper p-5 shadow-sm">
-
             <View className="mr-5 h-20 w-20 items-center justify-center rounded-full bg-bg-button overflow-hidden">
                 <Image
                     source={categoryIcons[product.category.icon as keyof typeof categoryIcons]}
@@ -79,6 +79,18 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
                 <ExpireBadge status={getExpireStatus(product.dDay)}>
                     {getDDayLabel(product.dDay)}
                 </ExpireBadge>
+
+                {/* 💡 임시 수정 버튼 추가 (onEdit prop이 전달될 때만 렌더링) */}
+                {onEdit && (
+                    <Pressable
+                        onPress={e => {
+                            e.stopPropagation(); // 카드 전체 클릭 이벤트(onPress)와 겹치지 않게 방지
+                            onEdit();
+                        }}
+                        className="mt-3 p-1.5 rounded-full bg-bg-subtle active:opacity-70">
+                        <Ionicons name="pencil" size={14} color="#777777" />
+                    </Pressable>
+                )}
             </View>
         </Pressable>
     );
