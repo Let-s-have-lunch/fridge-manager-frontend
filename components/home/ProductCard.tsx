@@ -50,9 +50,13 @@ export default function ProductCard({ product, onPress, onEdit }: ProductCardPro
             </View>
 
             <View className="flex-1 gap-1.5">
-                <TextComponent numberOfLines={1} className="text-base font-bold text-text-default">
-                    {product.name}
-                </TextComponent>
+                <View className={"flex-row"}>
+                    <TextComponent
+                        numberOfLines={1}
+                        className="text-base font-bold text-text-default">
+                        {product.name}
+                    </TextComponent>
+                </View>
 
                 <View className="flex-row items-center">
                     <View className="rounded-full bg-secondary-contrast px-3 py-1">
@@ -75,20 +79,19 @@ export default function ProductCard({ product, onPress, onEdit }: ProductCardPro
                 </View>
             </View>
 
-            <View className="ml-4 self-stretch items-end justify-center">
+            <View className="ml-4 self-start flex-row items-center">
                 <ExpireBadge status={getExpireStatus(product.dDay)}>
                     {getDDayLabel(product.dDay)}
                 </ExpireBadge>
 
-                {/* 💡 임시 수정 버튼 추가 (onEdit prop이 전달될 때만 렌더링) */}
                 {onEdit && (
                     <Pressable
                         onPress={e => {
-                            e.stopPropagation(); // 카드 전체 클릭 이벤트(onPress)와 겹치지 않게 방지
+                            e.stopPropagation();
                             onEdit();
                         }}
-                        className="mt-3 p-1.5 rounded-full bg-bg-subtle active:opacity-70">
-                        <Ionicons name="pencil" size={14} color="#777777" />
+                        className="ml-1">
+                        <Ionicons name="ellipsis-vertical" size={15} color="#8A8A8A" />
                     </Pressable>
                 )}
             </View>
