@@ -6,6 +6,7 @@ import {
     LayoutRectangle,
     Keyboard,
     TouchableWithoutFeedback,
+    Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -14,6 +15,9 @@ import Input from "@/components/common/input/Input";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextComponent from "@/components/common/text/TextComponent";
 import DropdownSelect from "@/components/common/input/DropdownSelect";
+
+import productApi from "@/api/user/productApi";
+import { useHomeStore } from "@/stores/home/productStore";
 
 // 드롭다운 옵션 목록
 const CATEGORY_OPTIONS = ["채소", "과일", "육류", "수산물", "유제품", "기타"];
@@ -25,6 +29,12 @@ export default function RegisterScreen() {
     const router = useRouter();
     const scrollViewRef = useRef<ScrollView>(null);
 
+    // 선택된 냉장고 ID
+    const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
+
+    // 오늘 날짜 구하기 (YYYY-MM-DD)
+    const todayString = new Date().toISOString().split("T")[0];
+
     // 입력 상태 관리
     const [category, setCategory] = useState("채소");
     const [productName, setProductName] = useState("");
@@ -32,6 +42,7 @@ export default function RegisterScreen() {
     const [unit, setUnit] = useState("개");
     const [storageMethod, setStorageMethod] = useState("냉장");
     const [storageStatus, setStorageStatus] = useState("보관");
+    const [expirationDate, setExpirationDate] = useState(""); // 소비기한 추가
     const [price, setPrice] = useState("");
     const [memo, setMemo] = useState("");
 
@@ -46,7 +57,6 @@ export default function RegisterScreen() {
                 setActiveDropdown(id);
                 setDropdownLayout(layout || null);
             } else if (activeDropdown === id) {
-                // 이 ID가 닫힐 때만 null로 설정
                 setActiveDropdown(null);
                 setDropdownLayout(null);
             }
@@ -54,7 +64,7 @@ export default function RegisterScreen() {
         [activeDropdown],
     );
 
-    // 드롭다운 목록을 렌더링하는 함수 (최상위 레이어에서 호출)
+    // 드롭다운 목록 렌더링
     const renderActiveDropdownList = useCallback(() => {
         if (!activeDropdown || !dropdownLayout) return null;
 
@@ -94,7 +104,7 @@ export default function RegisterScreen() {
                     top: dropdownLayout.y,
                     left: dropdownLayout.x,
                     width: dropdownLayout.width,
-                    maxHeight: 200, // 최대 높이
+                    maxHeight: 200,
                     elevation: 10,
                 }}>
                 <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
@@ -106,7 +116,7 @@ export default function RegisterScreen() {
                             }`}
                             onPress={() => {
                                 onSelect(option);
-                                setActiveDropdown(null); // 선택 시 닫기
+                                setActiveDropdown(null);
                                 setDropdownLayout(null);
                             }}>
                             <TextComponent
@@ -124,21 +134,72 @@ export default function RegisterScreen() {
         );
     }, [activeDropdown, dropdownLayout, category, unit, storageMethod, storageStatus]);
 
-    const handleRegister = () => {
-        console.log("등록 데이터:", {
-            category,
-            productName,
-            quantity,
-            unit,
-            storageMethod,
-            storageStatus,
-            price,
+    const handleRegister = async () => {
+        if (!selectedFridgeId) {
+            Alert.alert("알림", "선택된 냉장고가 없습니다. 냉장고를 선택해주세요.");
+            return;
+        }
+
+        if (!productName.trim()) {
+            Alert.alert("알림", "제품명을 입력해주세요.");
+            return;
+        }
+
+        if (!expirationDate.trim()) {
+            Alert.alert("알림", "소비기한을 입력해주세요. (예: 2026-08-10)");
+            return;
+        }
+
+        // 백엔드 매핑 테이블
+        const categoryIdMap: Record<string, number> = {
+            채소: 1,
+            과일: 2,
+            육류: 3,
+            수산물: 4,
+            유제품: 5,
+            기타: 6,
+        };
+
+        const unitMap: Record<string, string> = {
+            개: "EA",
+            g: "G",
+            kg: "KG",
+            L: "L",
+        };
+
+        const storageTypeMap: Record<string, string> = {
+            냉장: "REFRIGERATED",
+            냉동: "FROZEN",
+            실온: "ROOM_TEMP",
+        };
+
+        // 백엔드 스키마에 맞춘 최종 제출 데이터
+        const submitData = {
+            name: productName,
+            categoryId: categoryIdMap[category] || 1,
+            quantity: Number(quantity) || 0,
+            unit: unitMap[unit] || "EA",
+            storageType: storageTypeMap[storageMethod] || "REFRIGERATED",
+            expirationDate: expirationDate, // YYYY-MM-DD
+            price: Number(price) || 0,
             memo,
-        });
+        };
+
+        console.log("DB 전송 데이터:", submitData);
+
+        try {
+            await productApi.createProduct(selectedFridgeId, submitData as any);
+            router.back();
+        } catch (error: any) {
+            console.error("제품 등록 실패:", error?.response?.data || error);
+            Alert.alert(
+                "오류",
+                error?.response?.data?.message || "제품 등록 중 문제가 발생했습니다.",
+            );
+        }
     };
 
     return (
-        // 최상위 컨테이너 레이어 (전체 화면 차지)
         <View className="flex-1">
             <ScrollView
                 ref={scrollViewRef}
@@ -150,7 +211,6 @@ export default function RegisterScreen() {
                 }}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
-                // 스크롤 시작 시 드롭다운 닫기 (디자인 깨짐 방지)
                 onScrollBeginDrag={() => {
                     if (activeDropdown) {
                         setActiveDropdown(null);
@@ -194,7 +254,6 @@ export default function RegisterScreen() {
                 </InputGroup>
 
                 {/* 등록수량 + 단위 (드롭다운) */}
-                {/* 기존의 z-40 gap-3 뭉침 문제를 View 컨테이너에 flex-none을 주어 해결했습니다. */}
                 <View className="flex-row gap-3 z-10 flex-none">
                     <InputGroup wrap label="등록수량">
                         <Input
@@ -232,16 +291,16 @@ export default function RegisterScreen() {
 
                 {/* 등록일 */}
                 <InputGroup label="등록일">
-                    <Input editable={false} value="2026.08.04" />
+                    <Input editable={false} value={todayString} />
                 </InputGroup>
 
                 {/* 소비기한 */}
                 <InputGroup label="소비기한">
-                    <Pressable onPress={() => {}}>
-                        <View pointerEvents="none">
-                            <Input editable={false} placeholder="날짜를 선택해주세요." />
-                        </View>
-                    </Pressable>
+                    <Input
+                        value={expirationDate}
+                        onChangeText={setExpirationDate}
+                        placeholder="YYYY-MM-DD (예: 2026-08-10)"
+                    />
                 </InputGroup>
 
                 {/* 보관상태 (드롭다운) */}
