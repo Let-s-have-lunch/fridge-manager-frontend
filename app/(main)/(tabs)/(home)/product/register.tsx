@@ -5,9 +5,33 @@ import { useRouter } from "expo-router";
 import Input from "@/components/common/input/Input";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextComponent from "@/components/common/text/TextComponent";
+import { useEffect, useState } from "react";
+import { Category } from "@/types/category";
+import categoryApi from "@/api/user/categoryApi";
+import SelectCategoryModal from "@/components/category/SelectCategoryModal";
+import CreateCategoryModal from "@/components/category/CreateCategoryModal";
 
 export default function RegisterScreen() {
     const router = useRouter();
+    const [categoryModalVisible, setCategoryModalVisible] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [customCategories, setCustomCategories] = useState<Category[]>([]);
+    const [createCategoryModalVisible, setCreateCategoryModalVisible] = useState(false);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const list = await categoryApi.getCategoryList();
+                setCategories(list);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     return (
         <ScrollView
@@ -37,9 +61,13 @@ export default function RegisterScreen() {
 
             {/* 카테고리 */}
             <InputGroup label="카테고리">
-                <Pressable onPress={() => {}}>
+                <Pressable onPress={() => setCategoryModalVisible(true)}>
                     <View className="relative">
-                        <Input editable={false} value="채소" className="pr-10" />
+                        <Input
+                            editable={false}
+                            placeholder="카테고리를 선택해주세요."
+                            value={selectedCategory?.name}
+                        />
                         <Ionicons
                             name="chevron-forward"
                             size={18}
@@ -158,6 +186,20 @@ export default function RegisterScreen() {
                 onPress={() => {}}>
                 <TextComponent className="font-bold text-[18px] text-white">등록하기</TextComponent>
             </Pressable>
+
+            <SelectCategoryModal
+                visible={categoryModalVisible}
+                categories={categories}
+                onClose={() => setCategoryModalVisible(false)}
+                onSelect={category => {
+                    setSelectedCategory(category);
+                    setCategoryModalVisible(false);
+                }}
+                onAddCategory={() => {
+                    setCategoryModalVisible(false);
+                    setCreateCategoryModalVisible(true);
+                }}
+            />
         </ScrollView>
     );
 }
