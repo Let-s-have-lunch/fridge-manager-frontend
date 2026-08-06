@@ -29,17 +29,6 @@ const deleteProduct = async (productId: number): Promise<void> => {
     await axiosInstance.delete(`/products/${productId}`);
 };
 
-const createProductsByReceipt = async (
-    fridgeId: number,
-    receiptImage: File | Blob,
-): Promise<Product[]> => {
-    const formData = new FormData();
-
-    formData.append("receiptImage", receiptImage);
-
-    const response = await axiosInstance.post(`/products/fridge/${fridgeId}/receipt`, formData,);
-    return response.data.data;
-};
 
 export default {
     getProductList,
@@ -47,5 +36,4 @@ export default {
     createProduct,
     updateProduct,
     deleteProduct,
-    createProductsByReceipt,
 };
