@@ -161,12 +161,14 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                         opacity={0.3}
                     />
                 )}>
-                <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper px-1 pt-4 pb-0">
-                    <View className="mt-3 mb-5 items-center">
-                        <View className="h-1.5 w-14 rounded-full bg-divider" />
-                    </View>
-                    <MenuContent />
-                </BottomSheetView>
+                <View className={"flex-1"}>
+                    <BottomSheetView className="flex-1 rounded-t-[32px] bg-bg-paper px-1 pt-4 pb-0">
+                        <View className="mt-3 mb-5 items-center">
+                            <View className="h-1.5 w-14 rounded-full bg-divider" />
+                        </View>
+                        <MenuContent />
+                    </BottomSheetView>
+                </View>
             </BottomSheetModal>
         );
     },
