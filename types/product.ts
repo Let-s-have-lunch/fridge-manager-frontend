@@ -18,13 +18,6 @@ export const Unit = {
 
 export type UnitType = (typeof Unit)[keyof typeof Unit];
 
-export const AddMethod = {
-    manual: "MANUAL",
-    receipt: "RECEIPT",
-}
-
-export type AddMethodType = (typeof AddMethod)[keyof typeof AddMethod];
-
 export const Status = {
     stored: "STORED",
     consumed: "CONSUMED",
@@ -33,9 +26,7 @@ export const Status = {
 
 export type StatusType = (typeof Status)[keyof typeof Status];
 
-// 1. 📝 기본 식재료 타입 (상세 조회 - getProductById 응답용)
-// 백엔드 원본 데이터와 100% 일치 (dDay 없음)
-export interface ProductDetail {
+export interface Product {
     id: number;
     createdAt: string;
     updatedAt: string;
@@ -49,17 +40,20 @@ export interface ProductDetail {
     status: StatusType;
     fridgeId: number;   // 👈 냉장고 ID 컬럼 추가!
     categoryId: number; // 👈 카테고리 ID 컬럼 추가!
-    category: Category;
 }
 
-// 2. 📋 목록용 식재료 타입 (목록 조회 - getProductList 응답용)
-// 기본 타입(ProductDetail)의 모든 속성을 그대로 물려받고, dDay만 추가!
-export interface ProductListItem extends ProductDetail {
+export type ProductCategory = Pick<Category, "id" | "name" | "icon">;
+
+export interface ProductDetailItemType extends Product {
+    category: ProductCategory;
+}
+
+export interface ProductListItemType extends Pick<
+    Product,
+    "id" | "createdAt" | "name" | "memo" | "storageType" | "quantity" | "unit" | "expirationDate"
+> {
     dDay: number;
+    category: ProductCategory;
 }
 
-// 3. ✍️ 등록/수정용 폼 타입 (생성/수정 페이로드용)
-// 카테고리 객체(category)를 빼고, 숫자 형태의 categoryId를 넣음
-export interface ProductPayload extends Omit<ProductDetail, "id" | "createdAt" | "category"> {
-    categoryId: number;
-}
+

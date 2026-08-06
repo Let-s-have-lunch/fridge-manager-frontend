@@ -4,39 +4,30 @@ import {
     KeyboardAvoidingView,
     Modal,
     Platform,
-    Pressable,
     ScrollView,
     TouchableWithoutFeedback,
-    useWindowDimensions,
     View,
 } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
-
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
-import { useSwipeDown } from "@/hooks/useSwipeDown";
-
-import productApi from "@/api/productApi";
-import { productSchema, ProductInputType } from "@/schemas/user/createProductSchema";
+import { productSchema, ProductInputType } from "@/schemas/user/productSchema";
 import { useHomeStore } from "@/stores/home/productStore";
-import { Product } from "@/types/product"; // 프로젝트에 맞게 타입 경로 확인해주세요
+import { ProductDetailItemType } from "@/types/product";
+import productApi from "@/api/user/productApi";
 
 interface Props {
     visible: boolean;
     onClose: () => void;
-    initialData: Product | null; // 수정 시 전달될 기존 식재료 데이터
+    initialData: ProductDetailItemType | null; // 수정 시 전달될 기존 식재료 데이터
     onRefresh: () => Promise<void>; // 저장/수정 후 목록 새로고침 함수
 }
 
 export default function ProductFormModal({ visible, onClose, initialData, onRefresh }: Props) {
-    const { width } = useWindowDimensions();
-    const isMd = width >= 768;
-
-    const swipeDownHandlers = useSwipeDown(onClose);
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
 
     const {
@@ -50,11 +41,11 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         defaultValues: {
             name: "",
             memo: "",
-            categoryId: undefined as any,
+            categoryId: "" as any, // 렌더링 시 빈칸 유지를 위해 빈 문자열 사용
             storageType: "REFRIGERATED",
-            quantity: undefined as any,
+            quantity: "" as any, // 빈 문자열
             unit: "EA",
-            price: undefined,
+            price: "" as any, // 빈 문자열
             expirationDate: "",
             status: "STORED",
         },
@@ -66,10 +57,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     useEffect(() => {
         if (visible) {
             if (initialData) {
-                // 수정 모드: 기존 데이터 폼에 세팅
-                const formattedDate = initialData.expirationDate
-                    ? initialData.expirationDate.substring(0, 10)
-                    : "";
+                // ✅ 수정 모드: 기존 데이터 폼에 세팅
+                const formattedDate = initialData.expirationDate.substring(0, 10).replace(/-/g, "");
 
                 reset({
                     name: initialData.name,
@@ -78,20 +67,19 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     storageType: initialData.storageType,
                     quantity: initialData.quantity,
                     unit: initialData.unit,
-                    price: initialData.price ?? undefined,
+                    price: initialData.price ?? ("" as any),
                     expirationDate: formattedDate,
                     status: initialData.status,
                 });
             } else {
-                // 추가 모드: 폼 초기화
                 reset({
                     name: "",
                     memo: "",
-                    categoryId: undefined as any,
+                    categoryId: "" as any,
                     storageType: "REFRIGERATED",
-                    quantity: undefined as any,
+                    quantity: "" as any,
                     unit: "EA",
-                    price: undefined,
+                    price: "" as any,
                     expirationDate: "",
                     status: "STORED",
                 });
@@ -101,10 +89,20 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
     const onSubmit = async (data: ProductInputType) => {
         try {
-            // YYYY-MM-DD 형식을 ISO 문자열로 변환 (필요시 백엔드 스펙에 맞게 가공)
-            const formattedExpirationDate = `${data.expirationDate}T00:00:00Z`;
+            const { expirationDate, ...prevInput } = data;
+
+            let formattedExpirationDate = expirationDate;
+
+            if (expirationDate && expirationDate.length === 8) {
+                const year = expirationDate.slice(0, 4);
+                const month = expirationDate.slice(4, 6);
+                const day = expirationDate.slice(6, 8);
+
+                formattedExpirationDate = `${year}-${month}-${day}T00:00:00Z`;
+            }
+
             const payload = {
-                ...data,
+                ...prevInput,
                 expirationDate: formattedExpirationDate,
             };
 
@@ -135,7 +133,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         <Modal
             visible={visible}
             transparent={true}
-            animationType={isMd ? "fade" : "slide"}
+            animationType={"fade"}
             onRequestClose={onClose}>
             <TouchableWithoutFeedback onPress={onClose}>
                 <KeyboardAvoidingView
@@ -143,19 +141,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     className="flex-1 justify-end bg-black/50 md:justify-center md:items-center">
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                         <View className="w-full max-h-[85%] px-6 pt-4 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[480px] md:max-h-[90%] md:pt-8 md:rounded-[36px]">
-                            {/* 모바일 환경 스와이프 다운 바 */}
-                            {!isMd && (
-                                <View
-                                    {...swipeDownHandlers}
-                                    className="w-full items-center pb-4 -mt-2">
-                                    <Pressable
-                                        onPress={onClose}
-                                        className="w-full items-center cursor-pointer py-2">
-                                        <View className="w-12 h-1.5 bg-gray-400 rounded-full" />
-                                    </Pressable>
-                                </View>
-                            )}
-
                             <Title
                                 title={isEditMode ? "식재료 수정" : "식재료 추가"}
                                 className="h-auto pb-4 mb-4"

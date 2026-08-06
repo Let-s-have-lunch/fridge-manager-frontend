@@ -6,7 +6,7 @@ export const productSchema = z.object({
         .string()
         .trim()
         .min(1, "제품명을 입력해주세요.")
-        .max(20, "제품명은 20자 이내로 입력해주세요."),
+        .max(30, "제품명은 30자 이내로 입력해주세요."),
     memo: z.string().max(100, "메모는 100자 이내로 입력해주세요.").optional(),
     categoryId: z.number().int().positive("유효한 카테고리를 선택해주세요."),
     storageType: z.enum(Storage),
