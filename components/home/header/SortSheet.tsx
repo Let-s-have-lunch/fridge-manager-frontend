@@ -156,42 +156,48 @@ const SortSheet = forwardRef<BottomSheetModal, SortSheetProps>(({ selected, onSe
             handleIndicatorStyle={{
                 backgroundColor: handleColor,
             }}>
-            <BottomSheetView className="px-6 pt-2 bg-bg-paper">
-                <TextComponent className="mb-5 mt-1 px-5 text-lg font-bold text-text-default">
-                    정렬 방식
-                </TextComponent>
-                <Pressable
-                    className="flex-row items-center justify-between px-5 py-2 active:bg-bg-subtle rounded-xl"
-                    onPress={() => handleSelect("EXPIRE")}>
-                    <TextComponent
-                        className={
-                            selected === "EXPIRE"
-                                ? "font-bold text-text-default"
-                                : "text-text-secondary"
-                        }>
-                        유통기한 순
+            <View className={"flex-1"}>
+                <BottomSheetView className="px-6 pt-2 bg-bg-paper">
+                    <TextComponent className="mb-5 mt-1 px-5 text-lg font-bold text-text-default">
+                        정렬 방식
                     </TextComponent>
-                    {selected === "EXPIRE" && (
-                        <TextComponent className="text-primary-point font-bold">✓</TextComponent>
-                    )}
-                </Pressable>
+                    <Pressable
+                        className="flex-row items-center justify-between px-5 py-2 active:bg-bg-subtle rounded-xl"
+                        onPress={() => handleSelect("EXPIRE")}>
+                        <TextComponent
+                            className={
+                                selected === "EXPIRE"
+                                    ? "font-bold text-text-default"
+                                    : "text-text-secondary"
+                            }>
+                            유통기한 순
+                        </TextComponent>
+                        {selected === "EXPIRE" && (
+                            <TextComponent className="text-primary-point font-bold">
+                                ✓
+                            </TextComponent>
+                        )}
+                    </Pressable>
 
-                <Pressable
-                    className="flex-row items-center justify-between px-5 py-2 mb-5 active:bg-bg-subtle rounded-xl"
-                    onPress={() => handleSelect("CATEGORY")}>
-                    <TextComponent
-                        className={
-                            selected === "CATEGORY"
-                                ? "font-bold text-text-default"
-                                : "text-text-secondary"
-                        }>
-                        카테고리 순
-                    </TextComponent>
-                    {selected === "CATEGORY" && (
-                        <TextComponent className="text-primary-point font-bold">✓</TextComponent>
-                    )}
-                </Pressable>
-            </BottomSheetView>
+                    <Pressable
+                        className="flex-row items-center justify-between px-5 py-2 mb-5 active:bg-bg-subtle rounded-xl"
+                        onPress={() => handleSelect("CATEGORY")}>
+                        <TextComponent
+                            className={
+                                selected === "CATEGORY"
+                                    ? "font-bold text-text-default"
+                                    : "text-text-secondary"
+                            }>
+                            카테고리 순
+                        </TextComponent>
+                        {selected === "CATEGORY" && (
+                            <TextComponent className="text-primary-point font-bold">
+                                ✓
+                            </TextComponent>
+                        )}
+                    </Pressable>
+                </BottomSheetView>
+            </View>
         </BottomSheetModal>
     );
 });

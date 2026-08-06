@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { View, TouchableOpacity, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import formattingUtil from "@/utils/formattingUtil";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
+import shoppingListApi from "@/api/user/shoppingListApi";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { ShoppingItem } from "@/types/shoppingList";
 
 export default function ShoppingCalendarScreen() {
     useSetupLayout({ showDesktopHeader: true });
 
     const router = useRouter();
+    const { isLoggedIn } = useAuthStore();
 
     // 달력 상단에 보여줄 현재 기준 월
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -18,8 +22,22 @@ export default function ShoppingCalendarScreen() {
 
     const [calendarHeight, setCalendarHeight] = useState(0);
 
+    // 장보기 데이터 리스트 (ShoppingItem[])
+    const [shoppingData, setShoppingData] = useState<ShoppingItem[]>([]);
+
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+
+    // 💡 날짜 비교 함수
+    const isSameDate = (dbDate: string | Date, targetDateStr: string) => {
+        if (!dbDate) return false;
+        try {
+            const d = new Date(dbDate);
+            return formattingUtil.formatDateString(d) === targetDateStr;
+        } catch {
+            return false;
+        }
+    };
 
     // 💡 달력 한 판(그리드)을 그리기 위한 날짜 배열 생성 함수
     const getDaysInMonthGrid = (targetYear: number, targetMonth: number) => {
@@ -53,14 +71,49 @@ export default function ShoppingCalendarScreen() {
     const calendarGrid = getDaysInMonthGrid(year, month);
     const selectedDateStr = formattingUtil.formatDateString(selectedDate);
 
+    // 💡 실제 백엔드 API(getShoppingItems)를 활용해 달력 표출용 데이터 조회
+    const fetchShoppingData = useCallback(
+        async (gridDates: Date[]) => {
+            if (!isLoggedIn) return;
+
+            try {
+                // 달력에 표시되는 날짜들을 병렬(Promise.all)로 조회
+                const promises = gridDates.map(async day => {
+                    const dateStr = formattingUtil.formatDateString(day);
+                    try {
+                        const items = await shoppingListApi.getShoppingItems(dateStr);
+                        return items || [];
+                    } catch {
+                        return [];
+                    }
+                });
+
+                const results = await Promise.all(promises);
+                // 2차원 배열을 1차원 배열로 평탄화
+                setShoppingData(results.flat());
+            } catch (error) {
+                console.error("장보기 데이터 로드 실패:", error);
+                setShoppingData([]);
+            }
+        },
+        [isLoggedIn],
+    );
+
+    // 화면 진입 및 연/월 변경 시 자동 데이터 갱신
+    useFocusEffect(
+        useCallback(() => {
+            const grid = getDaysInMonthGrid(year, month);
+            void fetchShoppingData(grid);
+        }, [year, month, fetchShoppingData]),
+    );
+
     const ROW_GAP = 8;
 
-    // 💡 수정됨: 소수점 오차를 방지(Math.floor)하고, 모바일을 위한 최소 높이(70)를 보장(Math.max)합니다.
     const calculatedCellHeight =
         calendarHeight > 0 ? Math.floor((calendarHeight - ROW_GAP * 5) / 6) : 80;
     const cellHeight = Math.max(calculatedCellHeight, 70);
 
-    // 💡 월 이동 핸들러
+    // 월 이동 핸들러
     const handlePrevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
     const handleNextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
@@ -125,8 +178,7 @@ export default function ShoppingCalendarScreen() {
                 </TouchableOpacity>
             </View>
 
-            {/* 2. 달력 헤더: 요일 표시 
-                💡 수정됨: 하단 그리드의 pt-2를 제거하는 대신 헤더의 하단 여백을 mb-3에서 mb-5로 늘림 */}
+            {/* 2. 달력 헤더: 요일 표시 */}
             <View className="flex-row justify-between mb-5">
                 {WEEKDAYS.map((day, idx) => (
                     <View
@@ -139,14 +191,13 @@ export default function ShoppingCalendarScreen() {
                 ))}
             </View>
 
-            {/* 3. 달력 그리드 영역
-                💡 수정됨: View를 ScrollView로 변경하고 방해되던 pt-2를 제거 */}
+            {/* 3. 달력 그리드 영역 */}
             <ScrollView
                 className="flex-1"
                 onLayout={e => {
                     setCalendarHeight(e.nativeEvent.layout.height);
                 }}
-                contentContainerStyle={{ paddingBottom: 20 }} // 모바일 스크롤 시 넉넉한 하단 여백
+                contentContainerStyle={{ paddingBottom: 20 }}
                 showsVerticalScrollIndicator={false}>
                 <View className="flex-row flex-wrap justify-between">
                     {calendarGrid.map((day, idx) => {
@@ -160,6 +211,11 @@ export default function ShoppingCalendarScreen() {
                         const dateStr = formattingUtil.formatDateString(day);
                         const isSelected = dateStr === selectedDateStr;
                         const isToday = dateStr === formattingUtil.formatDateString(new Date());
+
+                        // 💡 해당 날짜에 장보기 항목이 존재하는지 체크
+                        const hasShoppingList = shoppingData.some(item =>
+                            isSameDate(item.date, dateStr),
+                        );
 
                         // 선택 여부, 주말, 이번 달 여부에 따른 텍스트 색상 처리
                         let dayTextClass = "text-text-default font-semibold";
@@ -182,10 +238,10 @@ export default function ShoppingCalendarScreen() {
                                 }}
                                 activeOpacity={0.7}
                                 style={{
-                                    height: cellHeight, // 계산된 최소 높이 적용
+                                    height: cellHeight,
                                     marginBottom: isLastRow ? 0 : ROW_GAP,
                                 }}
-                                className={`w-[13%] rounded-[10px] items-start justify-start p-2 ${
+                                className={`w-[13%] rounded-[10px] items-center justify-start p-2 ${
                                     isSelected
                                         ? "bg-primary-main"
                                         : isToday
@@ -194,9 +250,19 @@ export default function ShoppingCalendarScreen() {
                                             ? "bg-bg-paper"
                                             : "bg-transparent"
                                 }`}>
+                                {/* 날짜 숫자 */}
                                 <TextComponent className={`text-[15px] ${dayTextClass}`}>
                                     {day.getDate()}
                                 </TextComponent>
+
+                                {/* 💡 장보기 일정이 있을 때 나타나는 primary-main 동그라미 점 */}
+                                {hasShoppingList && (
+                                    <View
+                                        className={`mt-1.5 h-2 w-2 rounded-full ${
+                                            isSelected ? "bg-white" : "bg-primary-main"
+                                        }`}
+                                    />
+                                )}
                             </TouchableOpacity>
                         );
                     })}
