@@ -125,7 +125,7 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                     animationType="fade"
                     onRequestClose={handleClose}>
                     <TouchableWithoutFeedback onPress={handleClose}>
-                        <View className="flex-1 items-center justify-center bg-black/50">
+                        <View className="flex-1 items-center justify-center">
                             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                                 <View
                                     style={{ backgroundColor: bgColor }}

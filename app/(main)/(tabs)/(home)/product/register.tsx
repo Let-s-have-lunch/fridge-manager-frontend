@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 import Input from "@/components/common/input/Input";
 import InputGroup from "@/components/common/input/InputGroup";
 import TextComponent from "@/components/common/text/TextComponent";
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { Category } from "@/types/category";
 import categoryApi from "@/api/user/categoryApi";
 import SelectCategoryModal from "@/components/category/SelectCategoryModal";
@@ -418,6 +418,6 @@ export default function RegisterScreen() {
                     setCreateCategoryModalVisible(true);
                 }}
             />
-        </ScrollView>
+        </View>
     );
 }

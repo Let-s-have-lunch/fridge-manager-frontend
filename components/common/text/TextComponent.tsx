@@ -5,9 +5,15 @@ interface TextComponentProps extends TextProps {
     className?: string;
 }
 
-function TextComponent({ className, children, ...props }: TextComponentProps) {
+function TextComponent({ className = "", children, ...props }: TextComponentProps) {
     return (
-        <Text className={twMerge("font-inter", "text-text-default", className)} {...props}>
+        <Text
+            className={twMerge(
+                "font-inter",
+                !className.includes("text-") && "text-text-default",
+                className,
+            )}
+            {...props}>
             {children}
         </Text>
     );
