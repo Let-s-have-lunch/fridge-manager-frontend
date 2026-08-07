@@ -10,7 +10,8 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import { ProductDetailItemType, ProductListItemType } from "@/types/product";
-import ProductFormModal from "@/components/product/ProductFormModal"; // 👈 타입 추가
+import ProductFormModal from "@/components/product/ProductFormModal";
+import GuestView from "@/components/home/GuestView"; // 👈 타입 추가
 
 export default function HomeScreen() {
     useSetupLayout({ showMainHeader: true, showDesktopHeader: true });
@@ -122,53 +123,51 @@ export default function HomeScreen() {
 
     return (
         <>
-            <View className={"flex-1 gap-5"}>
+            <View className="flex-1">
                 <CategoryTabs value={category} onChange={setCategory} />
-                <FlatList
-                    data={sortedProducts}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <ProductCard
-                            product={item}
-                            onEdit={() => handleOpenEditModal(item)} // 👈 수정 버튼 핸들러 연결
-                        />
-                    )}
-                    contentContainerStyle={{
-                        paddingBottom: 32,
-                    }}
-                    showsVerticalScrollIndicator={false}
-                />
+
+                {!isLoggedIn ? (
+                    <GuestView />
+                ) : (
+                    <FlatList
+                        data={sortedProducts}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <ProductCard product={item} onEdit={() => handleOpenEditModal(item)} />
+                        )}
+                        // 💡 gap 대신 contentContainerStyle에 paddingTop: 16 (또는 20) 추가!
+                        contentContainerStyle={{ paddingTop: 16, paddingBottom: 32 }}
+                        showsVerticalScrollIndicator={false}
+                    />
+                )}
             </View>
 
-            {/* 💡 기존 페이지 이동 대신 모달 열기 함수(handleOpenAddModal)로 교체 */}
-            <Pressable
-                onPress={handleOpenAddModal}
-                className={twMerge(
-                    ["absolute bottom-6 right-5 h-16 w-16"],
-                    ["items-center justify-center"],
-                    ["rounded-full"],
-                    ["bg-primary-main"],
-                )}
-                style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.18,
-                    shadowRadius: 8,
-                    elevation: 8, // Android
-                }}>
-                <Ionicons name={"add"} size={43} color={"white"} />
-            </Pressable>
+            {/* 💡 플러스 버튼과 모달은 로그인 상태일 때만 렌더링! */}
+            {isLoggedIn && (
+                <>
+                    <Pressable
+                        onPress={handleOpenAddModal}
+                        className={twMerge(
+                            "absolute bottom-6 right-5 h-16 w-16 items-center justify-center rounded-full bg-primary-main",
+                        )}
+                        style={{
+                            shadowColor: "#000",
+                            shadowOffset: { width: 0, height: 4 },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 8,
+                            elevation: 8,
+                        }}>
+                        <Ionicons name={"add"} size={43} color={"white"} />
+                    </Pressable>
 
-            <ProductFormModal
-                visible={isModalVisible}
-                onClose={handleCloseModal}
-                initialData={selectedProduct}
-                onRefresh={loadProducts}
-
-            />
+                    <ProductFormModal
+                        visible={isModalVisible}
+                        onClose={handleCloseModal}
+                        initialData={selectedProduct}
+                        onRefresh={loadProducts}
+                    />
+                </>
+            )}
         </>
     );
 }

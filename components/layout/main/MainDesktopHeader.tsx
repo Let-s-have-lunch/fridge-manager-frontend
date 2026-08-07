@@ -11,71 +11,81 @@ import { USER_NAV_LIST } from "@/constants/menu";
 import FridgeDropdown from "@/components/home/header/FridgeDropdown";
 import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
 import { useFridgeHeader } from "@/hooks/useFridgeHeader";
-import SortSheet from "@/components/home/header/SortSheet"; // 👈 정렬 모달 임포트
-import { BottomSheetModal } from "@gorhom/bottom-sheet"; // 👈 바텀시트 타입 임포트
-import { useHomeStore } from "@/stores/home/productStore"; // 👈 정렬 상태 스토어 임포트
+import SortSheet from "@/components/home/header/SortSheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useHomeStore } from "@/stores/home/productStore"; // 👈 스토어 임포트 확인!
 
 export default function MainDesktopHeader() {
     const router = useRouter();
     const pathname = usePathname();
-
     const isHome = pathname === "/";
 
-    const user = useAuthStore(state => state.user);
+    const { user, isLoggedIn } = useAuthStore();
     const userName = user?.nickname ?? "";
     const userId = user?.id;
 
-    // 👈 붕어빵 틀(Hook)에서 똑같이 기능 쏙 빼오기
     const fridge = useFridgeHeader();
-
-    // 👇 데스크탑 헤더에도 정렬 관련 상태 및 리모컨(Ref) 추가
     const sortSheetRef = useRef<BottomSheetModal>(null);
+
     const sortType = useHomeStore(state => state.sortType);
     const setSortType = useHomeStore(state => state.setSortType);
 
     return (
         <View className="bg-bg-subtle pt-5 pb-4 items-center w-full ">
             <View className="w-full max-w-6xl px-5 flex-row items-center justify-between z-50">
-                {/* 1. [좌측] 💡 flex-1을 줘서 좌측 공간을 꽉 잡고 있게 합니다! */}
+                {/* 1. [좌측] */}
                 <View className="flex-row items-center flex-1">
                     <Pressable className="w-[50px] h-[50px] rounded-full overflow-hidden bg-bg-default shrink-0">
                         <Image
-                            source={getAnimalIcon(userId)}
+                            source={getAnimalIcon(isLoggedIn ? userId : undefined)}
                             style={{ width: "100%", height: "100%" }}
                             resizeMode="cover"
                         />
                     </Pressable>
 
                     <View className="ml-3 justify-center relative">
-                        <View className="flex-row items-center gap-2">
-                            <TextComponent
-                                className="text-[16px] font-bold text-text-default"
-                                numberOfLines={1}>
-                                {userName}님
-                            </TextComponent>
+                        {!isLoggedIn ? (
+                            <View className="flex-col justify-center">
+                                <TextComponent className="text-[15px] font-bold text-text-default">
+                                    안녕하세요!
+                                </TextComponent>
+                                <TextComponent className="text-[11px] text-text-secondary mt-0.5">
+                                    로그인하고 냉장고를 관리해보세요.
+                                </TextComponent>
+                            </View>
+                        ) : (
+                            <View className="flex-row items-center gap-2">
+                                <TextComponent
+                                    className="text-[16px] font-bold text-text-default"
+                                    numberOfLines={1}>
+                                    {userName}님
+                                </TextComponent>
 
-                            {isHome && (
-                                <Pressable
-                                    onPress={() => fridge.setIsFridgeOpen(prev => !prev)}
-                                    className={twMerge(
-                                        "px-2 py-0.5 flex-row items-center",
-                                        "rounded-full border border-[#A18F8F]",
-                                    )}>
-                                    <TextComponent className="mr-1 ml-1 text-[12px] font-medium text-text-default">
-                                        {fridge.selectedFridge?.name ?? "냉장고"}
-                                    </TextComponent>
-                                    <Ionicons
-                                        name={fridge.isFridgeOpen ? "chevron-up" : "chevron-down"}
-                                        size={12}
-                                        color="#A18F8F"
-                                    />
-                                </Pressable>
-                            )}
-                        </View>
+                                {isHome && (
+                                    <Pressable
+                                        onPress={() => fridge.setIsFridgeOpen(prev => !prev)}
+                                        className={twMerge(
+                                            "px-2 py-0.5 flex-row items-center",
+                                            "rounded-full border border-[#A18F8F]",
+                                        )}>
+                                        <TextComponent className="mr-1 ml-1 text-[12px] font-medium text-text-default">
+                                            {fridge.selectedFridge?.name ?? "냉장고"}
+                                        </TextComponent>
+                                        <Ionicons
+                                            name={
+                                                fridge.isFridgeOpen ? "chevron-up" : "chevron-down"
+                                            }
+                                            size={12}
+                                            color="#A18F8F"
+                                        />
+                                    </Pressable>
+                                )}
+                            </View>
+                        )}
                     </View>
                 </View>
 
-                {/* 2. [중앙] 💡 justify-center를 줘서 무조건 가운데 정렬 시킵니다! */}
+                {/* 2. [중앙] */}
                 <View className="flex-row items-center justify-center gap-14 mx-4">
                     {USER_NAV_LIST.map(tab => {
                         const isActive =
@@ -100,13 +110,12 @@ export default function MainDesktopHeader() {
                     })}
                 </View>
 
-                {/* 3. [우측] 💡 우측도 flex-1을 주고, 내용물을 우측 끝으로 밀어냅니다(justify-end) */}
+                {/* 3. [우측] */}
                 <View className="flex-row items-center justify-end gap-2 flex-1">
-                    {/* 버튼들만 isHome으로 감싸서 내용물만 투명하게 비워줍니다! */}
                     {isHome && (
                         <>
                             <Pressable
-                                onPress={fridge.handleSearchToggle}
+                                onPress={isLoggedIn ? fridge.handleSearchToggle : undefined}
                                 className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
                                 <Ionicons
                                     name={fridge.isSearchOpen ? "close" : "search"}
@@ -116,7 +125,9 @@ export default function MainDesktopHeader() {
                             </Pressable>
 
                             <Pressable
-                                onPress={() => sortSheetRef.current?.present()}
+                                onPress={
+                                    isLoggedIn ? () => sortSheetRef.current?.present() : undefined
+                                }
                                 className="w-10 h-10 rounded-full bg-bg-default items-center justify-center">
                                 <Ionicons name="swap-vertical" size={22} color="#A18F8F" />
                             </Pressable>
@@ -125,8 +136,8 @@ export default function MainDesktopHeader() {
                 </View>
             </View>
 
-            {/* 4. 검색창 */}
-            {isHome && fridge.isSearchOpen && (
+            {/* 4. 이하 기능적인 모달, 드롭다운 등은 로그인 시에만 렌더링 */}
+            {isLoggedIn && isHome && fridge.isSearchOpen && (
                 <View className="w-full max-w-6xl px-5 mt-3">
                     <View
                         className={twMerge(
@@ -147,28 +158,24 @@ export default function MainDesktopHeader() {
                 </View>
             )}
 
-            {/* 5. 데스크탑용 냉장고 드롭다운 및 모달 연동 */}
-            {isHome && (
-                <View className="absolute top-[70px] left-0 w-full z-40 pointer-events-none">
-                    <View className="w-full max-w-6xl px-5 mx-auto pointer-events-auto">
-                        <FridgeDropdown
-                            visible={fridge.isFridgeOpen}
-                            fridges={fridge.fridges}
-                            selectedFridgeId={fridge.selectedFridgeId}
-                            onClose={() => fridge.setIsFridgeOpen(false)}
-                            onSelect={id => {
-                                fridge.setSelectedFridgeId(id);
-                                fridge.setIsFridgeOpen(false);
-                            }}
-                            onOpenSetting={fridge.handleOpenSetting}
-                        />
-                    </View>
-                </View>
-            )}
-
-            {/* 6. 모달 렌더링 영역 (정렬 모달 추가) */}
-            {isHome && (
+            {isLoggedIn && isHome && (
                 <>
+                    <View className="absolute top-[70px] left-0 w-full z-40 pointer-events-none">
+                        <View className="w-full max-w-6xl px-5 mx-auto pointer-events-auto">
+                            <FridgeDropdown
+                                visible={fridge.isFridgeOpen}
+                                fridges={fridge.fridges}
+                                selectedFridgeId={fridge.selectedFridgeId}
+                                onClose={() => fridge.setIsFridgeOpen(false)}
+                                onSelect={id => {
+                                    fridge.setSelectedFridgeId(id);
+                                    fridge.setIsFridgeOpen(false);
+                                }}
+                                onOpenSetting={fridge.handleOpenSetting}
+                            />
+                        </View>
+                    </View>
+
                     <SortSheet
                         ref={sortSheetRef}
                         selected={sortType}

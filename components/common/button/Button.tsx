@@ -9,6 +9,7 @@ interface Props extends PressableProps {
     size?: StyleSizeType;
     fullWidth?: boolean;
     wrap?: boolean;
+    textClassName?: string;
 }
 
 export const SQUARE_SIZE_STYLE = {
@@ -29,6 +30,7 @@ function Button({
     size = "medium",
     fullWidth = false,
     wrap = false,
+    textClassName,
     className,
     children,
     ...props
@@ -70,6 +72,7 @@ function Button({
                     variant === "outlined" ? "text-text-secondary" : "text-white",
                     // 👉 [꿀팁]: 기존 2xl, 3xl은 버튼 텍스트 치고 너무 거대해서 화면을 깨뜨릴 수 있습니다! 보통 아래 크기를 많이 씁니다.
                     size === "small" ? "text-sm" : size === "large" ? "text-lg" : "text-base",
+                    textClassName,
                 )}>
                 {children}
             </Text>
