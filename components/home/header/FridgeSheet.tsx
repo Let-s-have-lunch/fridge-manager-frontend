@@ -124,7 +124,8 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
         };
         const disabled = !(name ?? "").trim();
 
-        const FormContent = () => (
+        // 💡 [수정 1] 컴포넌트 선언 대신 변수 형태로 보관하여 포커스 해제 현상 방지
+        const formContent = (
             <>
                 {/* Handle - 모바일에서만 노출 */}
                 {!isMd && (
@@ -149,8 +150,8 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                     render={({ field }) => (
                         <TextInput
                             value={field.value}
-                            onChangeText={field.onChange}
-                            maxLength={10}
+                            // 💡 [수정 2] maxLength 대신 slice로 10자 제한 처리
+                            onChangeText={text => field.onChange(text.slice(0, 10))}
                             placeholder="냉장고 이름을 입력해주세요"
                             placeholderTextColor="#B6B6B6"
                             className="h-14 rounded-[18px] border border-divider px-5 text-[16px] text-text-default"
@@ -203,7 +204,8 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                                 <View
                                     style={{ backgroundColor: bgColor }}
                                     className="w-full max-w-[400px] rounded-[32px] px-6 pt-8 pb-8 shadow-lg">
-                                    <FormContent />
+                                    {/* 💡 [수정 1-1] {formContent} 바인딩 */}
+                                    {formContent}
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
@@ -239,7 +241,8 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 <View className={"flex-1"}>
                     <BottomSheetView className="flex-1 bg-bg-paper rounded-t-[32px]">
                         <View className="flex-1 px-6 pb-8">
-                            <FormContent />
+                            {/* 💡 [수정 1-2] {formContent} 바인딩 */}
+                            {formContent}
                         </View>
                     </BottomSheetView>
                 </View>
