@@ -17,8 +17,8 @@ import { isAxiosError } from "axios";
 
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
-import Input from "@/components/common/input/Input"; // 👈 Input 추가
-import DropdownSelect from "@/components/common/input/DropdownSelect"; // 👈 팀원 컴포넌트 추가
+// 👈 Input 직접 import 제거됨!
+import DropdownSelect from "@/components/common/input/DropdownSelect";
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import TextComponent from "@/components/common/text/TextComponent";
@@ -77,7 +77,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         handleSubmit,
         setError,
         setValue,
-        watch, // 👈 드롭다운 렌더링 시 현재 값을 읽기 위해 추가
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<ProductInputType>({
         resolver: zodResolver(productSchema),
@@ -86,9 +86,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
             memo: "",
             categoryId: 1, // 기본값 채소
             storageType: "REFRIGERATED",
-            quantity: "" as any,
+            quantity: 1,
             unit: "EA",
-            price: "" as any,
+            price: 0,
             expirationDate: "",
             status: "STORED",
         },
@@ -148,7 +148,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
         return (
             <View
-                // 👇 bg-white를 bg-bg-default로 변경하고, border 색상도 테마에 맞게 조정
                 className="absolute z-[9999] rounded-[10px] border border-gray-200 dark:border-gray-700 bg-bg-default shadow-xl overflow-hidden"
                 style={{
                     top: dropdownLayout.y,
@@ -161,7 +160,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     {options.map((option, index) => (
                         <Pressable
                             key={index}
-                            // 👇 밑줄 색상도 다크모드일 때 너무 밝지 않게 조정 (필요시 tailwind 설정에 맞춰 변경)
                             className={`px-4 py-3 ${
                                 index !== options.length - 1
                                     ? "border-b border-gray-100 dark:border-gray-700"
@@ -176,7 +174,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 className={`text-[15px] ${
                                     currentValue === option.value
                                         ? "font-bold text-primary-main"
-                                        : "text-text-default" // 👈 이제 배경이 어두워졌으니 이 텍스트 색상이 정상적으로 보일 겁니다!
+                                        : "text-text-default"
                                 }`}>
                                 {option.label}
                             </TextComponent>
@@ -218,17 +216,16 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                 reset({
                     name: "",
                     memo: "",
-                    categoryId: 1, // 초기화 시 '채소'
+                    categoryId: 1,
                     storageType: "REFRIGERATED",
-                    quantity: "" as any,
+                    quantity: 1,
                     unit: "EA",
-                    price: "" as any,
+                    price: 0,
                     expirationDate: "",
                     status: "STORED",
                 });
             }
         } else {
-            // 닫힐 때 드롭다운 초기화
             setActiveDropdown(null);
             setDropdownLayout(null);
         }
@@ -236,7 +233,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
     const onSubmit = async (data: ProductInputType) => {
         try {
-            const { expirationDate, ...prevInput } = data;
+            // 👇 data에서 price도 따로 분리(구조분해할당)해서 꺼내줍니다.
+            const { expirationDate, price, ...prevInput } = data;
             let formattedExpirationDate = expirationDate;
 
             if (expirationDate && expirationDate.length === 8) {
@@ -250,6 +248,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
             const payload = {
                 ...prevInput,
                 expirationDate: formattedExpirationDate,
+                // 👇 백엔드로 보낼 때, price가 null이면 undefined로 바꿔서 전송 항목에서 아예 제외시킵니다!
+                price: price === null ? undefined : price,
             };
 
             if (isEditMode && initialData) {
@@ -277,15 +277,15 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
     return (
         <Modal visible={visible} transparent={true} animationType={"fade"} onRequestClose={onClose}>
-            <View className="flex-1 justify-end bg-black/50 md:justify-center md:items-center">
+            <View className="flex-1 justify-center items-center bg-black/50">
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1 w-full justify-end md:justify-center md:items-center">
+                    className="flex-1 w-full justify-center items-center">
                     <TouchableWithoutFeedback onPress={onClose}>
                         <View className="absolute inset-0" />
                     </TouchableWithoutFeedback>
 
-                    <View className="w-full max-h-[85%] px-6 pt-4 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[480px] md:max-h-[90%] md:pt-8 md:rounded-[36px] z-10">
+                    <View className="w-[90%] max-w-[480px] max-h-[85%] px-6 pt-8 pb-12 bg-bg-default rounded-[36px] z-10">
                         <Title
                             title={isEditMode ? "식재료 수정" : "식재료 추가"}
                             className="h-auto pb-4 mb-4"
@@ -296,14 +296,13 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                             showsVerticalScrollIndicator={false}
                             keyboardShouldPersistTaps="handled"
                             onScrollBeginDrag={() => {
-                                // 스크롤 시 열려있는 드롭다운 닫기
                                 if (activeDropdown) {
                                     setActiveDropdown(null);
                                     setDropdownLayout(null);
                                 }
                             }}
                             contentContainerStyle={{ paddingBottom: 20 }}>
-                            {/* 1. 카테고리 (Dropdown) */}
+                            {/* 1. 카테고리 (Dropdown: children으로 사용) */}
                             <Controller
                                 control={control}
                                 name="categoryId"
@@ -318,7 +317,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                                 isOpen={activeDropdown === "category"}
                                                 value={currentLabel}
                                                 options={CATEGORIES.map(c => c.label)}
-                                                onSelect={() => {}} // 글로벌 리스트에서 직접 값 주입
+                                                onSelect={() => {}}
                                                 onOpenChange={(isOpen, layout) =>
                                                     handleDropdownChange("category", isOpen, layout)
                                                 }
@@ -328,50 +327,52 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 }}
                             />
 
-                            {/* 2. 제품명 */}
+                            {/* 2. 제품명 (InputGroup에 props 바로 전달) */}
                             <Controller
                                 control={control}
                                 name="name"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="제품명" errorMessage={errors.name?.message}>
-                                        <Input
-                                            placeholder="제품명을 입력해주세요."
-                                            onBlur={onBlur}
-                                            onChangeText={onChange}
-                                            value={value}
-                                        />
-                                    </InputGroup>
+                                    <InputGroup
+                                        label="제품명"
+                                        errorMessage={errors.name?.message}
+                                        placeholder="제품명을 입력해주세요."
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                    />
                                 )}
                             />
 
                             {/* 3. 등록수량 & 단위 (반반 배치) */}
                             <View className="flex-row gap-3">
                                 <View className="flex-1">
+                                    {/* 등록수량 (InputGroup에 props 바로 전달) */}
                                     <Controller
                                         control={control}
                                         name="quantity"
                                         render={({ field: { onChange, onBlur, value } }) => (
                                             <InputGroup
                                                 label="등록수량"
-                                                errorMessage={errors.quantity?.message}>
-                                                <Input
-                                                    placeholder="0"
-                                                    keyboardType="numeric"
-                                                    onBlur={onBlur}
-                                                    onChangeText={text => {
-                                                        const num = parseInt(
-                                                            text.replace(/[^0-9]/g, ""),
-                                                            10,
-                                                        );
-                                                        onChange(isNaN(num) ? undefined : num);
-                                                    }}
-                                                    value={value?.toString()}
-                                                />
-                                            </InputGroup>
+                                                errorMessage={errors.quantity?.message}
+                                                placeholder="0"
+                                                keyboardType="numeric"
+                                                onBlur={onBlur}
+                                                onChangeText={text => {
+                                                    const cleaned = text.replace(/[^0-9]/g, "");
+                                                    if (cleaned === "") {
+                                                        onChange("");
+                                                    } else {
+                                                        onChange(parseInt(cleaned, 10));
+                                                    }
+                                                }}
+                                                value={value?.toString() ?? ""}
+                                                selectTextOnFocus={true}
+                                            />
                                         )}
                                     />
                                 </View>
                                 <View className="flex-1">
+                                    {/* 단위 (Dropdown: children으로 사용) */}
                                     <Controller
                                         control={control}
                                         name="unit"
@@ -402,7 +403,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 </View>
                             </View>
 
-                            {/* 4. 저장방식 (Dropdown) */}
+                            {/* 4. 저장방식 (Dropdown: children으로 사용) */}
                             <Controller
                                 control={control}
                                 name="storageType"
@@ -431,40 +432,36 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 }}
                             />
 
-                            {/* 5. 등록일 (읽기 전용) */}
-                            <InputGroup label="등록일">
-                                <Input
-                                    value={displayCreatedAt}
-                                    editable={false}
-                                    style={{ color: "#777777" }}
-                                />
-                            </InputGroup>
+                            {/* 5. 등록일 (읽기 전용, InputGroup에 props 바로 전달) */}
+                            <InputGroup
+                                label="등록일"
+                                value={displayCreatedAt}
+                                editable={false}
+                                style={{ color: "#777777" }}
+                            />
 
-                            {/* 6. 소비기한 */}
+                            {/* 6. 소비기한 (InputGroup에 props 바로 전달) */}
                             <Controller
                                 control={control}
                                 name="expirationDate"
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <InputGroup
                                         label="소비기한"
-                                        errorMessage={errors.expirationDate?.message}>
-                                        <Input
-                                            placeholder="YYYYMMDD (예: 20260810)"
-                                            keyboardType="number-pad"
-                                            maxLength={8} // 👈 하이픈이 빠지므로 10에서 8로 수정
-                                            onBlur={onBlur}
-                                            onChangeText={text => {
-                                                // 👈 불필요한 하이픈 로직 제거, 오직 숫자만 추출
-                                                const cleaned = text.replace(/[^0-9]/g, "");
-                                                onChange(cleaned);
-                                            }}
-                                            value={value}
-                                        />
-                                    </InputGroup>
+                                        errorMessage={errors.expirationDate?.message}
+                                        placeholder="YYYYMMDD (예: 20260810)"
+                                        keyboardType="number-pad"
+                                        maxLength={8}
+                                        onBlur={onBlur}
+                                        onChangeText={text => {
+                                            const cleaned = text.replace(/[^0-9]/g, "");
+                                            onChange(cleaned);
+                                        }}
+                                        value={value}
+                                    />
                                 )}
                             />
 
-                            {/* 7. 보관상태 (Dropdown) */}
+                            {/* 7. 보관상태 (Dropdown: children으로 사용) */}
                             <Controller
                                 control={control}
                                 name="status"
@@ -489,44 +486,46 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 }}
                             />
 
-                            {/* 8. 가격 */}
+                            {/* 8. 가격 (InputGroup에 props 바로 전달 + 빈칸 시 null 할당) */}
                             <Controller
                                 control={control}
                                 name="price"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="가격" errorMessage={errors.price?.message}>
-                                        <Input
-                                            placeholder="0"
-                                            keyboardType="numeric"
-                                            onBlur={onBlur}
-                                            onChangeText={text => {
-                                                const num = parseInt(
-                                                    text.replace(/[^0-9]/g, ""),
-                                                    10,
-                                                );
-                                                onChange(isNaN(num) ? undefined : num);
-                                            }}
-                                            value={value?.toString()}
-                                        />
-                                    </InputGroup>
+                                    <InputGroup
+                                        label="가격"
+                                        errorMessage={errors.price?.message}
+                                        placeholder="0"
+                                        keyboardType="numeric"
+                                        onBlur={onBlur}
+                                        onChangeText={text => {
+                                            const cleaned = text.replace(/[^0-9]/g, "");
+                                            if (cleaned === "") {
+                                                onChange(null); // 💡 가격은 다 지우면 null!
+                                            } else {
+                                                onChange(parseInt(cleaned, 10));
+                                            }
+                                        }}
+                                        value={value?.toString() ?? ""}
+                                        selectTextOnFocus={true}
+                                    />
                                 )}
                             />
 
-                            {/* 9. 메모 */}
+                            {/* 9. 메모 (InputGroup에 props 바로 전달) */}
                             <Controller
                                 control={control}
                                 name="memo"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="메모" errorMessage={errors.memo?.message}>
-                                        <Input
-                                            placeholder="메모를 입력해주세요."
-                                            onBlur={onBlur}
-                                            onChangeText={onChange}
-                                            value={value}
-                                            multiline={true}
-                                            style={{ height: 120, textAlignVertical: "top" }}
-                                        />
-                                    </InputGroup>
+                                    <InputGroup
+                                        label="메모"
+                                        errorMessage={errors.memo?.message}
+                                        placeholder="메모를 입력해주세요."
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        multiline={true}
+                                        style={{ height: 120, textAlignVertical: "top" }}
+                                    />
                                 )}
                             />
 
@@ -557,10 +556,10 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     </View>
                 </KeyboardAvoidingView>
 
-                {/* 💡 선택 리스트 렌더링 (가장 바깥쪽, 최상단 Z-index 배치를 위해 여기에 위치) */}
+                {/* 선택 리스트 렌더링 */}
                 {renderActiveDropdownList()}
 
-                {/* 💡 드롭다운 열렸을 때 백그라운드 터치 시 닫히도록 하는 투명 막 */}
+                {/* 드롭다운 열렸을 때 백그라운드 터치 시 닫히도록 하는 투명 막 */}
                 {activeDropdown && (
                     <TouchableWithoutFeedback
                         onPress={() => {
