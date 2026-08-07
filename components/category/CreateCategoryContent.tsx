@@ -7,6 +7,7 @@ import Input from "@/components/common/input/Input";
 import Button from "@/components/common/button/Button";
 import TextComponent from "@/components/common/text/TextComponent";
 import categoryApi from "@/api/user/categoryApi";
+import { Category } from "@/types/category";
 
 interface Props {
     mode: "create" | "edit";
