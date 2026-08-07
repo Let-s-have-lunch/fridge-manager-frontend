@@ -79,7 +79,7 @@ export default function ProductCard({ product, onPress, onEdit }: ProductCardPro
                 </View>
             </View>
 
-            <View className="ml-4 self-start flex-row items-center">
+            <View className="ml-4 justify-center items-center flex-row">
                 <ExpireBadge status={getExpireStatus(product.dDay)}>
                     {getDDayLabel(product.dDay)}
                 </ExpireBadge>
