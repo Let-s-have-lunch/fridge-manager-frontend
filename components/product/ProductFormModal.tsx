@@ -17,8 +17,8 @@ import { isAxiosError } from "axios";
 
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
-// 👈 Input 직접 import 제거됨!
-import DropdownSelect from "@/components/common/input/DropdownSelect";
+import Input from "@/components/common/input/Input"; // 👈 Input 추가
+import DropdownSelect from "@/components/common/input/DropdownSelect"; // 👈 팀원 컴포넌트 추가
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import TextComponent from "@/components/common/text/TextComponent";
@@ -28,16 +28,13 @@ import { productSchema, ProductInputType } from "@/schemas/user/productSchema";
 import { useHomeStore } from "@/stores/home/productStore";
 import { ProductDetailItemType } from "@/types/product";
 import productApi from "@/api/user/productApi";
+import { Category } from "@/types/category";
+import categoryApi from "@/api/user/categoryApi";
+import SelectCategoryContent from "@/components/category/SelectCategoryContent";
+import CreateCategoryContent from "@/components/category/CreateCategoryContent";
 
 // 💡 백엔드 전송 데이터와 UI 표시 텍스트 매핑
-const CATEGORIES = [
-    { label: "채소", value: 1 },
-    { label: "과일", value: 2 },
-    { label: "육류", value: 3 },
-    { label: "수산물", value: 4 },
-    { label: "유제품", value: 5 },
-    { label: "기타", value: 6 },
-];
+
 const UNITS = [
     { label: "개", value: "EA" },
     { label: "g", value: "G" },
@@ -52,7 +49,7 @@ const STORAGES = [
 ];
 const STATUSES = [
     { label: "보관", value: "STORED" },
-    { label: "소비 완료", value: "CONSUMED" },
+    { label: "소비", value: "CONSUMED" },
     { label: "폐기", value: "DISCARDED" },
 ];
 
@@ -64,8 +61,29 @@ interface Props {
 }
 
 export default function ProductFormModal({ visible, onClose, initialData, onRefresh }: Props) {
+    const [screen, setScreen] = useState<"form" | "selectCategory" | "createCategory" | "editCategory" >("form");
+
     const swipeDownHandlers = useSwipeDown(onClose);
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
+
+    const handleEditCategory = (category: Category) => {
+        setSelectedCategory(category);
+        setScreen("editCategory");
+    };
+
+    const loadCategories = async () => {
+        const result = await categoryApi.getCategoryList();
+        setCategories(result);
+    };
+
+    useEffect(() => {
+        if (visible) {
+            loadCategories();
+        }
+    }, [visible]);
 
     // 드롭다운 상태 관리
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -122,11 +140,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
         // 현재 열려있는 드롭다운 식별 및 매핑
         switch (activeDropdown) {
-            case "category":
-                options = CATEGORIES;
-                onSelect = val => setValue("categoryId", val, { shouldValidate: true });
-                currentValue = watch("categoryId");
-                break;
             case "unit":
                 options = UNITS;
                 onSelect = val => setValue("unit", val, { shouldValidate: true });
@@ -196,6 +209,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     const displayCreatedAt = initialData?.createdAt
         ? initialData.createdAt.substring(0, 10)
         : getTodayDate();
+
+
 
     useEffect(() => {
         if (visible) {
@@ -276,290 +291,357 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     };
 
     return (
-        <Modal visible={visible} transparent={true} animationType={"fade"} onRequestClose={onClose}>
-            <View className="flex-1 justify-center items-center bg-black/50">
+        <Modal visible={visible} transparent animationType="fade">
+            <View className="flex-1 items-center justify-center bg-black/50">
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1 w-full justify-center items-center">
+                    behavior={Platform.OS === "ios" ? "padding" : undefined}
+                    className="flex-1 w-full items-center justify-center">
                     <TouchableWithoutFeedback onPress={onClose}>
                         <View className="absolute inset-0" />
                     </TouchableWithoutFeedback>
 
-                    <View className="w-[90%] max-w-[480px] max-h-[85%] px-6 pt-8 pb-12 bg-bg-default rounded-[36px] z-10">
-                        <Title
-                            title={isEditMode ? "식재료 수정" : "식재료 추가"}
-                            className="h-auto pb-4 mb-4"
-                            textClassName={"text-2xl"}
-                        />
+                    {screen === "form" && (
+                        <View
+                            className="w-[90%] max-w-[480px] max-h-[75%] bg-bg-default rounded-[28px] px-6 pt-6 pb-8"
+                            style={{
+                                elevation: 12,
+                                shadowColor: "#000",
+                                shadowOpacity: 0.2,
+                                shadowRadius: 12,
+                                shadowOffset: { width: 0, height: 4 },
+                            }}>
+                            <Title
+                                title={isEditMode ? "식재료 수정" : "식재료 추가"}
+                                className="h-auto pb-4 mb-4"
+                                textClassName="text-2xl text-center text-text-default"
+                            />
 
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            keyboardShouldPersistTaps="handled"
-                            onScrollBeginDrag={() => {
-                                if (activeDropdown) {
-                                    setActiveDropdown(null);
-                                    setDropdownLayout(null);
-                                }
-                            }}
-                            contentContainerStyle={{ paddingBottom: 20 }}>
-                            {/* 1. 카테고리 (Dropdown: children으로 사용) */}
-                            <Controller
-                                control={control}
-                                name="categoryId"
-                                render={({ field: { value } }) => {
-                                    const currentLabel =
-                                        CATEGORIES.find(c => c.value === value)?.label || "";
-                                    return (
-                                        <InputGroup
-                                            label="카테고리"
-                                            errorMessage={errors.categoryId?.message}>
-                                            <DropdownSelect
-                                                isOpen={activeDropdown === "category"}
-                                                value={currentLabel}
-                                                options={CATEGORIES.map(c => c.label)}
-                                                onSelect={() => {}}
-                                                onOpenChange={(isOpen, layout) =>
-                                                    handleDropdownChange("category", isOpen, layout)
-                                                }
+                            <ScrollView
+                                showsVerticalScrollIndicator={false}
+                                keyboardShouldPersistTaps="handled"
+                                contentContainerStyle={{ paddingBottom: 20 }}>
+                                {/* 1. 카테고리 (Dropdown) */}
+                                <Controller
+                                    control={control}
+                                    name="categoryId"
+                                    render={({ field: { value } }) => {
+                                        const currentLabel =
+                                            categories.find(c => c.id === value)?.name || "";
+                                        return (
+                                            <InputGroup label="카테고리">
+                                                <Pressable
+                                                    onPress={() => setScreen("selectCategory")}>
+                                                    <Input
+                                                        value={currentLabel}
+                                                        editable={false}
+                                                        pointerEvents="none"
+                                                    />
+                                                </Pressable>
+                                            </InputGroup>
+                                        );
+                                    }}
+                                />
+
+                                {/* 2. 제품명 */}
+                                <Controller
+                                    control={control}
+                                    name="name"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup label="제품명">
+                                            <Input
+                                                placeholder="제품명을 입력해주세요."
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
                                             />
                                         </InputGroup>
-                                    );
-                                }}
-                            />
+                                    )}
+                                />
 
-                            {/* 2. 제품명 (InputGroup에 props 바로 전달) */}
-                            <Controller
-                                control={control}
-                                name="name"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        label="제품명"
-                                        errorMessage={errors.name?.message}
-                                        placeholder="제품명을 입력해주세요."
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
+                                {/* 3. 등록수량 & 단위 (반반 배치) */}
+                                <View className="flex-row gap-3">
+                                    <View className="flex-1">
+                                        <Controller
+                                            control={control}
+                                            name="quantity"
+                                            render={({ field: { onChange, onBlur, value } }) => (
+                                                <InputGroup label="등록수량">
+                                                    <Input
+                                                        placeholder="0"
+                                                        keyboardType="numeric"
+                                                        onBlur={onBlur}
+                                                        onChangeText={text => {
+                                                            const num = parseInt(
+                                                                text.replace(/[^0-9]/g, ""),
+                                                                10,
+                                                            );
+                                                            onChange(isNaN(num) ? undefined : num);
+                                                        }}
+                                                        value={value?.toString()}
+                                                    />
+                                                </InputGroup>
+                                            )}
+                                        />
+                                    </View>
+                                    <View className="flex-1">
+                                        <Controller
+                                            control={control}
+                                            name="unit"
+                                            render={({ field: { value } }) => {
+                                                const currentLabel =
+                                                    UNITS.find(u => u.value === value)?.label || "";
+                                                return (
+                                                    <InputGroup label="단위">
+                                                        <DropdownSelect
+                                                            isOpen={activeDropdown === "unit"}
+                                                            value={currentLabel}
+                                                            options={UNITS.map(u => u.label)}
+                                                            onSelect={() => {}}
+                                                            onOpenChange={(isOpen, layout) =>
+                                                                handleDropdownChange(
+                                                                    "unit",
+                                                                    isOpen,
+                                                                    layout,
+                                                                )
+                                                            }
+                                                        />
+                                                    </InputGroup>
+                                                );
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+
+                                {/* 4. 저장방식 (Dropdown) */}
+                                <Controller
+                                    control={control}
+                                    name="storageType"
+                                    render={({ field: { value } }) => {
+                                        const currentLabel =
+                                            STORAGES.find(s => s.value === value)?.label || "";
+                                        return (
+                                            <InputGroup label="저장방식">
+                                                <DropdownSelect
+                                                    isOpen={activeDropdown === "storageType"}
+                                                    value={currentLabel}
+                                                    options={STORAGES.map(s => s.label)}
+                                                    onSelect={() => {}}
+                                                    onOpenChange={(isOpen, layout) =>
+                                                        handleDropdownChange(
+                                                            "storageType",
+                                                            isOpen,
+                                                            layout,
+                                                        )
+                                                    }
+                                                />
+                                            </InputGroup>
+                                        );
+                                    }}
+                                />
+
+                                {/* 5. 등록일 (읽기 전용) */}
+                                <InputGroup label="등록일">
+                                    <Input
+                                        value={displayCreatedAt}
+                                        editable={false}
+                                        style={{ color: "#777777" }}
                                     />
-                                )}
-                            />
+                                </InputGroup>
 
-                            {/* 3. 등록수량 & 단위 (반반 배치) */}
-                            <View className="flex-row gap-3">
-                                <View className="flex-1">
-                                    {/* 등록수량 (InputGroup에 props 바로 전달) */}
-                                    <Controller
-                                        control={control}
-                                        name="quantity"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <InputGroup
-                                                label="등록수량"
-                                                errorMessage={errors.quantity?.message}
+                                {/* 6. 소비기한 */}
+                                <Controller
+                                    control={control}
+                                    name="expirationDate"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup label="소비기한">
+                                            <Input
+                                                placeholder="YYYYMMDD (예: 2026-08-10)"
+                                                keyboardType="number-pad"
+                                                maxLength={10}
+                                                onBlur={onBlur}
+                                                onChangeText={text => {
+                                                    let cleaned = text.replace(/[^0-9]/g, "");
+                                                    if (cleaned.length > 4 && cleaned.length <= 6) {
+                                                        cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+                                                    } else if (cleaned.length > 6) {
+                                                        cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
+                                                    }
+                                                    onChange(cleaned);
+                                                }}
+                                                value={value}
+                                            />
+                                        </InputGroup>
+                                    )}
+                                />
+
+                                {/* 7. 보관상태 (Dropdown) */}
+                                <Controller
+                                    control={control}
+                                    name="status"
+                                    render={({ field: { value } }) => {
+                                        const currentLabel =
+                                            STATUSES.find(s => s.value === value)?.label || "";
+                                        return (
+                                            <InputGroup label="보관상태">
+                                                <DropdownSelect
+                                                    isOpen={activeDropdown === "status"}
+                                                    value={currentLabel}
+                                                    options={STATUSES.map(s => s.label)}
+                                                    onSelect={() => {}}
+                                                    onOpenChange={(isOpen, layout) =>
+                                                        handleDropdownChange(
+                                                            "status",
+                                                            isOpen,
+                                                            layout,
+                                                        )
+                                                    }
+                                                />
+                                            </InputGroup>
+                                        );
+                                    }}
+                                />
+
+                                {/* 8. 가격 */}
+                                <Controller
+                                    control={control}
+                                    name="price"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup label="가격">
+                                            <Input
                                                 placeholder="0"
                                                 keyboardType="numeric"
                                                 onBlur={onBlur}
                                                 onChangeText={text => {
-                                                    const cleaned = text.replace(/[^0-9]/g, "");
-                                                    if (cleaned === "") {
-                                                        onChange("");
-                                                    } else {
-                                                        onChange(parseInt(cleaned, 10));
-                                                    }
+                                                    const num = parseInt(
+                                                        text.replace(/[^0-9]/g, ""),
+                                                        10,
+                                                    );
+                                                    onChange(isNaN(num) ? undefined : num);
                                                 }}
-                                                value={value?.toString() ?? ""}
-                                                selectTextOnFocus={true}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                <View className="flex-1">
-                                    {/* 단위 (Dropdown: children으로 사용) */}
-                                    <Controller
-                                        control={control}
-                                        name="unit"
-                                        render={({ field: { value } }) => {
-                                            const currentLabel =
-                                                UNITS.find(u => u.value === value)?.label || "";
-                                            return (
-                                                <InputGroup
-                                                    label="단위"
-                                                    errorMessage={errors.unit?.message}>
-                                                    <DropdownSelect
-                                                        isOpen={activeDropdown === "unit"}
-                                                        value={currentLabel}
-                                                        options={UNITS.map(u => u.label)}
-                                                        onSelect={() => {}}
-                                                        onOpenChange={(isOpen, layout) =>
-                                                            handleDropdownChange(
-                                                                "unit",
-                                                                isOpen,
-                                                                layout,
-                                                            )
-                                                        }
-                                                    />
-                                                </InputGroup>
-                                            );
-                                        }}
-                                    />
-                                </View>
-                            </View>
-
-                            {/* 4. 저장방식 (Dropdown: children으로 사용) */}
-                            <Controller
-                                control={control}
-                                name="storageType"
-                                render={({ field: { value } }) => {
-                                    const currentLabel =
-                                        STORAGES.find(s => s.value === value)?.label || "";
-                                    return (
-                                        <InputGroup
-                                            label="저장방식"
-                                            errorMessage={errors.storageType?.message}>
-                                            <DropdownSelect
-                                                isOpen={activeDropdown === "storageType"}
-                                                value={currentLabel}
-                                                options={STORAGES.map(s => s.label)}
-                                                onSelect={() => {}}
-                                                onOpenChange={(isOpen, layout) =>
-                                                    handleDropdownChange(
-                                                        "storageType",
-                                                        isOpen,
-                                                        layout,
-                                                    )
-                                                }
+                                                value={value?.toString()}
                                             />
                                         </InputGroup>
-                                    );
-                                }}
-                            />
+                                    )}
+                                />
 
-                            {/* 5. 등록일 (읽기 전용, InputGroup에 props 바로 전달) */}
-                            <InputGroup
-                                label="등록일"
-                                value={displayCreatedAt}
-                                editable={false}
-                                style={{ color: "#777777" }}
-                            />
-
-                            {/* 6. 소비기한 (InputGroup에 props 바로 전달) */}
-                            <Controller
-                                control={control}
-                                name="expirationDate"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        label="소비기한"
-                                        errorMessage={errors.expirationDate?.message}
-                                        placeholder="YYYYMMDD (예: 20260810)"
-                                        keyboardType="number-pad"
-                                        maxLength={8}
-                                        onBlur={onBlur}
-                                        onChangeText={text => {
-                                            const cleaned = text.replace(/[^0-9]/g, "");
-                                            onChange(cleaned);
-                                        }}
-                                        value={value}
-                                    />
-                                )}
-                            />
-
-                            {/* 7. 보관상태 (Dropdown: children으로 사용) */}
-                            <Controller
-                                control={control}
-                                name="status"
-                                render={({ field: { value } }) => {
-                                    const currentLabel =
-                                        STATUSES.find(s => s.value === value)?.label || "";
-                                    return (
-                                        <InputGroup
-                                            label="보관상태"
-                                            errorMessage={errors.status?.message}>
-                                            <DropdownSelect
-                                                isOpen={activeDropdown === "status"}
-                                                value={currentLabel}
-                                                options={STATUSES.map(s => s.label)}
-                                                onSelect={() => {}}
-                                                onOpenChange={(isOpen, layout) =>
-                                                    handleDropdownChange("status", isOpen, layout)
-                                                }
+                                {/* 9. 메모 */}
+                                <Controller
+                                    control={control}
+                                    name="memo"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <InputGroup label="메모">
+                                            <Input
+                                                placeholder="메모를 입력해주세요."
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
+                                                multiline={true}
+                                                style={{ height: 120, textAlignVertical: "top" }}
                                             />
                                         </InputGroup>
-                                    );
+                                    )}
+                                />
+
+                                {/* 에러 메시지 */}
+                                {errors.root?.message && (
+                                    <ErrorMessage className="text-center mt-2 mb-2">
+                                        {errors.root?.message}
+                                    </ErrorMessage>
+                                )}
+
+                                {/* 버튼 영역 */}
+                                <View className="flex-row gap-3 mt-6">
+                                    <Button
+                                        wrap={true}
+                                        onPress={onClose}
+                                        variant="outlined"
+                                        color="success">
+                                        취소
+                                    </Button>
+                                    <Button
+                                        wrap={true}
+                                        onPress={handleSubmit(onSubmit)}
+                                        disabled={isSubmitting}>
+                                        {isSubmitting ? "처리중..." : isEditMode ? "수정" : "등록"}
+                                    </Button>
+                                </View>
+                            </ScrollView>
+                        </View>
+                    )}
+                    {screen === "selectCategory" && (
+                        <View
+                            className="w-[90%] max-w-[520px] max-h-[80%] bg-white rounded-[28px] overflow-hidden"
+                            style={{
+                                elevation: 12,
+                                shadowColor: "#000",
+                                shadowOpacity: 0.2,
+                                shadowRadius: 12,
+                                shadowOffset: { width: 0, height: 4 },
+                            }}>
+                            <SelectCategoryContent
+                                categories={categories}
+                                onClose={() => setScreen("form")}
+                                onSelect={category => {
+                                    setValue("categoryId", category.id, {
+                                        shouldDirty: true,
+                                        shouldValidate: true,
+                                    });
+
+                                    setScreen("form");
+                                }}
+                                onAddCategory={() => setScreen("createCategory")}
+                                onEditCategory={handleEditCategory}
+                            />
+                        </View>
+                    )}
+
+                    {screen === "createCategory" && (
+                        <View
+                            className="w-[90%] max-w-[420px] bg-white rounded-[28px] overflow-hidden"
+                            style={{
+                                elevation: 12,
+                                shadowColor: "#000",
+                                shadowOpacity: 0.2,
+                                shadowRadius: 12,
+                                shadowOffset: { width: 0, height: 4 },
+                            }}>
+                            <CreateCategoryContent
+                                mode="create"
+                                onClose={() => setScreen("selectCategory")}
+                                onComplete={async () => {
+                                    await loadCategories();
+                                    setScreen("selectCategory");
                                 }}
                             />
-
-                            {/* 8. 가격 (InputGroup에 props 바로 전달 + 빈칸 시 null 할당) */}
-                            <Controller
-                                control={control}
-                                name="price"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        label="가격"
-                                        errorMessage={errors.price?.message}
-                                        placeholder="0"
-                                        keyboardType="numeric"
-                                        onBlur={onBlur}
-                                        onChangeText={text => {
-                                            const cleaned = text.replace(/[^0-9]/g, "");
-                                            if (cleaned === "") {
-                                                onChange(null); // 💡 가격은 다 지우면 null!
-                                            } else {
-                                                onChange(parseInt(cleaned, 10));
-                                            }
-                                        }}
-                                        value={value?.toString() ?? ""}
-                                        selectTextOnFocus={true}
-                                    />
-                                )}
+                        </View>
+                    )}
+                    {screen === "editCategory" && (
+                        <View
+                            className="w-[90%] max-w-[420px] bg-white rounded-[28px] overflow-hidden"
+                            style={{
+                                elevation: 12,
+                                shadowColor: "#000",
+                                shadowOpacity: 0.2,
+                                shadowRadius: 12,
+                                shadowOffset: { width: 0, height: 4 },
+                            }}>
+                            <CreateCategoryContent
+                                mode="edit"
+                                category={selectedCategory}
+                                onClose={() => setScreen("selectCategory")}
+                                onComplete={async () => {
+                                    await loadCategories();
+                                    setScreen("selectCategory");
+                                }}
                             />
-
-                            {/* 9. 메모 (InputGroup에 props 바로 전달) */}
-                            <Controller
-                                control={control}
-                                name="memo"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup
-                                        label="메모"
-                                        errorMessage={errors.memo?.message}
-                                        placeholder="메모를 입력해주세요."
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        multiline={true}
-                                        style={{ height: 120, textAlignVertical: "top" }}
-                                    />
-                                )}
-                            />
-
-                            {/* 에러 메시지 */}
-                            {errors.root?.message && (
-                                <ErrorMessage className="text-center mt-2 mb-2">
-                                    {errors.root?.message}
-                                </ErrorMessage>
-                            )}
-
-                            {/* 버튼 영역 */}
-                            <View className="flex-row gap-3 mt-6">
-                                <Button
-                                    wrap={true}
-                                    onPress={onClose}
-                                    variant="outlined"
-                                    color="success">
-                                    취소
-                                </Button>
-                                <Button
-                                    wrap={true}
-                                    onPress={handleSubmit(onSubmit)}
-                                    disabled={isSubmitting}>
-                                    {isSubmitting ? "처리중..." : isEditMode ? "수정" : "등록"}
-                                </Button>
-                            </View>
-                        </ScrollView>
-                    </View>
+                        </View>
+                    )}
                 </KeyboardAvoidingView>
 
                 {/* 선택 리스트 렌더링 */}
                 {renderActiveDropdownList()}
 
-                {/* 드롭다운 열렸을 때 백그라운드 터치 시 닫히도록 하는 투명 막 */}
+                {/* 💡 드롭다운 열렸을 때 백그라운드 터치 시 닫히도록 하는 투명 막 */}
                 {activeDropdown && (
                     <TouchableWithoutFeedback
                         onPress={() => {
