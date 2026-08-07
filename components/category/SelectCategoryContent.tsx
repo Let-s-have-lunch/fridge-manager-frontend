@@ -10,6 +10,8 @@ interface SelectCategoryModalProps {
     onClose: () => void;
     onSelect: (category: Category) => void;
     onAddCategory: () => void;
+
+    onEditCategory: (category: Category) => void;
 }
 
 export default function SelectCategoryContent({
@@ -17,8 +19,10 @@ export default function SelectCategoryContent({
     onClose,
     onSelect,
     onAddCategory,
+    onEditCategory,
 }: SelectCategoryModalProps) {
     const [showCustomCategory, setShowCustomCategory] = useState(false);
+
 
     const defaultCategories = useMemo(
         () => categories.filter(item => item.isDefault),

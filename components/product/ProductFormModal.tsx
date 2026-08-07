@@ -34,14 +34,7 @@ import SelectCategoryContent from "@/components/category/SelectCategoryContent";
 import CreateCategoryContent from "@/components/category/CreateCategoryContent";
 
 // 💡 백엔드 전송 데이터와 UI 표시 텍스트 매핑
-const CATEGORIES = [
-    { label: "채소", value: 1 },
-    { label: "과일", value: 2 },
-    { label: "육류", value: 3 },
-    { label: "수산물", value: 4 },
-    { label: "유제품", value: 5 },
-    { label: "기타", value: 6 },
-];
+
 const UNITS = [
     { label: "개", value: "EA" },
     { label: "g", value: "G" },
@@ -68,12 +61,18 @@ interface Props {
 }
 
 export default function ProductFormModal({ visible, onClose, initialData, onRefresh }: Props) {
-    const [screen, setScreen] = useState<"form" | "selectCategory" | "createCategory">("form");
+    const [screen, setScreen] = useState<"form" | "selectCategory" | "createCategory" | "editCategory" >("form");
 
     const swipeDownHandlers = useSwipeDown(onClose);
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
 
     const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
+
+    const handleEditCategory = (category: Category) => {
+        setSelectedCategory(category);
+        setScreen("editCategory");
+    };
 
     const loadCategories = async () => {
         const result = await categoryApi.getCategoryList();
@@ -208,6 +207,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     const displayCreatedAt = initialData?.createdAt
         ? initialData.createdAt.substring(0, 10)
         : getTodayDate();
+
+
 
     useEffect(() => {
         if (visible) {
@@ -577,6 +578,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     setScreen("form");
                                 }}
                                 onAddCategory={() => setScreen("createCategory")}
+                                onEditCategory={handleEditCategory}
                             />
                         </View>
                     )}
@@ -592,6 +594,28 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 shadowOffset: { width: 0, height: 4 },
                             }}>
                             <CreateCategoryContent
+                                mode="create"
+                                onClose={() => setScreen("selectCategory")}
+                                onComplete={async () => {
+                                    await loadCategories();
+                                    setScreen("selectCategory");
+                                }}
+                            />
+                        </View>
+                    )}
+                    {screen === "editCategory" && (
+                        <View
+                            className="w-[90%] max-w-[420px] bg-white rounded-[28px] overflow-hidden"
+                            style={{
+                                elevation: 12,
+                                shadowColor: "#000",
+                                shadowOpacity: 0.2,
+                                shadowRadius: 12,
+                                shadowOffset: { width: 0, height: 4 },
+                            }}>
+                            <CreateCategoryContent
+                                mode="edit"
+                                category={selectedCategory}
                                 onClose={() => setScreen("selectCategory")}
                                 onComplete={async () => {
                                     await loadCategories();

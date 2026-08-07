@@ -9,20 +9,29 @@ import TextComponent from "@/components/common/text/TextComponent";
 import categoryApi from "@/api/user/categoryApi";
 
 interface Props {
+    mode: "create" | "edit";
+    category?: Category;
+
     onClose: () => void;
     onComplete: () => void;
 }
 
-export default function CreateCategoryContent({ onClose, onComplete }: Props) {
-    const [name, setName] = useState("");
+export default function CreateCategoryContent({ mode, category, onClose, onComplete }: Props) {
+    const [name, setName] = useState(category?.name ?? "");
 
     const handleCreate = async () => {
         if (!name.trim()) return;
 
         try {
-            await categoryApi.createCategory({
-                name,
-            });
+            if (mode === "create") {
+                await categoryApi.createCategory({
+                    name,
+                });
+            } else {
+                await categoryApi.updateCategory(category!.id, {
+                    name,
+                });
+            }
 
             setName("");
             onComplete();
@@ -34,7 +43,7 @@ export default function CreateCategoryContent({ onClose, onComplete }: Props) {
     return (
         <View className="px-6 pt-6 pb-8">
             <Title
-                title="카테고리 추가"
+                title={mode === "create" ? "카테고리 추가" : "카테고리 수정"}
                 forceCenter
                 className="mb-6"
                 textClassName="text-2xl leading-8 text-text-default"
