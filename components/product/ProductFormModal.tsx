@@ -233,7 +233,15 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     const onSubmit = async (data: ProductInputType) => {
         try {
             const { expirationDate, ...prevInput } = data;
-            const formattedExpirationDate = `${expirationDate}T00:00:00Z`;
+            let formattedExpirationDate = expirationDate;
+
+            if (expirationDate && expirationDate.length === 8) {
+                const year = expirationDate.slice(0, 4);
+                const month = expirationDate.slice(4, 6);
+                const day = expirationDate.slice(6, 8);
+
+                formattedExpirationDate = `${year}-${month}-${day}T00:00:00Z`;
+            }
 
             const payload = {
                 ...prevInput,
@@ -299,7 +307,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     const currentLabel =
                                         CATEGORIES.find(c => c.value === value)?.label || "";
                                     return (
-                                        <InputGroup label="카테고리">
+                                        <InputGroup
+                                            label="카테고리"
+                                            errorMessage={errors.categoryId?.message}>
                                             <DropdownSelect
                                                 isOpen={activeDropdown === "category"}
                                                 value={currentLabel}
@@ -319,7 +329,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 control={control}
                                 name="name"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="제품명">
+                                    <InputGroup label="제품명" errorMessage={errors.name?.message}>
                                         <Input
                                             placeholder="제품명을 입력해주세요."
                                             onBlur={onBlur}
@@ -337,7 +347,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                         control={control}
                                         name="quantity"
                                         render={({ field: { onChange, onBlur, value } }) => (
-                                            <InputGroup label="등록수량">
+                                            <InputGroup
+                                                label="등록수량"
+                                                errorMessage={errors.quantity?.message}>
                                                 <Input
                                                     placeholder="0"
                                                     keyboardType="numeric"
@@ -363,7 +375,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                             const currentLabel =
                                                 UNITS.find(u => u.value === value)?.label || "";
                                             return (
-                                                <InputGroup label="단위">
+                                                <InputGroup
+                                                    label="단위"
+                                                    errorMessage={errors.unit?.message}>
                                                     <DropdownSelect
                                                         isOpen={activeDropdown === "unit"}
                                                         value={currentLabel}
@@ -392,7 +406,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     const currentLabel =
                                         STORAGES.find(s => s.value === value)?.label || "";
                                     return (
-                                        <InputGroup label="저장방식">
+                                        <InputGroup
+                                            label="저장방식"
+                                            errorMessage={errors.storageType?.message}>
                                             <DropdownSelect
                                                 isOpen={activeDropdown === "storageType"}
                                                 value={currentLabel}
@@ -425,19 +441,17 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 control={control}
                                 name="expirationDate"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="소비기한">
+                                    <InputGroup
+                                        label="소비기한"
+                                        errorMessage={errors.expirationDate?.message}>
                                         <Input
-                                            placeholder="YYYYMMDD (예: 2026-08-10)"
+                                            placeholder="YYYYMMDD (예: 20260810)"
                                             keyboardType="number-pad"
-                                            maxLength={10}
+                                            maxLength={8} // 👈 하이픈이 빠지므로 10에서 8로 수정
                                             onBlur={onBlur}
                                             onChangeText={text => {
-                                                let cleaned = text.replace(/[^0-9]/g, "");
-                                                if (cleaned.length > 4 && cleaned.length <= 6) {
-                                                    cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
-                                                } else if (cleaned.length > 6) {
-                                                    cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
-                                                }
+                                                // 👈 불필요한 하이픈 로직 제거, 오직 숫자만 추출
+                                                const cleaned = text.replace(/[^0-9]/g, "");
                                                 onChange(cleaned);
                                             }}
                                             value={value}
@@ -454,7 +468,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     const currentLabel =
                                         STATUSES.find(s => s.value === value)?.label || "";
                                     return (
-                                        <InputGroup label="보관상태">
+                                        <InputGroup
+                                            label="보관상태"
+                                            errorMessage={errors.status?.message}>
                                             <DropdownSelect
                                                 isOpen={activeDropdown === "status"}
                                                 value={currentLabel}
@@ -474,7 +490,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 control={control}
                                 name="price"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="가격">
+                                    <InputGroup label="가격" errorMessage={errors.price?.message}>
                                         <Input
                                             placeholder="0"
                                             keyboardType="numeric"
@@ -497,7 +513,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 control={control}
                                 name="memo"
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <InputGroup label="메모">
+                                    <InputGroup label="메모" errorMessage={errors.memo?.message}>
                                         <Input
                                             placeholder="메모를 입력해주세요."
                                             onBlur={onBlur}
