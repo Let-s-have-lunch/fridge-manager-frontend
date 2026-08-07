@@ -7,13 +7,14 @@ import {
     FlatList,
     useWindowDimensions,
     Pressable,
+    Image, // 👈 Image 컴포넌트 임포트 추가
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import TextComponent from "@/components/common/text/TextComponent";
 import { ExpirationListItem } from "@/types/statistic";
 import { useSwipeDown } from "@/hooks/useSwipeDown";
 import { twMerge } from "tailwind-merge";
-import Button from "@/components/common/button/Button";
+import { CategoryIconKey, categoryIcons } from "@/constants/categoryIcons"; // 👈 카테고리 아이콘 임포트 추가
 
 interface Props {
     visible: boolean;
@@ -36,42 +37,47 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
     const itemBorderColor = isExpiring ? "border-warning-border" : "border-error-border";
 
     // 1. 리스트 아이템 렌더링 함수
-    const renderItem = ({ item }: { item: ExpirationListItem }) => (
-        <View
-            className={twMerge(
-                "flex-row items-center p-4 mb-3 border rounded-[20px]",
-                itemBgColor,
-                itemBorderColor,
-            )}>
+    const renderItem = ({ item }: { item: ExpirationListItem }) => {
+        // 💡 백엔드에서 내려온 icon 값을 이용해 이미지 소스 매핑 (실패 시 기본 tag)
+        const iconKey = item.icon as CategoryIconKey;
+        const imageSource = categoryIcons[iconKey] ?? categoryIcons.tag;
+
+        return (
             <View
                 className={twMerge(
-                    "w-12 h-12 bg-bg-paper rounded-xl items-center justify-center mr-4",
+                    "flex-row items-center p-4 mb-3 border rounded-[20px]",
+                    itemBgColor,
+                    itemBorderColor,
                 )}>
-                <MaterialCommunityIcons
-                    name={item.icon as any}
-                    size={24}
-                    className={twMerge("text-text-secondary")}
-                />
+                <View
+                    className={twMerge(
+                        "bg-bg-paper rounded-xl items-center justify-center mr-4 overflow-hidden",
+                    )}>
+                    {/* 💡 MaterialCommunityIcons 대신 Image로 교체 */}
+                    <Image
+                        source={imageSource}
+                        style={{ width: 50, height: 50 }}
+                        resizeMode="contain"
+                    />
+                </View>
+                <View className={twMerge("flex-1")}>
+                    <TextComponent className={twMerge("text-lg font-bold text-text-default mb-1")}>
+                        {item.name}
+                    </TextComponent>
+                    <TextComponent className={twMerge("text-[15px] text-text-secondary")}>
+                        {new Date(item.expirationDate).toISOString().split("T")[0]} 까지
+                    </TextComponent>
+                </View>
             </View>
-            <View className={twMerge("flex-1")}>
-                <TextComponent className={twMerge("text-lg font-bold text-text-default mb-1")}>
-                    {item.name}
-                </TextComponent>
-                <TextComponent className={twMerge("text-[15px] text-text-secondary")}>
-                    {new Date(item.expirationDate).toISOString().split("T")[0]} 까지
-                </TextComponent>
-            </View>
-        </View>
-    );
+        );
+    };
 
     return (
         <Modal
             visible={visible}
             transparent={true}
             animationType={isMd ? "fade" : "slide"}
-            onRequestClose={onClose} // 안드로이드 물리 뒤로가기 버튼 처리
-        >
-            {/* 1. 반투명 배경 (누르면 모달 닫힘) */}
+            onRequestClose={onClose}>
             <TouchableWithoutFeedback onPress={onClose}>
                 <View
                     className={twMerge(
@@ -82,7 +88,6 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                             className={twMerge(
                                 "bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0",
                             )}>
-                            {/* 헤더: 타이틀과 닫기 버튼 */}
                             {!isMd && (
                                 <View
                                     {...swipeDownHandlers}
@@ -102,6 +107,7 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                             )}
                             <View className={twMerge("flex-row justify-between items-center mb-6")}>
                                 <View className={twMerge("flex-row items-center gap-2")}>
+                                    {/* 💡 타이틀 옆의 아이콘도 필요시 이미지로 변경 가능 (현재는 기존 유지 또는 tag 적용 가능) */}
                                     <Feather
                                         name={isExpiring ? "clock" : "alert-triangle"}
                                         size={22}
@@ -124,7 +130,6 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                 </TouchableOpacity>
                             </View>
 
-                            {/* 컨텐츠 영역: 데이터가 있을 때와 없을 때를 구분 */}
                             {data.length > 0 ? (
                                 <FlatList
                                     data={data}
@@ -134,7 +139,6 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                     contentContainerStyle={{ paddingBottom: 20 }}
                                 />
                             ) : (
-                                /* 데이터가 0개일 때의 똑똑한 빈 화면 (Empty State) 처리 */
                                 <View
                                     className={twMerge("flex-1 items-center justify-center py-10")}>
                                     <Feather
