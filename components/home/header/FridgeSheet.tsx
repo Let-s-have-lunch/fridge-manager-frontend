@@ -36,6 +36,12 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
         useImperativeHandle(ref, () => {
             return {
                 present: () => {
+                    if (mode === "edit" && fridge) {
+                        reset({ name: fridge.name });
+                    } else {
+                        reset({ name: "" });
+                    }
+
                     if (isMd) {
                         setIsModalVisible(true);
                     } else {
