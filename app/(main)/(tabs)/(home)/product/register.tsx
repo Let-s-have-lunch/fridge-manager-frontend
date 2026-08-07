@@ -17,8 +17,8 @@ import TextComponent from "@/components/common/text/TextComponent";
 import { useEffect, } from "react";
 import { Category } from "@/types/category";
 import categoryApi from "@/api/user/categoryApi";
-import SelectCategoryModal from "@/components/category/SelectCategoryModal";
-import CreateCategoryModal from "@/components/category/CreateCategoryModal";
+import SelectCategoryContent from "@/components/category/SelectCategoryContent";
+import CreateCategoryContent from "@/components/category/CreateCategoryContent";
 import DropdownSelect from "@/components/common/input/DropdownSelect";
 
 import productApi from "@/api/user/productApi";
@@ -405,7 +405,7 @@ export default function RegisterScreen() {
                     <View className="absolute inset-0 z-[999]" pointerEvents="auto" />
                 </TouchableWithoutFeedback>
             )}
-            <SelectCategoryModal
+            <SelectCategoryContent
                 visible={categoryModalVisible}
                 categories={categories}
                 onClose={() => setCategoryModalVisible(false)}
