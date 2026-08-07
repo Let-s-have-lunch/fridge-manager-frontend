@@ -12,16 +12,16 @@ export default function MainLayout() {
     return (
         /* 바깥쪽 전체 배경 판 */
         <View className="flex-1 w-full items-center bg-bg-default">
-            {/* 1. 모바일용 헤더 (768px 미만 && showMainHeader가 true일 때만 노출) */}
+            {/* 1. 모바일/태블릿용 헤더 (1024px 미만 && showMainHeader가 true일 때만 노출) */}
             {showMainHeader && (
-                <View className="md:hidden w-full">
+                <View className="lg:hidden w-full">
                     <MainHeader />
                 </View>
             )}
 
-            {/* 2. 데스크탑용 헤더 (768px 이상 && showDesktopHeader가 true일 때만 노출) */}
+            {/* 2. 데스크탑용 헤더 (1024px 이상 && showDesktopHeader가 true일 때만 노출) */}
             {showDesktopHeader && (
-                <View className="hidden md:flex w-full">
+                <View className="hidden lg:flex w-full">
                     <MainDesktopHeader />
                 </View>
             )}
@@ -37,8 +37,9 @@ export default function MainLayout() {
                 <Slot />
             </View>
 
+            {/* 푸터도 헤더 기준과 동일하게 lg:hidden으로 맞춤 */}
             {showMainFooter && (
-                <View className="md:hidden w-full">
+                <View className="lg:hidden w-full">
                     <MainFooter />
                 </View>
             )}
