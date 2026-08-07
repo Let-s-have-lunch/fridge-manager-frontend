@@ -17,23 +17,20 @@ import { isAxiosError } from "axios";
 
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
-import Input from "@/components/common/input/Input"; // 👈 Input 추가
-import DropdownSelect from "@/components/common/input/DropdownSelect"; // 👈 팀원 컴포넌트 추가
+import DropdownSelect from "@/components/common/input/DropdownSelect";
 import Button from "@/components/common/button/Button";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import TextComponent from "@/components/common/text/TextComponent";
+import Input from "@/components/common/input/Input";
 
-import { useSwipeDown } from "@/hooks/useSwipeDown";
 import { productSchema, ProductInputType } from "@/schemas/user/productSchema";
 import { useHomeStore } from "@/stores/home/productStore";
 import { ProductDetailItemType } from "@/types/product";
 import productApi from "@/api/user/productApi";
-import { Category } from "@/types/category";
 import categoryApi from "@/api/user/categoryApi";
-import SelectCategoryContent from "@/components/category/SelectCategoryContent";
+import { Category } from "@/types/category";
 import CreateCategoryContent from "@/components/category/CreateCategoryContent";
-
-// 💡 백엔드 전송 데이터와 UI 표시 텍스트 매핑
+import SelectCategoryContent from "@/components/category/SelectCategoryContent";
 
 const UNITS = [
     { label: "개", value: "EA" },
@@ -49,7 +46,7 @@ const STORAGES = [
 ];
 const STATUSES = [
     { label: "보관", value: "STORED" },
-    { label: "소비", value: "CONSUMED" },
+    { label: "소비 완료", value: "CONSUMED" },
     { label: "폐기", value: "DISCARDED" },
 ];
 
@@ -61,22 +58,27 @@ interface Props {
 }
 
 export default function ProductFormModal({ visible, onClose, initialData, onRefresh }: Props) {
-    const [screen, setScreen] = useState<"form" | "selectCategory" | "createCategory" | "editCategory" >("form");
+    const [screen, setScreen] = useState<"form" | "selectCategory" | "createCategory">("form");
 
-    const swipeDownHandlers = useSwipeDown(onClose);
+    // 💡 카테고리 모드 및 수정 대상 카테고리 상태 추가
+    const [categoryMode, setCategoryMode] = useState<"create" | "edit">("create");
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+
     const selectedFridgeId = useHomeStore(state => state.selectedFridgeId);
 
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
+    // 드롭다운 상태 관리
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [dropdownLayout, setDropdownLayout] = useState<LayoutRectangle | null>(null);
 
-    const handleEditCategory = (category: Category) => {
-        setSelectedCategory(category);
-        setScreen("editCategory");
-    };
+    const [categories, setCategories] = useState<Category[]>([]);
 
     const loadCategories = async () => {
-        const result = await categoryApi.getCategoryList();
-        setCategories(result);
+        try {
+            const result = await categoryApi.getCategoryList();
+            setCategories(result);
+        } catch (error) {
+            console.error("카테고리 로드 실패:", error);
+        }
     };
 
     useEffect(() => {
@@ -84,10 +86,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
             loadCategories();
         }
     }, [visible]);
-
-    // 드롭다운 상태 관리
-    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-    const [dropdownLayout, setDropdownLayout] = useState<LayoutRectangle | null>(null);
 
     const {
         control,
@@ -102,7 +100,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         defaultValues: {
             name: "",
             memo: "",
-            categoryId: 1, // 기본값 채소
+            categoryId: 1, // 기본값
             storageType: "REFRIGERATED",
             quantity: 1,
             unit: "EA",
@@ -119,7 +117,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     const handleDropdownChange = useCallback(
         (id: string, isOpen: boolean, layout?: LayoutRectangle) => {
             if (isOpen) {
-                Keyboard.dismiss(); // 드롭다운 열 때 키보드 닫기
+                Keyboard.dismiss();
                 setActiveDropdown(id);
                 setDropdownLayout(layout || null);
             } else if (activeDropdown === id) {
@@ -138,7 +136,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         let onSelect: (value: any) => void = () => {};
         let currentValue: any = "";
 
-        // 현재 열려있는 드롭다운 식별 및 매핑
         switch (activeDropdown) {
             case "unit":
                 options = UNITS;
@@ -196,7 +193,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                 </ScrollView>
             </View>
         );
-    }, [activeDropdown, dropdownLayout, watch, setValue]);
+    }, [activeDropdown, dropdownLayout, watch, setValue, categories]);
 
     const getTodayDate = () => {
         const today = new Date();
@@ -210,12 +207,12 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         ? initialData.createdAt.substring(0, 10)
         : getTodayDate();
 
-
-
     useEffect(() => {
         if (visible) {
             if (initialData) {
-                const formattedDate = initialData.expirationDate.substring(0, 10).replace(/-/g, "");
+                const formattedDate = initialData.expirationDate
+                    ? initialData.expirationDate.substring(0, 10).replace(/-/g, "")
+                    : "";
                 reset({
                     name: initialData.name,
                     memo: initialData.memo || "",
@@ -243,12 +240,14 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
         } else {
             setActiveDropdown(null);
             setDropdownLayout(null);
+            setScreen("form");
+            setCategoryMode("create");
+            setEditingCategory(null);
         }
     }, [visible, initialData, reset]);
 
     const onSubmit = async (data: ProductInputType) => {
         try {
-            // 👇 data에서 price도 따로 분리(구조분해할당)해서 꺼내줍니다.
             const { expirationDate, price, ...prevInput } = data;
             let formattedExpirationDate = expirationDate;
 
@@ -263,7 +262,6 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
             const payload = {
                 ...prevInput,
                 expirationDate: formattedExpirationDate,
-                // 👇 백엔드로 보낼 때, price가 null이면 undefined로 바꿔서 전송 항목에서 아예 제외시킵니다!
                 price: price === null ? undefined : price,
             };
 
@@ -291,36 +289,34 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
     };
 
     return (
-        <Modal visible={visible} transparent animationType="fade">
-            <View className="flex-1 items-center justify-center bg-black/50">
+        <Modal visible={visible} transparent={true} animationType={"fade"} onRequestClose={onClose}>
+            <View className="flex-1 justify-center items-center bg-black/50">
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : undefined}
-                    className="flex-1 w-full items-center justify-center">
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    className="flex-1 w-full justify-center items-center">
                     <TouchableWithoutFeedback onPress={onClose}>
                         <View className="absolute inset-0" />
                     </TouchableWithoutFeedback>
 
                     {screen === "form" && (
-                        <View
-                            className="w-[90%] max-w-[480px] max-h-[75%] bg-bg-default rounded-[28px] px-6 pt-6 pb-8"
-                            style={{
-                                elevation: 12,
-                                shadowColor: "#000",
-                                shadowOpacity: 0.2,
-                                shadowRadius: 12,
-                                shadowOffset: { width: 0, height: 4 },
-                            }}>
+                        <View className="w-[90%] max-w-[480px] max-h-[85%] px-6 pt-8 pb-12 bg-bg-default rounded-[36px] z-10">
                             <Title
                                 title={isEditMode ? "식재료 수정" : "식재료 추가"}
                                 className="h-auto pb-4 mb-4"
-                                textClassName="text-2xl text-center text-text-default"
+                                textClassName={"text-2xl"}
                             />
 
                             <ScrollView
                                 showsVerticalScrollIndicator={false}
                                 keyboardShouldPersistTaps="handled"
+                                onScrollBeginDrag={() => {
+                                    if (activeDropdown) {
+                                        setActiveDropdown(null);
+                                        setDropdownLayout(null);
+                                    }
+                                }}
                                 contentContainerStyle={{ paddingBottom: 20 }}>
-                                {/* 1. 카테고리 (Dropdown) */}
+                                {/* 1. 카테고리 선택 */}
                                 <Controller
                                     control={control}
                                     name="categoryId"
@@ -347,39 +343,41 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     control={control}
                                     name="name"
                                     render={({ field: { onChange, onBlur, value } }) => (
-                                        <InputGroup label="제품명">
-                                            <Input
-                                                placeholder="제품명을 입력해주세요."
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                        </InputGroup>
+                                        <InputGroup
+                                            label="제품명"
+                                            errorMessage={errors.name?.message}
+                                            placeholder="제품명을 입력해주세요."
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                        />
                                     )}
                                 />
 
-                                {/* 3. 등록수량 & 단위 (반반 배치) */}
+                                {/* 3. 등록수량 & 단위 */}
                                 <View className="flex-row gap-3">
                                     <View className="flex-1">
                                         <Controller
                                             control={control}
                                             name="quantity"
                                             render={({ field: { onChange, onBlur, value } }) => (
-                                                <InputGroup label="등록수량">
-                                                    <Input
-                                                        placeholder="0"
-                                                        keyboardType="numeric"
-                                                        onBlur={onBlur}
-                                                        onChangeText={text => {
-                                                            const num = parseInt(
-                                                                text.replace(/[^0-9]/g, ""),
-                                                                10,
-                                                            );
-                                                            onChange(isNaN(num) ? undefined : num);
-                                                        }}
-                                                        value={value?.toString()}
-                                                    />
-                                                </InputGroup>
+                                                <InputGroup
+                                                    label="등록수량"
+                                                    errorMessage={errors.quantity?.message}
+                                                    placeholder="0"
+                                                    keyboardType="numeric"
+                                                    onBlur={onBlur}
+                                                    onChangeText={text => {
+                                                        const cleaned = text.replace(/[^0-9]/g, "");
+                                                        if (cleaned === "") {
+                                                            onChange("");
+                                                        } else {
+                                                            onChange(parseInt(cleaned, 10));
+                                                        }
+                                                    }}
+                                                    value={value?.toString() ?? ""}
+                                                    selectTextOnFocus={true}
+                                                />
                                             )}
                                         />
                                     </View>
@@ -391,7 +389,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                                 const currentLabel =
                                                     UNITS.find(u => u.value === value)?.label || "";
                                                 return (
-                                                    <InputGroup label="단위">
+                                                    <InputGroup
+                                                        label="단위"
+                                                        errorMessage={errors.unit?.message}>
                                                         <DropdownSelect
                                                             isOpen={activeDropdown === "unit"}
                                                             value={currentLabel}
@@ -412,7 +412,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     </View>
                                 </View>
 
-                                {/* 4. 저장방식 (Dropdown) */}
+                                {/* 4. 저장방식 */}
                                 <Controller
                                     control={control}
                                     name="storageType"
@@ -420,7 +420,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                         const currentLabel =
                                             STORAGES.find(s => s.value === value)?.label || "";
                                         return (
-                                            <InputGroup label="저장방식">
+                                            <InputGroup
+                                                label="저장방식"
+                                                errorMessage={errors.storageType?.message}>
                                                 <DropdownSelect
                                                     isOpen={activeDropdown === "storageType"}
                                                     value={currentLabel}
@@ -439,42 +441,36 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     }}
                                 />
 
-                                {/* 5. 등록일 (읽기 전용) */}
-                                <InputGroup label="등록일">
-                                    <Input
-                                        value={displayCreatedAt}
-                                        editable={false}
-                                        style={{ color: "#777777" }}
-                                    />
-                                </InputGroup>
+                                {/* 5. 등록일 */}
+                                <InputGroup
+                                    label="등록일"
+                                    value={displayCreatedAt}
+                                    editable={false}
+                                    style={{ color: "#777777" }}
+                                />
 
                                 {/* 6. 소비기한 */}
                                 <Controller
                                     control={control}
                                     name="expirationDate"
                                     render={({ field: { onChange, onBlur, value } }) => (
-                                        <InputGroup label="소비기한">
-                                            <Input
-                                                placeholder="YYYYMMDD (예: 2026-08-10)"
-                                                keyboardType="number-pad"
-                                                maxLength={10}
-                                                onBlur={onBlur}
-                                                onChangeText={text => {
-                                                    let cleaned = text.replace(/[^0-9]/g, "");
-                                                    if (cleaned.length > 4 && cleaned.length <= 6) {
-                                                        cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
-                                                    } else if (cleaned.length > 6) {
-                                                        cleaned = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
-                                                    }
-                                                    onChange(cleaned);
-                                                }}
-                                                value={value}
-                                            />
-                                        </InputGroup>
+                                        <InputGroup
+                                            label="소비기한"
+                                            errorMessage={errors.expirationDate?.message}
+                                            placeholder="YYYYMMDD (예: 20260810)"
+                                            keyboardType="number-pad"
+                                            maxLength={8}
+                                            onBlur={onBlur}
+                                            onChangeText={text => {
+                                                const cleaned = text.replace(/[^0-9]/g, "");
+                                                onChange(cleaned);
+                                            }}
+                                            value={value}
+                                        />
                                     )}
                                 />
 
-                                {/* 7. 보관상태 (Dropdown) */}
+                                {/* 7. 보관상태 */}
                                 <Controller
                                     control={control}
                                     name="status"
@@ -482,7 +478,9 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                         const currentLabel =
                                             STATUSES.find(s => s.value === value)?.label || "";
                                         return (
-                                            <InputGroup label="보관상태">
+                                            <InputGroup
+                                                label="보관상태"
+                                                errorMessage={errors.status?.message}>
                                                 <DropdownSelect
                                                     isOpen={activeDropdown === "status"}
                                                     value={currentLabel}
@@ -506,21 +504,23 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     control={control}
                                     name="price"
                                     render={({ field: { onChange, onBlur, value } }) => (
-                                        <InputGroup label="가격">
-                                            <Input
-                                                placeholder="0"
-                                                keyboardType="numeric"
-                                                onBlur={onBlur}
-                                                onChangeText={text => {
-                                                    const num = parseInt(
-                                                        text.replace(/[^0-9]/g, ""),
-                                                        10,
-                                                    );
-                                                    onChange(isNaN(num) ? undefined : num);
-                                                }}
-                                                value={value?.toString()}
-                                            />
-                                        </InputGroup>
+                                        <InputGroup
+                                            label="가격"
+                                            errorMessage={errors.price?.message}
+                                            placeholder="0"
+                                            keyboardType="numeric"
+                                            onBlur={onBlur}
+                                            onChangeText={text => {
+                                                const cleaned = text.replace(/[^0-9]/g, "");
+                                                if (cleaned === "") {
+                                                    onChange(null);
+                                                } else {
+                                                    onChange(parseInt(cleaned, 10));
+                                                }
+                                            }}
+                                            value={value?.toString() ?? ""}
+                                            selectTextOnFocus={true}
+                                        />
                                     )}
                                 />
 
@@ -529,16 +529,16 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     control={control}
                                     name="memo"
                                     render={({ field: { onChange, onBlur, value } }) => (
-                                        <InputGroup label="메모">
-                                            <Input
-                                                placeholder="메모를 입력해주세요."
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                                multiline={true}
-                                                style={{ height: 120, textAlignVertical: "top" }}
-                                            />
-                                        </InputGroup>
+                                        <InputGroup
+                                            label="메모"
+                                            errorMessage={errors.memo?.message}
+                                            placeholder="메모를 입력해주세요."
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                            multiline={true}
+                                            style={{ height: 120, textAlignVertical: "top" }}
+                                        />
                                     )}
                                 />
 
@@ -568,6 +568,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                             </ScrollView>
                         </View>
                     )}
+
                     {screen === "selectCategory" && (
                         <View
                             className="w-[90%] max-w-[520px] max-h-[80%] bg-white rounded-[28px] overflow-hidden"
@@ -586,11 +587,18 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                         shouldDirty: true,
                                         shouldValidate: true,
                                     });
-
                                     setScreen("form");
                                 }}
-                                onAddCategory={() => setScreen("createCategory")}
-                                onEditCategory={handleEditCategory}
+                                onAddCategory={() => {
+                                    setCategoryMode("create");
+                                    setEditingCategory(null);
+                                    setScreen("createCategory");
+                                }}
+                                onEditCategory={category => {
+                                    setCategoryMode("edit");
+                                    setEditingCategory(category);
+                                    setScreen("createCategory");
+                                }}
                             />
                         </View>
                     )}
@@ -606,31 +614,15 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 shadowOffset: { width: 0, height: 4 },
                             }}>
                             <CreateCategoryContent
-                                mode="create"
-                                onClose={() => setScreen("selectCategory")}
-                                onComplete={async () => {
-                                    await loadCategories();
+                                mode={categoryMode}
+                                category={editingCategory ?? undefined}
+                                onClose={() => {
+                                    setEditingCategory(null);
                                     setScreen("selectCategory");
                                 }}
-                            />
-                        </View>
-                    )}
-                    {screen === "editCategory" && (
-                        <View
-                            className="w-[90%] max-w-[420px] bg-white rounded-[28px] overflow-hidden"
-                            style={{
-                                elevation: 12,
-                                shadowColor: "#000",
-                                shadowOpacity: 0.2,
-                                shadowRadius: 12,
-                                shadowOffset: { width: 0, height: 4 },
-                            }}>
-                            <CreateCategoryContent
-                                mode="edit"
-                                category={selectedCategory}
-                                onClose={() => setScreen("selectCategory")}
                                 onComplete={async () => {
                                     await loadCategories();
+                                    setEditingCategory(null);
                                     setScreen("selectCategory");
                                 }}
                             />
@@ -638,19 +630,19 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     )}
                 </KeyboardAvoidingView>
 
-                {/* 선택 리스트 렌더링 */}
-                {renderActiveDropdownList()}
-
-                {/* 💡 드롭다운 열렸을 때 백그라운드 터치 시 닫히도록 하는 투명 막 */}
+                {/* 드롭다운 바깥 레이어 클릭 시 닫기 */}
                 {activeDropdown && (
                     <TouchableWithoutFeedback
                         onPress={() => {
                             setActiveDropdown(null);
                             setDropdownLayout(null);
                         }}>
-                        <View className="absolute inset-0 z-[999]" pointerEvents="auto" />
+                        <View className="absolute inset-0 z-[9990]" pointerEvents="auto" />
                     </TouchableWithoutFeedback>
                 )}
+
+                {/* 선택 리스트 렌더링 */}
+                {renderActiveDropdownList()}
             </View>
         </Modal>
     );
