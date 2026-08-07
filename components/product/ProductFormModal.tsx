@@ -148,7 +148,8 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
         return (
             <View
-                className="absolute z-[9999] rounded-[10px] border border-gray-200 bg-white shadow-xl"
+                // 👇 bg-white를 bg-bg-default로 변경하고, border 색상도 테마에 맞게 조정
+                className="absolute z-[9999] rounded-[10px] border border-gray-200 dark:border-gray-700 bg-bg-default shadow-xl overflow-hidden"
                 style={{
                     top: dropdownLayout.y,
                     left: dropdownLayout.x,
@@ -160,11 +161,14 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                     {options.map((option, index) => (
                         <Pressable
                             key={index}
+                            // 👇 밑줄 색상도 다크모드일 때 너무 밝지 않게 조정 (필요시 tailwind 설정에 맞춰 변경)
                             className={`px-4 py-3 ${
-                                index !== options.length - 1 ? "border-b border-gray-100" : ""
+                                index !== options.length - 1
+                                    ? "border-b border-gray-100 dark:border-gray-700"
+                                    : ""
                             }`}
                             onPress={() => {
-                                onSelect(option.value); // React Hook Form에 값 세팅!
+                                onSelect(option.value);
                                 setActiveDropdown(null);
                                 setDropdownLayout(null);
                             }}>
@@ -172,7 +176,7 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                 className={`text-[15px] ${
                                     currentValue === option.value
                                         ? "font-bold text-primary-main"
-                                        : "text-text-default"
+                                        : "text-text-default" // 👈 이제 배경이 어두워졌으니 이 텍스트 색상이 정상적으로 보일 겁니다!
                                 }`}>
                                 {option.label}
                             </TextComponent>
