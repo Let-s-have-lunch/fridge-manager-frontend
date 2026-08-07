@@ -52,7 +52,7 @@ const STORAGES = [
 ];
 const STATUSES = [
     { label: "보관", value: "STORED" },
-    { label: "소비 완료", value: "CONSUMED" },
+    { label: "소비", value: "CONSUMED" },
     { label: "폐기", value: "DISCARDED" },
 ];
 
@@ -265,19 +265,27 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
 
     return (
         <Modal visible={visible} transparent={true} animationType={"fade"} onRequestClose={onClose}>
-            <View className="flex-1 justify-end bg-black/50 md:justify-center md:items-center">
+            <View className="flex-1 justify-center items-center bg-black/50">
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1 w-full justify-end md:justify-center md:items-center">
+                    className="flex-1 w-full justify-center items-center">
                     <TouchableWithoutFeedback onPress={onClose}>
                         <View className="absolute inset-0" />
                     </TouchableWithoutFeedback>
 
-                    <View className="w-full max-h-[85%] px-6 pt-4 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[480px] md:max-h-[90%] md:pt-8 md:rounded-[36px] z-10">
+                    <View
+                        className="w-[90%] max-w-[480px] max-h-[75%] px-6 pt-6 pb-8 bg-bg-default rounded-[28px] z-10"
+                        style={{
+                            elevation: 12,
+                            shadowColor: "#000",
+                            shadowOpacity: 0.2,
+                            shadowRadius: 12,
+                            shadowOffset: { width: 0, height: 4 },
+                        }}>
                         <Title
                             title={isEditMode ? "식재료 수정" : "식재료 추가"}
                             className="h-auto pb-4 mb-4"
-                            textClassName={"text-2xl"}
+                            textClassName={"text-2xl text-center text-text-default"}
                         />
 
                         <ScrollView
