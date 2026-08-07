@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback } from "react";
 import { View, Pressable, ScrollView, LayoutRectangle, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "@/components/common/input/Input";
-import TextComponent from "@/components/common/text/TextComponent";
 
 interface DropdownSelectProps {
     value: string;
@@ -16,18 +15,11 @@ interface DropdownSelectProps {
 
 export default function DropdownSelect({
     value,
-    options,
-    onSelect,
     placeholder = "선택해주세요",
     onOpenChange,
     isOpen,
 }: DropdownSelectProps) {
     const containerRef = useRef<View>(null); // 자신의 위치를 측정하기 위한 ref
-
-    const handleSelect = (option: string) => {
-        onSelect(option);
-        onOpenChange(false); // 선택 시 닫기
-    };
 
     const handleToggle = useCallback(() => {
         if (!isOpen) {
