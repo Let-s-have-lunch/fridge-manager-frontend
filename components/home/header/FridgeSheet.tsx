@@ -33,32 +33,6 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
         const [isModalVisible, setIsModalVisible] = useState(false);
         const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-        useImperativeHandle(ref, () => {
-            return {
-                present: () => {
-                    if (mode === "edit" && fridge) {
-                        reset({ name: fridge.name });
-                    } else {
-                        reset({ name: "" });
-                    }
-
-                    if (isMd) {
-                        setIsModalVisible(true);
-                    } else {
-                        bottomSheetRef.current?.present();
-                    }
-                },
-                dismiss: () => {
-                    setIsModalVisible(false);
-                    bottomSheetRef.current?.dismiss();
-                },
-                close: () => {
-                    setIsModalVisible(false);
-                    bottomSheetRef.current?.close();
-                },
-            } as unknown as BottomSheetModal;
-        }, [isMd]);
-
         const snapPoints = useMemo(() => ["55%"], []);
 
         const {
@@ -73,6 +47,35 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 name: "",
             },
         });
+
+        useImperativeHandle(
+            ref,
+            () =>
+                ({
+                    present: () => {
+                        if (mode === "edit" && fridge) {
+                            reset({ name: fridge.name });
+                        } else {
+                            reset({ name: "" });
+                        }
+
+                        if (isMd) {
+                            setIsModalVisible(true);
+                        } else {
+                            bottomSheetRef.current?.present();
+                        }
+                    },
+                    dismiss: () => {
+                        setIsModalVisible(false);
+                        bottomSheetRef.current?.dismiss();
+                    },
+                    close: () => {
+                        setIsModalVisible(false);
+                        bottomSheetRef.current?.close();
+                    },
+                }) as unknown as BottomSheetModal,
+            [mode, fridge, isMd, reset],
+        );
 
         const theme = useThemeStore(state => state.theme);
         const isDarkMode = theme === "dark";
