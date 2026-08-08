@@ -9,40 +9,37 @@ import React, { useEffect, useState } from "react";
 import shoppingListApi from "@/api/user/shoppingListApi";
 import {
     Alert,
-    KeyboardAvoidingView,
     Modal,
     Platform,
     Pressable,
+    Text,
     TouchableWithoutFeedback,
-    useWindowDimensions,
     View,
 } from "react-native";
-import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
-import Button from "@/components/common/button/Button";
-import { useSwipeDown } from "@/hooks/useSwipeDown";
+import { useThemeStore } from "@/stores/theme/useThemeStore";
 
 interface Props {
     visible: boolean;
     onClose: () => void;
     targetDate: string;
     initialData: ShoppingItem | null;
-    onRefresh: () => Promise<void>;
+    onRefresh: () => Promise<any>;
 }
 
 export default function ShoppingListFormModal({
-                                                  visible,
-                                                  onClose,
-                                                  targetDate,
-                                                  initialData,
-                                                  onRefresh,
-                                              }: Props) {
-    const { width } = useWindowDimensions();
-    const isMd = width >= 768;
-
-    const swipeDownHandlers = useSwipeDown(onClose);
-
+    visible,
+    onClose,
+    targetDate,
+    initialData,
+    onRefresh,
+}: Props) {
     const [isEditMode, setIsEditMode] = useState(false);
+
+    const theme = useThemeStore(state => state.theme);
+    const isDarkMode = theme === "dark";
+
+    const bgColor = isDarkMode ? "#3A3532" : "#FFFFFF";
 
     const {
         control,
@@ -51,13 +48,16 @@ export default function ShoppingListFormModal({
         formState: { errors, isSubmitting },
     } = useForm<ShoppingListFormInputType>({
         resolver: zodResolver(shoppingListFormSchema),
-        defaultValues: { memo: "" },
+        defaultValues: {
+            memo: "",
+        },
         mode: "onTouched",
     });
 
     useEffect(() => {
         if (visible) {
             setIsEditMode(!!initialData);
+
             reset({
                 memo: initialData?.memo || "",
             });
@@ -66,6 +66,7 @@ export default function ShoppingListFormModal({
 
     const onSubmit = async (data: ShoppingListFormInputType) => {
         const [year, month, day] = targetDate.split("-").map(Number);
+
         const finalDate = new Date(year, month - 1, day, 0, 0, 0, 0);
 
         const payload = {
@@ -79,12 +80,14 @@ export default function ShoppingListFormModal({
             } else {
                 await shoppingListApi.createShoppingItem(payload);
             }
+
             await onRefresh();
             onClose();
         } catch (error) {
             console.log(error);
 
             const errorKeyword = isEditMode ? "수정" : "저장";
+
             if (Platform.OS === "web") {
                 alert(`${errorKeyword} 중 문제가 발생했습니다.`);
             } else {
@@ -93,42 +96,45 @@ export default function ShoppingListFormModal({
         }
     };
 
+    const handleClose = () => {
+        reset({
+            memo: "",
+        });
+        onClose();
+    };
+
     return (
         <Modal
             visible={visible}
             transparent={true}
-            animationType={isMd ? "fade" : "slide"}
-            onRequestClose={onClose}>
-            <TouchableWithoutFeedback onPress={onClose}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1 justify-end bg-black/50 md:justify-center md:items-center">
+            animationType="fade"
+            onRequestClose={handleClose}>
+            {/* 바깥 영역 */}
+            <TouchableWithoutFeedback onPress={handleClose}>
+                <View className="flex-1 items-center justify-center bg-black/50">
+                    {/* 모달 카드 */}
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
-                        <View className="w-full min-h-[50%] px-6 pt-4 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[450px] md:min-h-0 md:pt-8 md:rounded-[36px]">
-                            {!isMd && (
-                                <View
-                                    {...swipeDownHandlers}
-                                    className="w-full items-center pb-6 -mt-2">
-                                    <Pressable
-                                        onPress={onClose}
-                                        className="w-full items-center cursor-pointer py-2">
-                                        <View className="w-12 h-1.5 bg-gray-400 rounded-full" />
-                                    </Pressable>
-                                </View>
-                            )}
+                        <View
+                            style={{
+                                backgroundColor: bgColor,
+                            }}
+                            className="w-[calc(100%-48px)] max-w-[400px] rounded-[32px] px-6 pt-8 pb-8 shadow-lg">
+                            {/* 제목 */}
+                            <Text className="mb-8 text-center text-[23px] font-bold text-text-default">
+                                {isEditMode ? "일정 수정" : "일정 등록"}
+                            </Text>
 
-                            <Title
-                                title={isEditMode ? "일정 수정" : "일정 등록"}
-                                className="h-auto pb-6 mb-6"
-                                textClassName={"text-2xl"}
-                            />
+                            {/* 라벨 */}
+                            <Text className="mb-3 text-[16px] font-semibold text-text-default">
+                                제품명
+                            </Text>
 
+                            {/* 입력 */}
                             <Controller
                                 control={control}
                                 name="memo"
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <InputGroup
-                                        label="제품명"
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
@@ -139,20 +145,33 @@ export default function ShoppingListFormModal({
                                 )}
                             />
 
-                            <View className="flex-row gap-3 mt-6">
-                                <Button wrap={true} onPress={onClose} color={"success"}>
-                                    취소
-                                </Button>
-                                <Button
-                                    wrap={true}
+                            {/* 버튼 */}
+                            <View className="mt-6 flex-row gap-4">
+                                {/* 취소 */}
+                                <Pressable
+                                    onPress={handleClose}
+                                    disabled={isSubmitting}
+                                    className="h-14 flex-1 items-center justify-center rounded-[18px] bg-bg-button">
+                                    <Text className="text-[18px] font-semibold text-text-default">
+                                        취소
+                                    </Text>
+                                </Pressable>
+
+                                {/* 등록 / 수정 */}
+                                <Pressable
                                     onPress={handleSubmit(onSubmit)}
-                                    disabled={isSubmitting}>
-                                    {isSubmitting ? "처리중..." : isEditMode ? "수정" : "등록"}
-                                </Button>
+                                    disabled={isSubmitting}
+                                    className={`h-14 flex-1 items-center justify-center rounded-[18px] bg-primary-main ${
+                                        isSubmitting ? "opacity-50" : ""
+                                    }`}>
+                                    <Text className="text-[18px] font-semibold text-text-contrast">
+                                        {isSubmitting ? "처리중..." : isEditMode ? "수정" : "등록"}
+                                    </Text>
+                                </Pressable>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
+                </View>
             </TouchableWithoutFeedback>
         </Modal>
     );

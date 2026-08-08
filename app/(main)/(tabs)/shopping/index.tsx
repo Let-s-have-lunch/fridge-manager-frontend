@@ -166,7 +166,7 @@ export default function ShoppingCalendarScreen() {
                         className="text-text-secondary font-bold"
                     />
                 </TouchableOpacity>
-                <TextComponent className="text-[22px] font-bold text-text-default px-4">
+                <TextComponent className="text-[20px] font-bold text-text-default px-4">
                     {year}년 {month + 1}월
                 </TextComponent>
                 <TouchableOpacity onPress={handleNextMonth} className="p-2" activeOpacity={0.7}>

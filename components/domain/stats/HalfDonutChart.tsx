@@ -15,6 +15,7 @@ const polarToCartesian = (
     angleInDegrees: number,
 ) => {
     const angleInRadians = ((angleInDegrees - 180) * Math.PI) / 180.0;
+
     return {
         x: centerX + radius * Math.cos(angleInRadians),
         y: centerY + radius * Math.sin(angleInRadians),
@@ -29,15 +30,21 @@ const describeArc = (
     endAngle: number,
 ) => {
     const start = polarToCartesian(x, y, radius, startAngle);
+
     const end = polarToCartesian(x, y, radius, endAngle);
+
     return ["M", start.x, start.y, "A", radius, radius, 0, 0, 1, end.x, end.y].join(" ");
 };
 
 export default function HalfDonutChart({ consumed, discarded, others }: Props) {
-    // 💡 차트 컬러 (Tailwind 테마 색상 헥스코드)
-    const COLOR_CONSUMED = "#8AB4F8";
-    const COLOR_DISCARDED = "#FDBA74";
-    const COLOR_OTHERS = "#A7D7A9";
+    // 💡 global.css의 테마 컬러 사용
+    // 소비 → Secondary
+    // 폐기 → Primary
+    // 기타 → Success
+
+    const COLOR_CONSUMED = "#A8C8E3";
+    const COLOR_DISCARDED = "#F79C79";
+    const COLOR_OTHERS = "#A8C9A2";
 
     const consumedAngle = (consumed / 100) * 180;
     const discardedAngle = (discarded / 100) * 180;
@@ -67,6 +74,7 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeWidth={strokeWidth}
                     strokeLinecap="butt"
                 />
+
                 {/* 2. 폐기 */}
                 <Path
                     d={describeArc(cx, cy, r, discardedStart, discardedEnd)}
@@ -75,6 +83,7 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeWidth={strokeWidth}
                     strokeLinecap="butt"
                 />
+
                 {/* 3. 기타 */}
                 <Path
                     d={describeArc(cx, cy, r, othersStart, othersEnd)}

@@ -13,6 +13,7 @@ interface Props {
     className?: string;
     textClassName?: string;
     forceCenter?: boolean;
+    leftIcon?: ReactNode;
 }
 
 function Title({
@@ -22,6 +23,7 @@ function Title({
     description,
     children,
     className,
+    leftIcon,
     textClassName,
     forceCenter = false,
 }: Props) {
@@ -41,7 +43,9 @@ function Title({
                         onPress={onBackPress}
                         className="py-2 justify-center"
                         activeOpacity={0.7}>
-                        <Feather name="chevron-left" size={28} className="text-text-default" />
+                        {leftIcon ?? (
+                            <Feather name="chevron-left" size={28} className="text-text-default" />
+                        )}
                     </TouchableOpacity>
                 )}
 

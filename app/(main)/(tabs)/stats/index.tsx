@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, ScrollView, TouchableOpacity, Platform, Alert } from "react-native";
+import { View, ScrollView, Platform, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import Title from "@/components/common/title/Title";
 import { router } from "expo-router";
@@ -8,14 +8,12 @@ import statsApi from "@/api/user/statsApi";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ExpirationDetailModal from "@/components/domain/stats/ExpirationDetailModal";
 import ConsumptionDetailModal from "@/components/domain/stats/ConsumptionDetailModal";
-import MonthSelector from "@/components/domain/stats/MonthSelector";
 import ConsumptionStatusCard from "@/components/domain/stats/ConsumptionStatusCard";
 import ExpirationSummaryCard from "@/components/domain/stats/ExpirationSummaryCard";
 import TopConsumptionCard from "@/components/domain/stats/TopConsumptionCard";
 import { twMerge } from "tailwind-merge";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-import MainDesktopHeader from "@/components/layout/main/MainDesktopHeader";
 
 type ModalType = "expiringSoon" | "expired" | "consumptionDetail";
 
@@ -25,7 +23,7 @@ interface ModalConfigState {
 }
 
 function StatsPage() {
-    useSetupLayout({  showDesktopHeader: true });
+    useSetupLayout({ showDesktopHeader: true });
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [statsData, setStatsData] = useState<GetStatisticsResponse | null>(null);
@@ -39,6 +37,7 @@ function StatsPage() {
     });
 
     const year = String(selectedDate.getFullYear());
+    // month는 문자열("8") 형태로 추출됩니다.
     const month = String(selectedDate.getMonth() + 1);
 
     const loadStatsData = useCallback(async () => {
@@ -49,9 +48,7 @@ function StatsPage() {
 
         try {
             setIsLoading(true);
-
             const response = await statsApi.getStatistics(year, month);
-
             setStatsData(response);
         } catch (error) {
             console.error("통계 데이터를 불러오는 중 오류 발생:", error);
@@ -117,12 +114,15 @@ function StatsPage() {
 
     return (
         <View className={twMerge("flex-1 bg-bg-default")}>
-            {/* 1. 타이틀 헤더 */}
-            <View className={twMerge("relative", "md:hidden")}>
+            <View className={twMerge("mb-5 relative", "md:hidden")}>
                 <Title
                     title="월간 대시보드"
-                    showBackButton={true}
-                    onBackPress={() => router.back()}
+                    textClassName="text-[20px]"
+                    showBackButton
+                    leftIcon={<Feather name="calendar" size={24} color="#2C2C2C" />}
+                    onBackPress={() => {
+                        router.push("/shopping");
+                    }}
                 />
             </View>
 
@@ -130,18 +130,16 @@ function StatsPage() {
                 <LoadingIndicator fullScreen={true} />
             ) : (
                 <ScrollView className={twMerge("flex-1")} showsVerticalScrollIndicator={false}>
-                    {/* 2. 월(Month) 선택 영역 */}
-                    <MonthSelector
-                        targetMonth={statsData?.targetMonth || `${year}-${month.padStart(2, "0")}`}
-                        onPrev={handlePrevMonth}
-                        onNext={handleNextMonth}
-                    />
+                    {/* 기존에 있던 MonthSelector 컴포넌트는 삭제했습니다. */}
 
-                    {/* 3. 이번 달 소비/폐기 현황 카드 */}
+                    {/* 3. 이번 달 소비/폐기 현황 카드 (Props 추가) */}
                     <ConsumptionStatusCard
+                        month={month}
                         totalPrice={statsData?.dashboardData?.totalConsumedPrice || 0}
                         rates={statsData?.dashboardData?.statusRates}
                         onPress={() => handleCardPress(openConsumptionModal)}
+                        onPrev={handlePrevMonth}
+                        onNext={handleNextMonth}
                     />
 
                     {/* 4. 임박 / 지난 알림 요약 카드 */}

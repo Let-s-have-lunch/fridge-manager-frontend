@@ -86,7 +86,7 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                         <View
                             className={twMerge(
-                                "bg-bg-default px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0",
+                                "bg-bg-paper px-6 pt-8 pb-10 w-full min-h-[50%] max-h-[85%] rounded-t-[36px] md:max-w-[450px] md:rounded-[36px] md:min-h-0",
                             )}>
                             {!isMd && (
                                 <View
@@ -114,7 +114,7 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                         className={textColor}
                                     />
                                     <TextComponent
-                                        className={twMerge("text-2xl font-bold", textColor)}>
+                                        className={twMerge("text-xl font-bold text-center text-text-default",)}>
                                         {title}
                                     </TextComponent>
                                 </View>
@@ -143,12 +143,12 @@ export default function ExpirationDetailModal({ visible, type, onClose, data }: 
                                     className={twMerge("flex-1 items-center justify-center py-10")}>
                                     <Feather
                                         name="check-circle"
-                                        size={48}
+                                        size={40}
                                         className={twMerge("text-success-main mb-4")}
                                     />
                                     <TextComponent
                                         className={twMerge(
-                                            "text-lg text-text-secondary text-center leading-relaxed",
+                                            "text-base text-text-secondary text-center leading-relaxed",
                                         )}>
                                         해당하는 상품이 없습니다.{"\n"}냉장고 관리를 아주 잘하고
                                         계시네요!

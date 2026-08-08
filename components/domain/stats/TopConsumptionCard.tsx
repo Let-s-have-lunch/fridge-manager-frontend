@@ -13,7 +13,7 @@ interface Props {
 export default function TopConsumptionCard({ products }: Props) {
     return (
         <Card>
-            <TextComponent className="font-bold text-xl text-text-default mb-5">
+            <TextComponent className="font-bold text-[18px] text-text-default mb-5">
                 가장 많이 소비한 TOP 3
             </TextComponent>
 
@@ -59,25 +59,25 @@ export default function TopConsumptionCard({ products }: Props) {
                                 </View>
                                 {/* 상품 정보 */}
                                 <View>
-                                    <TextComponent className="text-xl font-bold text-text-default mb-1">
+                                    <TextComponent className="text-[16px] font-bold text-text-default mb-1">
                                         {product.name}
                                     </TextComponent>
                                     <View className="flex-row items-center">
-                                        <TextComponent className="text-lg text-text-secondary">
+                                        <TextComponent className="text-[14px] text-text-secondary">
                                             {product.useCount}회 사용
                                         </TextComponent>
                                         <View className="w-[1px] h-4 bg-divider mx-2" />
-                                        <TextComponent className="text-lg text-text-secondary">
+                                        <TextComponent className="text-[14px] text-text-secondary">
                                             {product.totalPrice.toLocaleString()}원
                                         </TextComponent>
                                     </View>
                                 </View>
                             </View>
-                            <Feather
-                                name="chevron-right"
-                                size={20}
-                                className="text-text-secondary"
-                            />
+                            {/*<Feather*/}
+                            {/*    name="chevron-right"*/}
+                            {/*    size={15}*/}
+                            {/*    className="text-text-secondary"*/}
+                            {/*/>*/}
                         </TouchableOpacity>
                     );
                 })

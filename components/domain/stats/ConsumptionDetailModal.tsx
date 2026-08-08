@@ -54,7 +54,7 @@ export default function ConsumptionDetailModal({ visible, onClose, data, targetM
                     <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
                         <View
                             className={twMerge(
-                                "w-full min-h-[50%] px-6 pt-8 pb-12 bg-bg-default rounded-t-[36px] md:max-w-[450px] md:min-h-0 md:rounded-[36px]",
+                                "w-full min-h-[50%] px-6 pt-8 pb-12 bg-bg-paper rounded-t-[36px] md:max-w-[450px] md:min-h-0 md:rounded-[36px]",
                             )}>
                             {!isMd && (
                                 <View

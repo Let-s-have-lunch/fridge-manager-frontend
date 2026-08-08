@@ -30,17 +30,17 @@ export default function ExpirationSummaryCard({
                 <View className={twMerge("flex-row items-center gap-1")}>
                     <Feather name="clock" size={18} className={twMerge("text-warning-main")} />
                     <TextComponent
-                        className={twMerge("text-xl font-bold text-text-secondary ml-2")}>
+                        className={twMerge("text-xl font-semibold text-text-default ml-2")}>
                         임박
                     </TextComponent>
                     <MaterialCommunityIcons
                         name="information-outline"
                         size={18}
-                        className={twMerge("text-warning-main opacity-60 ml-0.5")}
+                        className={twMerge("text-warning-main ml-0.5")}
                     />
                 </View>
 
-                <TextComponent className={twMerge("text-3xl font-bold text-warning-main mt-1")}>
+                <TextComponent className={twMerge("text-2xl font-semibold text-warning-main mt-1")}>
                     {expiringCount}개
                 </TextComponent>
             </TouchableOpacity>
@@ -59,16 +59,16 @@ export default function ExpirationSummaryCard({
                         className={twMerge("text-error-point")}
                     />
                     <TextComponent
-                        className={twMerge("text-xl font-bold text-text-secondary ml-2")}>
+                        className={twMerge("text-xl font-semibold text-text-default ml-2")}>
                         지난
                     </TextComponent>
                     <MaterialCommunityIcons
                         name="information-outline"
                         size={18}
-                        className={twMerge("text-error-point opacity-60 ml-0.5")}
+                        className={twMerge("text-error-point ml-0.5")}
                     />
                 </View>
-                <TextComponent className={twMerge("text-3xl font-bold text-error-point mt-1")}>
+                <TextComponent className={twMerge("text-2xl font-semibold text-error-point mt-1")}>
                     {expiredCount}개
                 </TextComponent>
             </TouchableOpacity>
