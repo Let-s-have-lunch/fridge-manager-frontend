@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Image, ImageSourcePropType, ScrollView } from "react-native";
+import { View, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { User } from "@/types/user";
@@ -7,20 +7,18 @@ import userApi from "@/api/user/userApi";
 import TextComponent from "@/components/common/text/TextComponent";
 import Card from "@/components/common/card/Card";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
-import Button from "@/components/common/button/Button";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import { getAnimalIcon } from "@/constants/profile";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
-import Badge from "@/components/common/badge/ExpireBadge";
 
 export default function MyPageScreen() {
     useSetupLayout({ showDesktopHeader: true });
 
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
-    const { logout, isLoggedIn } = useAuthStore();
 
+    const { logout, isLoggedIn } = useAuthStore();
     const { theme, onChangeTheme } = useThemeStore();
 
     useEffect(() => {
@@ -59,9 +57,11 @@ export default function MyPageScreen() {
             <ScrollView
                 className="w-full flex-1"
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 100 }}>
-                <View className=" w-full flex-1">
-                    {/* 🌟 1. 프로필 영역 (비회원 / 회원 분기 처리) 🌟 */}
+                contentContainerStyle={{
+                    paddingBottom: 100,
+                }}>
+                <View className="w-full flex-1">
+                    {/* 1. 프로필 영역 */}
                     <View className="mb-8">
                         <Card className="px-[20px] py-[20px]">
                             {isLoggedIn ? (
@@ -69,21 +69,26 @@ export default function MyPageScreen() {
                                     <View className="w-[84px] h-[84px] rounded-full border border-divider overflow-hidden items-center justify-center bg-bg-light">
                                         <Image
                                             source={getAnimalIcon(user?.id)}
-                                            style={{ width: "100%", height: "100%" }}
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                            }}
                                             resizeMode="contain"
                                         />
                                     </View>
+
                                     <View className="flex-1 justify-center">
                                         <TextComponent className="text-xl font-bold text-text-default">
                                             {user?.nickname || "로딩중..."}님
                                         </TextComponent>
+
                                         <TextComponent className="text-sm text-text-secondary mt-1">
                                             {user?.email || "정보를 불러오는 중입니다"}
                                         </TextComponent>
                                     </View>
                                 </View>
                             ) : (
-                                // --- 비회원(Guest) 깡통 프로필 ---
+                                // 비회원 프로필
                                 <TouchableOpacity
                                     className="flex-row items-center justify-between gap-5 py-2"
                                     activeOpacity={0.7}
@@ -94,65 +99,72 @@ export default function MyPageScreen() {
                                         )}>
                                         <Feather name="user" size={40} color="#9CA3AF" />
                                     </View>
+
                                     <View className="flex-1 justify-center">
                                         <TextComponent className="text-xl font-bold text-text-default">
                                             로그인이 필요해요
                                         </TextComponent>
-                                        <TextComponent className="text-[13px] text-text-secondary mt-1">
+
+                                        <TextComponent className="text-[12px] text-text-secondary mt-1">
                                             스마트한 유통기한 관리로 식재료 폐기는 줄이고 소비
                                             효율을 높여보세요!
                                         </TextComponent>
                                     </View>
+
                                     <Feather name="chevron-right" size={24} color="#BDBDBD" />
                                 </TouchableOpacity>
                             )}
                         </Card>
                     </View>
 
-                    {/* 🌟 2. 나의 계정정보 카테고리 (회원에게만 노출) 🌟 */}
+                    {/* 2. 나의 계정정보 */}
                     {isLoggedIn && (
                         <View className="mb-8 md:mb-12">
                             <TextComponent className="text-base font-bold text-text-default mb-3">
                                 나의 계정정보
                             </TextComponent>
+
                             <View>
                                 <TouchableOpacity
-                                    onPress={() => router.push(`/my-page/edit-profile`)}
+                                    onPress={() => router.push("/my-page/edit-profile")}
                                     className="flex-row items-center justify-between py-4 border-b border-divider">
                                     <TextComponent className="text-[15px] text-text-default">
                                         회원정보 수정
                                     </TextComponent>
+
                                     <Feather name="chevron-right" size={20} color="#BDBDBD" />
                                 </TouchableOpacity>
+
                                 <TouchableOpacity
                                     onPress={() => router.push("/my-page/change-password")}
                                     className="flex-row items-center justify-between py-4 border-b border-divider">
                                     <TextComponent className="text-[15px] text-text-default">
                                         비밀번호 수정
                                     </TextComponent>
+
                                     <Feather name="chevron-right" size={20} color="#BDBDBD" />
                                 </TouchableOpacity>
                             </View>
                         </View>
                     )}
 
-                    {/* 🌟 3. 고객지원 카테고리 (공통 노출이되, 내부 메뉴 분기) 🌟 */}
+                    {/* 3. 고객지원 */}
                     <View className="mb-8">
                         <TextComponent className="text-base font-bold text-text-default mb-3">
                             고객지원
                         </TextComponent>
+
                         <View>
-                            {/* 공지사항은 비회원도 접근 가능! */}
                             <TouchableOpacity
                                 onPress={() => router.push("/my-page/notice")}
                                 className="flex-row items-center justify-between py-4 border-b border-divider">
                                 <TextComponent className="text-[15px] text-text-default">
                                     공지사항
                                 </TextComponent>
+
                                 <Feather name="chevron-right" size={20} color="#BDBDBD" />
                             </TouchableOpacity>
 
-                            {/* 1:1 문의는 회원만 노출 (또는 누르면 로그인 페이지로 이동하게 할 수도 있음) */}
                             {isLoggedIn && (
                                 <TouchableOpacity
                                     onPress={() => router.push("/my-page/inquiries")}
@@ -160,13 +172,14 @@ export default function MyPageScreen() {
                                     <TextComponent className="text-[15px] text-text-default">
                                         1:1 문의
                                     </TextComponent>
+
                                     <Feather name="chevron-right" size={20} color="#BDBDBD" />
                                 </TouchableOpacity>
                             )}
                         </View>
                     </View>
 
-                    {/* 4. 관리자 전용 별도 카테고리 */}
+                    {/* 4. 관리자 */}
                     {isLoggedIn && user?.role === "ADMIN" && (
                         <TouchableOpacity
                             onPress={() => router.push("/admin")}
@@ -176,17 +189,17 @@ export default function MyPageScreen() {
                                 관리자 전용
                             </TextComponent>
 
-                            {/* 2. 기존의 안쪽 TouchableOpacity는 단순 View로 변경하여 레이아웃만 유지 */}
                             <View className="flex-row items-center justify-between py-3">
                                 <TextComponent className="text-[15px] font-bold text-primary-main">
                                     관리자 대시보드 바로가기
                                 </TextComponent>
+
                                 <Feather name="chevron-right" size={20} color="#BDBDBD" />
                             </View>
                         </TouchableOpacity>
                     )}
 
-                    {/* 🌟 5. 로그아웃 버튼 (회원에게만 노출) 🌟 */}
+                    {/* 5. 로그인 / 회원가입 / 로그아웃 */}
                     {isLoggedIn ? (
                         <View className="mt-8 md:mt-6">
                             <TouchableOpacity
@@ -198,33 +211,43 @@ export default function MyPageScreen() {
                             </TouchableOpacity>
                         </View>
                     ) : (
-                        <View className={"flex flex-col md:flex-row mt-8 md:mt-6 gap-3 w-full"}>
-                            <Button onPress={() => router.push("/auth/login")} wrap={true}>
-                                로그인
-                            </Button>
-                            <Button
+                        <View className="flex flex-col md:flex-row mt-8 md:mt-6 gap-3 w-full">
+                            {/* 로그인 */}
+                            <TouchableOpacity
+                                onPress={() => router.push("/auth/login")}
+                                activeOpacity={0.8}
+                                className="flex-1 items-center justify-center rounded-2xl bg-primary-main py-3">
+                                <TextComponent className="text-[18px] font-bold text-text-contrast">
+                                    로그인
+                                </TextComponent>
+                            </TouchableOpacity>
+
+                            {/* 회원가입 */}
+                            <TouchableOpacity
                                 onPress={() => router.push("/auth/register")}
-                                wrap={true}
-                                color={"success"}>
-                                회원가입
-                            </Button>
+                                activeOpacity={0.8}
+                                className="flex-1 items-center justify-center rounded-2xl border-2 border-primary-main bg-transparent py-3">
+                                <TextComponent className="text-[18px] font-bold text-primary-main">
+                                    회원가입
+                                </TextComponent>
+                            </TouchableOpacity>
                         </View>
                     )}
                 </View>
             </ScrollView>
 
-            {/* 테마 변경 플로팅 버튼 (비회원도 사용 가능) */}
-            <View className="absolute top-0 h-full w-full pointer-events-none justify-end items-end pb-6 pr-6">
-                <Button
-                    variant="contained-circle"
-                    className="bg-bg-paper border border-divider shadow-sm elevation-3 z-50 pointer-events-auto"
-                    onPress={handleToggleTheme}>
+            {/* 테마 변경 플로팅 버튼 */}
+            <View className="absolute top-0 h-full w-full pointer-events-none justify-end items-end pb-8 pr-2">
+                <TouchableOpacity
+                    onPress={handleToggleTheme}
+                    activeOpacity={0.8}
+                    className="w-14 h-14 items-center justify-center rounded-full bg-bg-paper border border-divider shadow-sm elevation-3 pointer-events-auto">
                     <Feather
                         name={theme === "light" ? "moon" : "sun"}
                         size={20}
-                        color={theme === "light" ? "text-text-default" : "#F8F5F1"}
+                        color={theme === "light" ? "#444444" : "#F8F5F1"}
                     />
-                </Button>
+                </TouchableOpacity>
             </View>
         </View>
     );
