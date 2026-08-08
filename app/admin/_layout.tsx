@@ -28,7 +28,7 @@ function AdminLayout() {
     }
 
     return (
-        <View className={twMerge(["flex-1", "flex-col", "md:flex-row"])}>
+        <View className={twMerge(["flex-1", "flex-col", "md:flex-row", "bg-bg-default"])}>
             <View className={twMerge("hidden", "md:flex", "h-full")}>
                 <AdminAsideDesktop />
             </View>
@@ -37,7 +37,7 @@ function AdminLayout() {
                 <AdminAsideMobile />
             </View>
 
-            <View className="flex-1 bg-bg-subtle items-center">
+            <View className="flex-1 bg-bg-default items-center">
                 <View className="flex-1 w-full max-w-5xl p-6 md:p-8">
                     <Slot />
                 </View>

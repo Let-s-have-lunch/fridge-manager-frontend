@@ -217,7 +217,7 @@ export default function MyPageScreen() {
                                 onPress={() => router.push("/auth/login")}
                                 activeOpacity={0.8}
                                 className="flex-1 items-center justify-center rounded-2xl bg-primary-main py-3">
-                                <TextComponent className="text-[18px] font-bold text-text-contrast">
+                                <TextComponent className="text-[16px] font-semibold text-text-contrast">
                                     로그인
                                 </TextComponent>
                             </TouchableOpacity>
@@ -226,8 +226,8 @@ export default function MyPageScreen() {
                             <TouchableOpacity
                                 onPress={() => router.push("/auth/register")}
                                 activeOpacity={0.8}
-                                className="flex-1 items-center justify-center rounded-2xl border-2 border-primary-main bg-transparent py-3">
-                                <TextComponent className="text-[18px] font-bold text-primary-main">
+                                className="flex-1 items-center justify-center rounded-2xl border-[1px] border-primary-main bg-transparent py-3">
+                                <TextComponent className="text-[16px] font-semibold text-primary-main">
                                     회원가입
                                 </TextComponent>
                             </TouchableOpacity>

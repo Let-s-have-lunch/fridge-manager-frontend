@@ -34,13 +34,13 @@ export default function AdminDashboard() {
 
     return (
         /* 웹에서 너무 넓어지지 않도록 중앙 정렬 및 최대 너비(max-w-md) 적용 */
-        <View className="flex-1 items-center">
+        <View className="flex-1 items-center bg-bg-default">
             <View className="w-full flex-1 ">
                 <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
                     {/* 웰컴 배너 카드 */}
                     <Card className="p-5 mb-5 bg-bg-paper border border-divider rounded-2xl md:hidden">
                         <View className="flex-col">
-                            <TextComponent className="text-xl font-extrabold text-text-default">
+                            <TextComponent className="text-[16px] font-semibold text-text-default">
                                 관리자 시스템
                             </TextComponent>
                             <TextComponent className="text-xs text-text-secondary mt-1.5 leading-relaxed">

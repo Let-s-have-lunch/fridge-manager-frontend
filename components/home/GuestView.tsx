@@ -64,7 +64,7 @@ export default function GuestView() {
                     로그인하고 더 많은 기능을 이용해보세요!
                 </TextComponent>
                 <TextComponent className="text-[12px] text-text-secondary mt-1.5 mb-6 text-center">
-                    데이터는 안전하게 저장되며, 언제 어디서나 확인할 수 있어요.
+                    데이터는 안전하게 저장되며, {"\n"} 언제 어디서나 확인할 수 있어요.
                 </TextComponent>
 
                 {/* 🚨 핵심 수정: 모바일에서는 세로(flex-col), 웹(md 이상)에서는 가로(flex-row) 배치! */}

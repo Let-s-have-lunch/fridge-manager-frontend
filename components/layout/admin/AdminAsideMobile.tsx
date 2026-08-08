@@ -1,6 +1,6 @@
 import { Modal, Pressable, useWindowDimensions, View } from "react-native";
 import { twMerge } from "tailwind-merge";
-import { Link, usePathname } from "expo-router";
+import { Href, Link, usePathname } from "expo-router";
 import TextComponent from "@/components/common/text/TextComponent";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
@@ -25,16 +25,16 @@ function AdminAsideMobile() {
             <View
                 className={twMerge(
                     ["h-20", "px-4", "flex-row", "justify-between", "items-center"],
-                    ["bg-bg-default", "border-b", "border-text-subtle"],
+                    ["bg-bg-subtle", "border-b", "border-divider"],
                 )}>
                 <Link href={"/admin"} asChild>
                     <Pressable>
                         <TextComponent
-                            className={twMerge("text-lg", "font-extrabold", "text-text-default")}>
+                            className={twMerge("text-[18px]", "font-extrabold", "text-text-default")}>
                             <Ionicons
                                 name={"shield-half"}
                                 size={22}
-                                className={twMerge(["pr-1", "text-text-default"])}
+                                className={twMerge(["pr-2", "pl-3.5", "text-text-default"])}
                             />
                             관리자 센터
                         </TextComponent>
@@ -51,7 +51,7 @@ function AdminAsideMobile() {
                         <View
                             className={twMerge(
                                 ["h-20", "flex-row", "justify-between", "items-center", "px-4"],
-                                ["border-b", "border-text-subtle"],
+                                ["border-b", "border-divider"],
                             )}>
                             <Link href={"/admin"} asChild onPress={() => setIsMenuOpen(false)}>
                                 <Pressable>
@@ -64,7 +64,7 @@ function AdminAsideMobile() {
                                         <Ionicons
                                             name={"shield-half"}
                                             size={22}
-                                            className={twMerge(["pr-1", "text-text-default"])}
+                                            className={twMerge(["pr-2", "pl-2", "text-text-default"])}
                                         />
                                         관리자 센터
                                     </TextComponent>
@@ -83,7 +83,7 @@ function AdminAsideMobile() {
 
                                 return (
                                     <Link
-                                        href={item.path}
+                                        href={item.path as Href}
                                         key={item.path}
                                         asChild
                                         onPress={() => setIsMenuOpen(false)}>
@@ -120,7 +120,7 @@ function AdminAsideMobile() {
                         </View>
                     </View>
 
-                    <View className={twMerge(["p-4"], ["border-t", "border-text-subtle"])}>
+                    <View className={twMerge(["p-4"], ["border-t", "border-divider"])}>
                         <View className={twMerge("mb-4", ["flex-row", "items-center", "gap-3"])}>
                             <View
                                 className={twMerge(
