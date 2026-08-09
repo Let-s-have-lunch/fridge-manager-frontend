@@ -104,7 +104,7 @@ function UserInquiryPage() {
                 title="1:1 문의"
                 showBackButton={true}
                 onBackPress={() => router.back()}
-                className="mb-6">
+                className="mb-5">
                 <Button
                     size="small"
                     color="primary"
@@ -124,22 +124,33 @@ function UserInquiryPage() {
                     className={twMerge(
                         "hidden md:flex",
                         "flex-row items-center px-4 py-3",
-                        "border-divider border-b bg-primary-main rounded-t-xl",
+                        "border-divider border-b bg-bg-subtle rounded-t-xl",
                     )}>
                     <TextComponent
-                        className={twMerge("hidden md:flex w-12", "font-bold text-text-secondary")}>
+                        className={twMerge(
+                            "hidden md:flex w-12",
+                            "text-[15px] font-bold text-text-default",
+                        )}>
                         ID
                     </TextComponent>
                     <TextComponent
-                        className={twMerge("flex-1", "font-bold text-text-secondary px-2")}>
+                        className={twMerge(
+                            "flex-1",
+                            "text-[15px] font-bold text-text-default px-2",
+                        )}>
                         제목
                     </TextComponent>
                     <TextComponent
-                        className={twMerge("w-28", "font-bold text-text-secondary text-center")}>
+                        className={twMerge(
+                            "w-28 text-[15px] font-bold text-text-default text-center",
+                        )}>
                         처리상태
                     </TextComponent>
                     <TextComponent
-                        className={twMerge("w-24", "font-bold text-text-secondary text-center")}>
+                        className={twMerge(
+                            "w-24",
+                            "font-bold text-[15px] text-text-default text-center",
+                        )}>
                         등록일
                     </TextComponent>
                 </View>
@@ -161,10 +172,17 @@ function UserInquiryPage() {
                         return (
                             <View
                                 key={item.id}
+                                style={{
+                                    shadowColor: "#000",
+                                    shadowOffset: { width: 0, height: 2 },
+                                    shadowOpacity: 0.08,
+                                    shadowRadius: 6,
+                                    elevation: 3,
+                                }}
                                 className={twMerge(
                                     "my-2 md:my-0",
                                     "flex-col md:flex-row md:items-center px-4 py-4 md:py-3",
-                                    "transition-all bg-bg-paper border-b border-divider hover:bg-bg-subtle rounded-xl md:rounded-none",
+                                    "transition-all bg-bg-paper border-b border-divider rounded-xl md:rounded-none",
                                     index === inquiries.length - 1 && "md:rounded-b-xl border-b-0",
                                 )}>
                                 <TextComponent

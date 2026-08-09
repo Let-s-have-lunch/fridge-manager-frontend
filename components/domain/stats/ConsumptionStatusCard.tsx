@@ -27,15 +27,15 @@ export default function ConsumptionStatusCard({
     onNext,
 }: Props) {
     return (
-        <Card className="mb-6">
+        <Card className="mb-4">
             {/* 타이틀 헤더 영역 */}
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                className="flex-row items-center mb-6 gap-2">
+                className="flex-row items-center mb-5 gap-2">
                 <View className="flex-row items-center gap-2">
                     <Feather name="shopping-cart" size={18} className="text-text-default" />
-                    <TextComponent className="text-xl font-bold text-text-default">
+                    <TextComponent className="text-[18px] font-semibold text-text-default">
                         {month}월 소비/폐기 현황
                     </TextComponent>
                 </View>
@@ -69,7 +69,7 @@ export default function ConsumptionStatusCard({
 
                     {/* 반원 중앙에 텍스트 띄우기 */}
                     <View className="absolute bottom-6 items-center">
-                        <TextComponent className="text-[15px] font-semibold text-text-secondary mb-1">
+                        <TextComponent className="text-[16px] font-semibold text-text-secondary mb-1">
                             총 소비
                         </TextComponent>
                         <TextComponent className="text-[20px] font-semibold text-text-default">

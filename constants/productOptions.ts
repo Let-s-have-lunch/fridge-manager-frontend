@@ -12,6 +12,6 @@ export const STORAGES = [
 ];
 export const STATUSES = [
     { label: "보관", value: "STORED" },
-    { label: "소비 완료", value: "CONSUMED" },
+    { label: "소비", value: "CONSUMED" },
     { label: "폐기", value: "DISCARDED" },
 ];

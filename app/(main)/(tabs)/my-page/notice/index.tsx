@@ -73,19 +73,21 @@ function UserNoticePage() {
                     className={twMerge(
                         ["hidden", "md:flex"],
                         ["flex-row", "items-center", "px-4", "py-3"],
-                        ["border-divider", "border-b", "bg-primary-main", "rounded-t-xl"],
+                        ["border-divider", "border-b", "bg-bg-subtle", "rounded-t-xl"],
                     )}>
                     <TextComponent
                         className={twMerge(
                             ["hidden", "md:flex", "w-12"],
-                            ["font-bold", "text-text-secondary"],
+                            ["text-[15px]"],
+                            ["font-bold", "text-text-default"],
                         )}>
                         ID
                     </TextComponent>
                     <TextComponent
                         className={twMerge(
                             ["flex-1"],
-                            ["font-bold", "text-text-secondary", "px-2"],
+                            ["text-[15px]"],
+                            ["font-bold", "text-text-default", "px-2"],
                         )}>
                         제목
                     </TextComponent>
@@ -93,7 +95,8 @@ function UserNoticePage() {
                     <TextComponent
                         className={twMerge(
                             ["w-24"],
-                            ["font-bold", "text-text-secondary", "text-center"],
+                            ["text-[15px]"],
+                            ["font-bold", "text-text-default", "text-center"],
                         )}>
                         등록일
                     </TextComponent>
@@ -117,29 +120,33 @@ function UserNoticePage() {
                             <View
                                 key={item.id}
                                 className={twMerge(
-                                    ["my-2", "md:my-0"],
                                     [
+                                        "my-2",
+                                        "md:my-0",
                                         "flex-col",
                                         "md:flex-row",
                                         "md:items-center",
                                         "px-4",
                                         "py-4",
                                         "md:py-3",
-                                    ],
-                                    [
-                                        "transition-all",
                                         "bg-bg-paper",
-                                        "border-b",
-                                        "border-divider",
-                                        "hover:bg-bg-subtle",
                                         "rounded-xl",
                                         "md:rounded-none",
                                     ],
                                     index === notices.length - 1 && [
                                         "md:rounded-b-xl",
-                                        "border-b-0",
                                     ],
-                                )}>
+                                )}
+                                style={{
+                                    shadowColor: "#000",
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 2,
+                                    },
+                                    shadowOpacity: 0.08,
+                                    shadowRadius: 6,
+                                    elevation: 3,
+                                }}>
                                 <TextComponent
                                     className={twMerge(
                                         ["hidden", "md:flex", "w-12"],
@@ -162,10 +169,10 @@ function UserNoticePage() {
                                     <View className="flex-row items-center gap-2">
                                         <TextComponent
                                             className={twMerge([
-                                                "font-bold",
+                                                "font-semibold",
                                                 "transition-all",
                                                 "hover:text-primary-main",
-                                                "text-[15px] md:text-base", // 🛠️ [수정] 모바일에서 제목 크기 조절
+                                                "text-[14px] md:text-base", // 🛠️ [수정] 모바일에서 제목 크기 조절
                                             ])}
                                             numberOfLines={1}>
                                             {item.title}

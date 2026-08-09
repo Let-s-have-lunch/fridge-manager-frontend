@@ -129,7 +129,7 @@ function StatsPage() {
             {isLoading ? (
                 <LoadingIndicator fullScreen={true} />
             ) : (
-                <ScrollView className={twMerge("flex-1")} showsVerticalScrollIndicator={false}>
+                    <ScrollView className={twMerge("flex-1")} showsVerticalScrollIndicator={false}>
                     {/* 기존에 있던 MonthSelector 컴포넌트는 삭제했습니다. */}
 
                     {/* 3. 이번 달 소비/폐기 현황 카드 (Props 추가) */}

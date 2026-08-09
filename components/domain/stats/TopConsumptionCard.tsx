@@ -13,9 +13,11 @@ interface Props {
 export default function TopConsumptionCard({ products }: Props) {
     return (
         <Card>
-            <TextComponent className="font-bold text-[18px] text-text-default mb-5">
-                가장 많이 소비한 TOP 3
-            </TextComponent>
+
+                <TextComponent className="font-semibold text-[18px] text-text-default mb-5">
+                    가장 많이 소비한 TOP 3
+                </TextComponent>
+
 
             {/* 🚨 [추가됨] 데이터가 없을 때의 빈 화면 처리 */}
             {products.length === 0 ? (
@@ -52,14 +54,14 @@ export default function TopConsumptionCard({ products }: Props) {
                                         />
                                     </View>
                                     <View className="absolute -top-1 -left-1 bg-warning-main w-6 h-6 rounded-full items-center justify-center">
-                                        <TextComponent className="text-lg font-bold text-bg-paper">
+                                        <TextComponent className="text-[18px] font-medium text-bg-paper">
                                             {index + 1}
                                         </TextComponent>
                                     </View>
                                 </View>
                                 {/* 상품 정보 */}
                                 <View>
-                                    <TextComponent className="text-[16px] font-bold text-text-default mb-1">
+                                    <TextComponent className="text-[16px] font-medium text-text-default mb-1">
                                         {product.name}
                                     </TextComponent>
                                     <View className="flex-row items-center">

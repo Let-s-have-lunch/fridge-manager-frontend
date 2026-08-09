@@ -19,7 +19,7 @@ export default function ExpirationSummaryCard({
     onPressExpired,
 }: Props) {
     return (
-        <Card className={twMerge("flex-row mb-6 gap-3")}>
+        <Card className={twMerge("flex-row mb-4 gap-3")}>
             {/* --- 임박 카드 (노란색/Warning 테마로 변경) --- */}
             <TouchableOpacity
                 activeOpacity={0.7}
@@ -30,7 +30,7 @@ export default function ExpirationSummaryCard({
                 <View className={twMerge("flex-row items-center gap-1")}>
                     <Feather name="clock" size={18} className={twMerge("text-warning-main")} />
                     <TextComponent
-                        className={twMerge("text-xl font-semibold text-text-default ml-2")}>
+                        className={twMerge("text-[18px] font-semibold text-text-default ml-2")}>
                         임박
                     </TextComponent>
                     <MaterialCommunityIcons
@@ -59,7 +59,7 @@ export default function ExpirationSummaryCard({
                         className={twMerge("text-error-point")}
                     />
                     <TextComponent
-                        className={twMerge("text-xl font-semibold text-text-default ml-2")}>
+                        className={twMerge("text-[18px] font-semibold text-text-default ml-2")}>
                         지난
                     </TextComponent>
                     <MaterialCommunityIcons

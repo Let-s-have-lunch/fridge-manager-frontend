@@ -156,7 +156,7 @@ export default function ShoppingCalendarScreen() {
     ];
 
     return (
-        <View className="flex-1 bg-bg-default py-5">
+        <View className="flex-1 bg-bg-default py-2 mb-8">
             {/* 1. 달력 상단: 연/월 표시 및 이동 버튼 */}
             <View className="flex-row justify-center items-center mb-9">
                 <TouchableOpacity onPress={handlePrevMonth} className="p-2" activeOpacity={0.7}>

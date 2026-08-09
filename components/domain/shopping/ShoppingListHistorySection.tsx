@@ -43,7 +43,7 @@ export default function ShoppingListHistorySection({
 
     return (
         <View className={twMerge("flex-1 w-full max-w-[600px] self-center relative")}>
-            <Title title={formattedDate} showBackButton={true} onBackPress={() => router.back()} />
+            <Title title={formattedDate} className={"font-normal"} showBackButton={true} onBackPress={() => router.back()} />
 
             <ScrollView
                 className="relative mt-4"
@@ -64,9 +64,9 @@ export default function ShoppingListHistorySection({
                     {/* 제목 */}
                     <View
                         className={twMerge(
-                            "flex-row items-center justify-center w-full relative mt-3 mb-6",
+                            "flex-row items-center justify-center w-full relative mt-6 mb-5",
                         )}>
-                        <TextComponent className="text-[20px] text-text-default font-bold tracking-wide">
+                        <TextComponent className="text-[20px] text-text-default font-semibold tracking-wide">
                             장보기 리스트
                         </TextComponent>
                     </View>
@@ -120,7 +120,7 @@ export default function ShoppingListHistorySection({
                                         <View className="flex-1">
                                             <TextComponent
                                                 className={twMerge(
-                                                    "text-[16px] font-semibold",
+                                                    "text-[16px] font-normal",
                                                     isChecked
                                                         ? "text-text-secondary line-through"
                                                         : "text-text-default",

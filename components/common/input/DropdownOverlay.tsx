@@ -31,7 +31,7 @@ export default function DropdownOverlay({
 
     return (
         <View
-            className="absolute z-[9999] rounded-[10px] border border-gray-200 dark:border-gray-700 bg-bg-default shadow-xl overflow-hidden"
+            className="absolute z-[9999] rounded-[10px] bg-bg-paper shadow-lg overflow-hidden"
             style={{
                 top: dropdownLayout.y,
                 left: dropdownLayout.x,
