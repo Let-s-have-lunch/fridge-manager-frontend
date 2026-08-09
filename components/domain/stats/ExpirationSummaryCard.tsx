@@ -20,55 +20,50 @@ export default function ExpirationSummaryCard({
 }: Props) {
     return (
         <Card className={twMerge("flex-row mb-4 gap-3")}>
-            {/* --- 임박 카드 (노란색/Warning 테마로 변경) --- */}
+            {/* 임박 */}
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPressExpiring}
-                className={twMerge(
-                    "flex-1 bg-warning-bg border border-warning-border rounded-[20px] py-4 items-center justify-center gap-1",
-                )}>
-                <View className={twMerge("flex-row items-center gap-1")}>
-                    <Feather name="clock" size={18} className={twMerge("text-warning-main")} />
-                    <TextComponent
-                        className={twMerge("text-[18px] font-semibold text-text-default ml-2")}>
+                className="flex-1 bg-warning-bg rounded-[20px] py-3.5 px-3 items-center justify-center">
+                <View className="flex-row items-center">
+                    <Feather name="clock" size={18} className="text-warning-main" />
+
+                    <TextComponent className="text-[17px] font-semibold text-text-default ml-2">
                         임박
                     </TextComponent>
+
                     <MaterialCommunityIcons
                         name="information-outline"
-                        size={18}
-                        className={twMerge("text-warning-main ml-0.5")}
+                        size={17}
+                        className="text-warning-main ml-1"
                     />
                 </View>
 
-                <TextComponent className={twMerge("text-2xl font-semibold text-warning-main mt-1")}>
+                <TextComponent className="text-2xl font-semibold text-warning-main mt-2">
                     {expiringCount}개
                 </TextComponent>
             </TouchableOpacity>
 
-            {/* --- 지난 카드 (빨간색/Error 테마로 변경) --- */}
+            {/* 지난 */}
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPressExpired}
-                className={twMerge(
-                    "flex-1 bg-error-bg border border-error-border rounded-[20px] py-4 items-center justify-center gap-1",
-                )}>
-                <View className={twMerge("flex-row items-center gap-1")}>
-                    <Feather
-                        name="alert-triangle"
-                        size={18}
-                        className={twMerge("text-error-point")}
-                    />
-                    <TextComponent
-                        className={twMerge("text-[18px] font-semibold text-text-default ml-2")}>
+                className="flex-1 bg-error-bg rounded-[20px] py-3.5 px-3 items-center justify-center">
+                <View className="flex-row items-center">
+                    <Feather name="alert-triangle" size={18} className="text-error-point" />
+
+                    <TextComponent className="text-[17px] font-semibold text-text-default ml-2">
                         지난
                     </TextComponent>
+
                     <MaterialCommunityIcons
                         name="information-outline"
-                        size={18}
-                        className={twMerge("text-error-point ml-0.5")}
+                        size={17}
+                        className="text-error-point ml-1"
                     />
                 </View>
-                <TextComponent className={twMerge("text-2xl font-semibold text-error-point mt-1")}>
+
+                <TextComponent className="text-2xl font-semibold text-error-point mt-2">
                     {expiredCount}개
                 </TextComponent>
             </TouchableOpacity>

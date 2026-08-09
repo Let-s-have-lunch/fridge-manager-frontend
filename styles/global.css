@@ -52,14 +52,14 @@
         =========================== */
         --error-main: #F6C8C0; /* 오류 상태 */
         --error-contrast: #FFFFFF; /* 텍스트 */
-        --error-point: #E98D82; /* 오류 강조 */
+        --error-point: #e38070; /* 오류 강조 */
         --error-bg: #FFF5F4; /* 👈 추가: 지남 카드 배경 */
         --error-border: #FCE1DE; /* 👈 추가: 지남 카드 테두리 */
 
         /* ===========================
            Warning
         =========================== */
-        --warning-main: #F7D88A; /* 경고 상태 */
+        --warning-main: #dbba63; /* 경고 상태 */
         --warning-contrast: #2C2C2C; /* 텍스트 */
         --warning-bg: #FFFBF3; /* 👈 추가: 임박 카드 배경 */
         --warning-border: #FBEAC1; /* 👈 추가: 임박 카드 테두리 */

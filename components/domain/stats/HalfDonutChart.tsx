@@ -35,13 +35,7 @@ const describeArc = (
 
     return ["M", start.x, start.y, "A", radius, radius, 0, 0, 1, end.x, end.y].join(" ");
 };
-
 export default function HalfDonutChart({ consumed, discarded, others }: Props) {
-    // 💡 global.css의 테마 컬러 사용
-    // 소비 → Secondary
-    // 폐기 → Primary
-    // 기타 → Success
-
     const COLOR_CONSUMED = "#A8C8E3";
     const COLOR_DISCARDED = "#F79C79";
     const COLOR_OTHERS = "#A8C9A2";
@@ -58,15 +52,15 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
     const othersStart = discardedEnd;
     const othersEnd = 180;
 
-    const cx = 150;
-    const cy = 130;
-    const r = 100;
-    const strokeWidth = 30;
+    // 기존보다 약 10% 축소
+    const cx = 135;
+    const cy = 115;
+    const r = 90;
+    const strokeWidth = 27;
 
     return (
         <View className="items-center justify-center">
-            <Svg width={300} height={150}>
-                {/* 1. 소비 */}
+            <Svg width={270} height={135}>
                 <Path
                     d={describeArc(cx, cy, r, consumedStart, consumedEnd)}
                     fill="none"
@@ -75,7 +69,6 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeLinecap="butt"
                 />
 
-                {/* 2. 폐기 */}
                 <Path
                     d={describeArc(cx, cy, r, discardedStart, discardedEnd)}
                     fill="none"
@@ -84,7 +77,6 @@ export default function HalfDonutChart({ consumed, discarded, others }: Props) {
                     strokeLinecap="butt"
                 />
 
-                {/* 3. 기타 */}
                 <Path
                     d={describeArc(cx, cy, r, othersStart, othersEnd)}
                     fill="none"

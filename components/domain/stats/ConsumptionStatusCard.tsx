@@ -43,62 +43,53 @@ export default function ConsumptionStatusCard({
             </TouchableOpacity>
 
             {/* 그래프와 좌우 버튼 영역 */}
-            <View className="flex-row items-center justify-between px-2 w-full">
-                {/*
-                  수정 포인트 1: 이전 달(<) 버튼
-                  zIndex와 elevation으로 차트보다 앞으로 배치하고, hitSlop으로 터치 영역을 크게 잡습니다.
-                */}
-                <TouchableOpacity
-                    onPress={onPrev}
-                    className="p-2"
-                    activeOpacity={0.6}
-                    style={{ zIndex: 10, elevation: 10 }}
-                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
-                    <Feather name="chevron-left" size={28} className="text-text-secondary" />
-                </TouchableOpacity>
-
-                {/* 반원 차트 렌더링 영역 (zIndex를 1로 낮춰 버튼과 겹치지 않게 합니다) */}
-                <View
-                    className="relative flex-1 items-center justify-center pt-2 pb-6"
-                    style={{ zIndex: 1 }}>
+            <View className="relative w-full">
+                {/* 그래프 */}
+                <View className="items-center">
                     <HalfDonutChart
                         consumed={rates.consumed}
                         discarded={rates.discarded}
                         others={rates.others}
                     />
-
-                    {/* 반원 중앙에 텍스트 띄우기 */}
-                    <View className="absolute bottom-6 items-center">
-                        <TextComponent className="text-[16px] font-semibold text-text-secondary mb-1">
-                            총 소비
-                        </TextComponent>
-                        <TextComponent className="text-[20px] font-semibold text-text-default">
-                            {totalPrice.toLocaleString()}원
-                        </TextComponent>
-                    </View>
                 </View>
 
-                {/*
-                  수정 포인트 2: 다음 달(>) 버튼
-                  마찬가지로 터치 우선순위와 영역을 확보합니다.
-                */}
+                {/* 왼쪽 화살표 */}
+                <TouchableOpacity
+                    onPress={onPrev}
+                    activeOpacity={0.6}
+                    className="absolute left-2 top-[42%] p-2"
+                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+                    <Feather name="chevron-left" size={28} className="text-text-secondary" />
+                </TouchableOpacity>
+
+                {/* 오른쪽 화살표 */}
                 <TouchableOpacity
                     onPress={onNext}
-                    className="p-2"
                     activeOpacity={0.6}
-                    style={{ zIndex: 10, elevation: 10 }}
+                    className="absolute right-2 top-[42%] p-2"
                     hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
                     <Feather name="chevron-right" size={28} className="text-text-secondary" />
                 </TouchableOpacity>
+
+                {/* 중앙 텍스트 */}
+                <View className="absolute bottom-6 left-0 right-0 items-center">
+                    <TextComponent className="text-[16px] font-semibold text-text-secondary mb-1">
+                        총 소비
+                    </TextComponent>
+
+                    <TextComponent className="text-[20px] font-semibold text-text-default">
+                        {totalPrice.toLocaleString()}원
+                    </TextComponent>
+                </View>
             </View>
 
             {/* 범례 (Legend) */}
-            <View className="flex-row justify-between px-4 mt-2 mb-3">
+            <View className="flex-row justify-between px-4 mt-1 mb-2">
                 <View className="items-center">
                     <TextComponent className="text-lg font-bold text-text-secondary mt-0.5">
                         소비
                     </TextComponent>
-                    <TextComponent className="text-2xl font-semibold text-secondary-main">
+                    <TextComponent className="text-2xl font-semibold color-[#6faee3]">
                         {rates.consumed}%
                     </TextComponent>
                 </View>
@@ -106,7 +97,7 @@ export default function ConsumptionStatusCard({
                     <TextComponent className="text-lg font-semibold text-text-secondary mt-0.5">
                         폐기
                     </TextComponent>
-                    <TextComponent className="text-2xl font-bold text-primary-main">
+                    <TextComponent className="text-2xl font-bold color-[#e89270]">
                         {rates.discarded}%
                     </TextComponent>
                 </View>
@@ -114,7 +105,7 @@ export default function ConsumptionStatusCard({
                     <TextComponent className="text-lg font-semibold text-text-secondary mt-0.5">
                         기타
                     </TextComponent>
-                    <TextComponent className="text-2xl font-bold text-success-main">
+                    <TextComponent className="text-2xl font-bold  color-[#93b48d] ">
                         {rates.others}%
                     </TextComponent>
                 </View>
