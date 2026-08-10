@@ -44,20 +44,30 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
     const handleDelete = async () => {
         if (!category) return;
 
+        console.log("삭제 시작:", category.id);
+
         Alert.alert("카테고리 삭제", `"${category.name}" 카테고리를 삭제하시겠어요?`, [
             {
                 text: "취소",
                 style: "cancel",
+                onPress: () => {
+                    console.log("삭제 취소");
+                },
             },
             {
                 text: "삭제",
                 style: "destructive",
                 onPress: async () => {
+                    console.log("Alert 삭제 버튼 눌림");
+
                     try {
                         await categoryApi.deleteCategory(category.id);
+
+                        console.log("카테고리 삭제 성공");
+
                         onComplete();
                     } catch (error) {
-                        console.error(error);
+                        console.error("카테고리 삭제 실패:", error);
                     }
                 },
             },
