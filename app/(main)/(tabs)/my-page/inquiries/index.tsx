@@ -7,7 +7,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import inquiryApi from "@/api/user/inquiryApi";
 import Button from "@/components/common/button/Button";
-import { InquiryInputType, inquirySchema } from "@/schemas/user/inquirySchema";
+import { InquiryInputType, inquirySchema } from "@/schemas/inquiry/inquirySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { InquiryUserItemType } from "@/types/inquiry";

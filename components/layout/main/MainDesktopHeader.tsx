@@ -8,10 +8,10 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import TextComponent from "@/components/common/text/TextComponent";
 import Input from "@/components/common/input/Input";
 import { USER_NAV_LIST } from "@/constants/menu";
-import FridgeDropdown from "@/components/home/header/FridgeDropdown";
-import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
+import FridgeDropdown from "@/components/domain/home/header/FridgeDropdown";
+import FridgeHeaderModals from "@/components/domain/home/header/FridgeHeaderModals";
 import { useFridgeHeader } from "@/hooks/useFridgeHeader";
-import SortSheet from "@/components/home/header/SortSheet";
+import SortSheet from "@/components/domain/home/header/SortSheet";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useHomeStore } from "@/stores/home/productStore"; // 👈 스토어 임포트 확인!
 

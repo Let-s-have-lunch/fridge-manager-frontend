@@ -1,7 +1,7 @@
 import { PaginationResponseType } from "@/types/common";
 import { Inquiry, InquiryUserItemType } from "@/types/inquiry";
 import axiosInstance from "@/api/axiosInstance";
-import { InquiryInputType } from "@/schemas/user/inquirySchema";
+import { InquiryInputType } from "@/schemas/inquiry/inquirySchema";
 
 const fetchMyInquiryList = async (
     page: number,

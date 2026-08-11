@@ -14,7 +14,7 @@ import fridgeApi from "@/api/user/fridgeApi";
 import { useHomeStore } from "@/stores/home/productStore";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFridgeSchema, FridgeInputType } from "@/schemas/user/createFridgeSchema";
+import { createFridgeSchema, FridgeInputType } from "@/schemas/fridge/createFridgeSchema";
 import { isAxiosError } from "axios";
 import { Fridge } from "@/types/fridge";
 import { useThemeStore } from "@/stores/theme/useThemeStore";

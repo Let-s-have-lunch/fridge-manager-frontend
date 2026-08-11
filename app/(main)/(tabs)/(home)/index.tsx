@@ -4,14 +4,14 @@ import fridgeApi from "@/api/user/fridgeApi";
 import productApi from "@/api/user/productApi";
 import { FlatList, View, Pressable, Platform, Alert } from "react-native";
 import { useHomeStore } from "@/stores/home/productStore";
-import CategoryTabs from "@/components/home/CategoryTabs";
-import ProductCard from "@/components/home/ProductCard";
+import CategoryTabs from "@/components/domain/home/CategoryTabs";
+import ProductCard from "@/components/domain/home/ProductCard";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import { ProductDetailItemType, ProductListItemType } from "@/types/product";
-import ProductFormModal from "@/components/product/ProductFormModal";
-import GuestView from "@/components/home/GuestView"; // 👈 타입 추가
+import ProductFormModal from "@/components/domain/product/ProductFormModal";
+import GuestView from "@/components/domain/home/GuestView"; // 👈 타입 추가
 
 export default function HomeScreen() {
     useSetupLayout({ showMainHeader: true, showDesktopHeader: true });

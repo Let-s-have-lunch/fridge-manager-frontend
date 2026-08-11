@@ -1,6 +1,6 @@
 
 import axiosInstance from "@/api/axiosInstance";
-import { CategoryInputType } from "@/schemas/user/createCategorySchema";
+import { CategoryInputType } from "@/schemas/category/createCategorySchema";
 import { Category } from "@/types/category";
 
 const getCategoryList = async (): Promise<Category[]> => {

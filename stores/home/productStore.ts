@@ -1,4 +1,4 @@
-import { Category } from "@/components/home/CategoryTabs";
+import { Category } from "@/components/domain/home/CategoryTabs";
 import { Fridge } from "@/types/fridge";
 import { create } from "zustand";
 import { Product, ProductListItemType } from "@/types/product";

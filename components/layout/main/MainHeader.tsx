@@ -3,12 +3,12 @@ import { Pressable, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
-import HeaderProfile from "@/components/home/header/HeaderProfile";
-import FridgeDropdown from "@/components/home/header/FridgeDropdown";
-import SearchBar from "@/components/home/header/SearchBar";
-import FridgeHeaderModals from "@/components/home/header/FridgeHeaderModals";
+import HeaderProfile from "@/components/domain/home/header/HeaderProfile";
+import FridgeDropdown from "@/components/domain/home/header/FridgeDropdown";
+import SearchBar from "@/components/domain/home/header/SearchBar";
+import FridgeHeaderModals from "@/components/domain/home/header/FridgeHeaderModals";
 import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 공통 훅
-import SortSheet from "@/components/home/header/SortSheet"; // 👈 팀원이 추가한 정렬 모달
+import SortSheet from "@/components/domain/home/header/SortSheet"; // 👈 팀원이 추가한 정렬 모달
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useHomeStore } from "@/stores/home/productStore";
 

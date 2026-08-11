@@ -20,8 +20,8 @@ import ErrorMessage from "@/components/common/label/ErrorMessage";
 import DropdownOverlay from "@/components/common/input/DropdownOverlay";
 
 // 카테고리 컴포넌트 및 기타
-import CreateCategoryContent from "@/components/category/CreateCategoryContent";
-import SelectCategoryContent from "@/components/category/SelectCategoryContent";
+import CreateCategoryContent from "@/components/domain/category/CreateCategoryContent";
+import SelectCategoryContent from "@/components/domain/category/SelectCategoryContent";
 import { STATUSES, STORAGES, UNITS } from "@/constants/productOptions"; // 💡 3개 다 가져와야 합니다!
 
 // 커스텀 훅 임포트

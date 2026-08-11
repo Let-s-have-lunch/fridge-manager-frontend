@@ -1,7 +1,7 @@
 import React from "react";
-import FridgeSettingSheet from "@/components/home/header/FridgeSettingSheet";
-import FridgeSheet from "@/components/home/header/FridgeSheet";
-import DeleteFridgeSheet from "@/components/home/header/DeleteFridgeSheet";
+import FridgeSettingSheet from "@/components/domain/home/header/FridgeSettingSheet";
+import FridgeSheet from "@/components/domain/home/header/FridgeSheet";
+import DeleteFridgeSheet from "@/components/domain/home/header/DeleteFridgeSheet";
 
 interface Props {
     bottomSheetRef: React.RefObject<any>;

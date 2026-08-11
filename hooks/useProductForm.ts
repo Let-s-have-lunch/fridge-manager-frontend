@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 
-import { productSchema, ProductInputType } from "@/schemas/user/productSchema";
+import { productSchema, ProductInputType } from "@/schemas/product/productSchema";
 import { Category } from "@/types/category";
 import { ProductDetailItemType } from "@/types/product";
 import productApi from "@/api/user/productApi";

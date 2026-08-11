@@ -11,7 +11,7 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/
 import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { twMerge } from "tailwind-merge";
 
-import MenuItem from "@/components/home/header/MenuItem";
+import MenuItem from "@/components/domain/home/header/MenuItem";
 
 interface FridgeSettingSheetProps {
     onClose: () => void;

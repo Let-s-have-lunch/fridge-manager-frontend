@@ -2,7 +2,7 @@ import { ShoppingItem } from "@/types/shoppingList";
 import {
     ShoppingListFormInputType,
     shoppingListFormSchema,
-} from "@/schemas/user/ShoppingListFormSchema";
+} from "@/schemas/shopping-list/ShoppingListFormSchema";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";

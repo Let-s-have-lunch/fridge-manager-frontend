@@ -1,6 +1,6 @@
 import axiosInstance from "@/api/axiosInstance";
 import { Product, ProductDetailItemType, ProductListItemType } from "@/types/product";
-import { ProductInputType } from "@/schemas/user/productSchema";
+import { ProductInputType } from "@/schemas/product/productSchema";
 
 const getProductList = async (fridgeId: number): Promise<ProductListItemType[]> => {
     const response = await axiosInstance.get(`/products/fridge/${fridgeId}`);
