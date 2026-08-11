@@ -51,6 +51,8 @@
         "zustand": "^5.0.14"
     },
     "devDependencies": {
+        "@babel/core": "^8.0.1",
+        "@babel/types": "^8.0.4",
         "@types/react": "~19.1.0",
         "eslint": "^9.25.0",
         "eslint-config-expo": "~10.0.0",
