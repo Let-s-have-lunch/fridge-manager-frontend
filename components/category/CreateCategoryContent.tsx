@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, View, Platform } from "react-native";
 
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
@@ -44,36 +44,34 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
     const handleDelete = async () => {
         if (!category) return;
 
-        console.log("삭제 시작:", category.id);
+        const executeDelete = async () => {
+            try {
+                await categoryApi.deleteCategory(category.id);
+                onComplete();
+            } catch (error) {
+                console.error("카테고리 삭제 실패:", error);
+            }
+        };
 
-        Alert.alert("카테고리 삭제", `"${category.name}" 카테고리를 삭제하시겠어요?`, [
-            {
-                text: "취소",
-                style: "cancel",
-                onPress: () => {
-                    console.log("삭제 취소");
+        if (Platform.OS === "web") {
+            // 웹 환경일 때 window.confirm 사용
+            if (window.confirm(`"${category.name}" 카테고리를 삭제하시겠어요?`)) {
+                await executeDelete();
+            }
+        } else {
+            // 모바일(iOS, Android) 환경일 때 Alert.alert 사용
+            Alert.alert("카테고리 삭제", `"${category.name}" 카테고리를 삭제하시겠어요?`, [
+                { text: "취소", style: "cancel" },
+                {
+                    text: "삭제",
+                    style: "destructive",
+                    onPress: async () => {
+                        await executeDelete();
+                    },
                 },
-            },
-            {
-                text: "삭제",
-                style: "destructive",
-                onPress: async () => {
-                    console.log("Alert 삭제 버튼 눌림");
-
-                    try {
-                        await categoryApi.deleteCategory(category.id);
-
-                        console.log("카테고리 삭제 성공");
-
-                        onComplete();
-                    } catch (error) {
-                        console.error("카테고리 삭제 실패:", error);
-                    }
-                },
-            },
-        ]);
+            ]);
+        }
     };
-
     return (
         <View className="px-6 pt-6 pb-8">
             <Title
