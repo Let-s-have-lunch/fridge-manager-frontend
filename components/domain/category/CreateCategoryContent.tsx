@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { Alert, View, Platform } from "react-native";
 
 import Title from "@/components/common/title/Title";
 import InputGroup from "@/components/common/input/InputGroup";
@@ -41,6 +41,37 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
         }
     };
 
+    const handleDelete = async () => {
+        if (!category) return;
+
+        const executeDelete = async () => {
+            try {
+                await categoryApi.deleteCategory(category.id);
+                onComplete();
+            } catch (error) {
+                console.error("카테고리 삭제 실패:", error);
+            }
+        };
+
+        if (Platform.OS === "web") {
+            // 웹 환경일 때 window.confirm 사용
+            if (window.confirm(`"${category.name}" 카테고리를 삭제하시겠어요?`)) {
+                await executeDelete();
+            }
+        } else {
+            // 모바일(iOS, Android) 환경일 때 Alert.alert 사용
+            Alert.alert("카테고리 삭제", `"${category.name}" 카테고리를 삭제하시겠어요?`, [
+                { text: "취소", style: "cancel" },
+                {
+                    text: "삭제",
+                    style: "destructive",
+                    onPress: async () => {
+                        await executeDelete();
+                    },
+                },
+            ]);
+        }
+    };
     return (
         <View className="px-6 pt-6 pb-8">
             <Title
@@ -62,21 +93,44 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
             <View className="mb-5 items-end">
                 <TextComponent className="text-sm text-text-subtle">{name.length}/10</TextComponent>
             </View>
-
             <View className="mt-2 flex-row gap-3">
-                <Button
-                    wrap
-                    variant="outlined"
-                    onPress={() => {
-                        setName("");
-                        onClose();
-                    }}>
-                    취소
-                </Button>
+                {mode === "edit" ? (
+                    <>
+                        {/* 삭제 */}
+                        <Button
+                            wrap
+                            variant="outlined"
+                            onPress={() => {
+                                console.log("삭제 버튼 눌림");
+                                handleDelete();
+                            }}>
+                            삭제
+                        </Button>
 
-                <Button wrap disabled={!name.trim()} onPress={handleCreate}>
-                    저장
-                </Button>
+                        {/* 수정 */}
+                        <Button wrap disabled={!name.trim()} onPress={handleCreate}>
+                            수정
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        {/* 취소 */}
+                        <Button
+                            wrap
+                            variant="outlined"
+                            onPress={() => {
+                                setName("");
+                                onClose();
+                            }}>
+                            취소
+                        </Button>
+
+                        {/* 저장 */}
+                        <Button wrap disabled={!name.trim()} onPress={handleCreate}>
+                            저장
+                        </Button>
+                    </>
+                )}
             </View>
         </View>
     );

@@ -87,6 +87,7 @@ export default function SelectCategoryContent({
                                             <View style={styles.rowWrap}>
                                                 {customCategories.map(item => (
                                                     <View key={item.id} style={styles.categoryItem}>
+                                                        {/* 카테고리 선택 */}
                                                         <Pressable onPress={() => onSelect(item)}>
                                                             <View
                                                                 style={styles.iconWrapper}
@@ -98,13 +99,27 @@ export default function SelectCategoryContent({
                                                                     style={styles.icon}
                                                                 />
                                                             </View>
+                                                        </Pressable>
 
+                                                        {/* 카테고리 이름 + ⋮ */}
+                                                        <View className="mt-2 flex-row items-center justify-center">
                                                             <TextComponent
-                                                                numberOfLines={2}
-                                                                className="mt-2 text-center">
+                                                                numberOfLines={1}
+                                                                className="max-w-[65px] text-center">
                                                                 {item.name}
                                                             </TextComponent>
-                                                        </Pressable>
+
+                                                            <Pressable
+                                                                hitSlop={8}
+                                                                className="ml-1"
+                                                                onPress={() =>
+                                                                    onEditCategory(item)
+                                                                }>
+                                                                <TextComponent className="text-lg font-bold text-text-subtle">
+                                                                    ⋮
+                                                                </TextComponent>
+                                                            </Pressable>
+                                                        </View>
                                                     </View>
                                                 ))}
                                             </View>
