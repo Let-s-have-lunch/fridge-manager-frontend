@@ -57,7 +57,7 @@ export default function ConsumptionStatusCard({
                 <TouchableOpacity
                     onPress={onPrev}
                     activeOpacity={0.6}
-                    className="absolute left-2 top-[42%] p-2"
+                    className="absolute left-2 top-[42%] p-2 z-10" // <-- z-10 추가
                     hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
                     <Feather name="chevron-left" size={28} className="text-text-secondary" />
                 </TouchableOpacity>
@@ -66,7 +66,7 @@ export default function ConsumptionStatusCard({
                 <TouchableOpacity
                     onPress={onNext}
                     activeOpacity={0.6}
-                    className="absolute right-2 top-[42%] p-2"
+                    className="absolute right-2 top-[42%] p-2 z-10" // <-- z-10 추가
                     hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
                     <Feather name="chevron-right" size={28} className="text-text-secondary" />
                 </TouchableOpacity>
