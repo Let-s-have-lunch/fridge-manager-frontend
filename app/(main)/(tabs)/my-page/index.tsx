@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/auth/useAuthStore";
 import { twMerge } from "tailwind-merge";
 import { getAnimalIcon } from "@/constants/profile";
 import { useSetupLayout } from "@/hooks/useSetupLayout";
+import Button from "@/components/common/button/Button";
 
 export default function MyPageScreen() {
     useSetupLayout({ showDesktopHeader: true });
@@ -213,24 +214,26 @@ export default function MyPageScreen() {
                     ) : (
                         <View className="flex flex-col md:flex-row mt-8 md:mt-6 gap-3 w-full">
                             {/* 로그인 */}
-                            <TouchableOpacity
-                                onPress={() => router.push("/auth/login")}
-                                activeOpacity={0.8}
-                                className="flex-1 items-center justify-center rounded-2xl bg-primary-main py-3">
-                                <TextComponent className="text-[16px] font-semibold text-text-contrast">
-                                    로그인
-                                </TextComponent>
-                            </TouchableOpacity>
+                            <Button
+                                fullWidth
+                                size="medium"
+                                color="primary"
+                                variant="contained-square"
+                                className="flex-1"
+                                onPress={() => router.push("/auth/login")}>
+                                로그인
+                            </Button>
 
                             {/* 회원가입 */}
-                            <TouchableOpacity
-                                onPress={() => router.push("/auth/register")}
-                                activeOpacity={0.8}
-                                className="flex-1 items-center justify-center rounded-2xl border-[1px] border-primary-main bg-transparent py-3">
-                                <TextComponent className="text-[16px] font-semibold text-primary-main">
-                                    회원가입
-                                </TextComponent>
-                            </TouchableOpacity>
+
+                            <Button
+                                className={"border-primary-main"}
+                                textClassName={"text-primary-main"}
+                                wrap={true}
+                                variant="outlined"
+                                onPress={() => router.push("/auth/register")}>
+                                회원가입
+                            </Button>
                         </View>
                     )}
                 </View>
