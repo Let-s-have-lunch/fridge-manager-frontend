@@ -11,7 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { twMerge } from "tailwind-merge";
 import { ProductDetailItemType, ProductListItemType } from "@/types/product";
 import ProductFormModal from "@/components/domain/product/ProductFormModal";
-import GuestView from "@/components/domain/home/GuestView"; // 👈 타입 추가
+import GuestView from "@/components/domain/home/GuestView";
+import Button from "@/components/common/button/Button"; // 👈 타입 추가
 
 export default function HomeScreen() {
     useSetupLayout({ showMainHeader: true, showDesktopHeader: true });
@@ -145,11 +146,11 @@ export default function HomeScreen() {
             {/* 💡 플러스 버튼과 모달은 로그인 상태일 때만 렌더링! */}
             {isLoggedIn && (
                 <>
-                    <Pressable
+                    <Button
+                        variant="contained-circle"
+                        size="fab"
+                        className="absolute bottom-7 right-7"
                         onPress={handleOpenAddModal}
-                        className={twMerge(
-                            "absolute bottom-6 right-5 h-16 w-16 items-center justify-center rounded-full bg-primary-main",
-                        )}
                         style={{
                             shadowColor: "#000",
                             shadowOffset: { width: 0, height: 4 },
@@ -157,8 +158,8 @@ export default function HomeScreen() {
                             shadowRadius: 8,
                             elevation: 8,
                         }}>
-                        <Ionicons name={"add"} size={43} color={"white"} />
-                    </Pressable>
+                        <Ionicons name="add" size={43} />
+                    </Button>
 
                     <ProductFormModal
                         visible={isModalVisible}

@@ -12,6 +12,7 @@ import { useThemeStore } from "@/stores/theme/useThemeStore";
 import { twMerge } from "tailwind-merge";
 
 import MenuItem from "@/components/domain/home/header/MenuItem";
+import Button from "@/components/common/button/Button";
 
 interface FridgeSettingSheetProps {
     onClose: () => void;
@@ -107,11 +108,12 @@ const FridgeSettingSheet = forwardRef<BottomSheetModal, FridgeSettingSheetProps>
                     />
                 </View>
 
-                <Pressable
-                    className="mx-5 mt-8 mb-8 h-14 items-center justify-center rounded-[22px] bg-button-subtle"
-                    onPress={handleClose}>
-                    <Text className="text-lg font-semibold text-text-default">닫기</Text>
-                </Pressable>
+                <Button
+                    onPress={handleClose}
+                    className="mx-5 mt-8 mb-8 h-14 rounded-[22px] bg-button-subtle"
+                    textClassName="text-lg font-semibold text-text-default">
+                    닫기
+                </Button>
             </>
         );
 

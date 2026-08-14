@@ -14,6 +14,7 @@ import { Fridge } from "@/types/fridge";
 import { useHomeStore } from "@/stores/home/productStore";
 import { isAxiosError } from "axios";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import Button from "@/components/common/button/Button";
 
 interface DeleteFridgeSheetProps {
     fridge?: Fridge;
@@ -116,17 +117,21 @@ const DeleteFridgeSheet = forwardRef<BottomSheetModal, DeleteFridgeSheetProps>(
                 </Text>
 
                 <View className="mt-6 flex-row gap-4">
-                    <Pressable
+                    <Button
+                        variant="outlined"
                         onPress={handleClose}
-                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
-                        <Text className="text-[18px] font-semibold text-text-default">취소</Text>
-                    </Pressable>
+                        className="flex-1 h-14 rounded-[18px] bg-bg-button"
+                        textClassName="text-[18px] font-semibold text-text-default">
+                        취소
+                    </Button>
 
-                    <Pressable
+                    <Button
+                        variant="contained-square"
                         onPress={handleDelete}
-                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-error-point">
-                        <Text className="text-[18px] font-semibold text-text-contrast">삭제</Text>
-                    </Pressable>
+                        className="flex-1 h-14 rounded-[18px] bg-error-point"
+                        textClassName="text-[18px] font-semibold text-text-contrast">
+                        삭제
+                    </Button>
                 </View>
             </>
         );

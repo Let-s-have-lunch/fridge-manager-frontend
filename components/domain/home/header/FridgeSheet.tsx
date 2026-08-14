@@ -18,6 +18,7 @@ import { createFridgeSchema, FridgeInputType } from "@/schemas/fridge/createFrid
 import { isAxiosError } from "axios";
 import { Fridge } from "@/types/fridge";
 import { useThemeStore } from "@/stores/theme/useThemeStore";
+import Button from "@/components/common/button/Button";
 
 interface FridgeSheetProps {
     mode: "create" | "edit";
@@ -177,18 +178,23 @@ const FridgeSheet = forwardRef<BottomSheetModal, FridgeSheetProps>(
                 </Text>
 
                 <View className="mt-2 flex-row gap-4">
-                    <Pressable
+                    <Button
+                        variant="outlined"
                         onPress={handleClose}
-                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-bg-button">
-                        <Text className="text-[18px] font-semibold text-text-default">취소</Text>
-                    </Pressable>
+                        className="flex-1 h-14 rounded-[18px]"
+                        textClassName="text-[18px] font-semibold text-text-default">
+                        취소
+                    </Button>
 
-                    <Pressable
+                    <Button
+                        variant="contained-square"
+                        color="primary"
                         disabled={disabled}
-                        className="flex-1 h-14 items-center justify-center rounded-[18px] bg-primary-main"
-                        onPress={handleSubmit(onSubmit)}>
-                        <Text className="text-[18px] font-semibold text-text-contrast">저장</Text>
-                    </Pressable>
+                        onPress={handleSubmit(onSubmit)}
+                        className="flex-1 h-14 rounded-[18px]"
+                        textClassName="text-[18px] font-semibold text-text-contrast">
+                        저장
+                    </Button>
                 </View>
             </>
         );

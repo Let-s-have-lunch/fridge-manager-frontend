@@ -16,12 +16,14 @@ export const SQUARE_SIZE_STYLE = {
     small: "rounded-[15px] px-3 py-3",
     medium: "rounded-[15px] px-3 py-3",
     large: "rounded-[20px] px-5 py-4",
+    fab: "rounded-full w-16 h-16",
 };
 
 export const CIRCLE_SIZE_STYLE = {
     small: "rounded-full w-10 h-10",
     medium: "rounded-full w-14 h-14",
     large: "rounded-full w-20 h-20",
+    fab: "rounded-full w-16 h-16",
 };
 
 function Button({

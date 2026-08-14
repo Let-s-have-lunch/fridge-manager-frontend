@@ -1,6 +1,7 @@
 export type StyleColorType = "primary" | "secondary" | "success" | "error" | "warning" | "info" | "text";
 export type StyleVariantType = "contained-square" | "contained-circle"| "icon-only" | "outlined";
-export type StyleSizeType = "small" | "medium" | "large";
+export type StyleSizeType = "small" | "medium" | "large" | "fab";
+
 
 export const INPUT_SIZE_STYLE = {
     mini: "text-xs px-1 py-1",

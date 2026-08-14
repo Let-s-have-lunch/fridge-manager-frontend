@@ -43,7 +43,12 @@ export default function ShoppingListHistorySection({
 
     return (
         <View className={twMerge("flex-1 w-full max-w-[600px] self-center relative")}>
-            <Title title={formattedDate} className={"font-normal"} showBackButton={true} onBackPress={() => router.back()} />
+            <Title
+                title={formattedDate}
+                className={"font-normal"}
+                showBackButton={true}
+                onBackPress={() => router.back()}
+            />
 
             <ScrollView
                 className="relative mt-4"
@@ -169,25 +174,23 @@ export default function ShoppingListHistorySection({
             </ScrollView>
 
             {/* 추가 버튼 */}
-            <Pressable
+            <Button
+                variant="contained-circle"
                 onPress={isLoading ? undefined : onAddPress}
                 disabled={isLoading}
                 className={twMerge(
-                    "absolute bottom-6 right-1 h-16 w-16 items-center justify-center rounded-full bg-primary-main",
+                    "absolute bottom-7 right-1.5 h-16 w-16",
                     isLoading && "opacity-50",
                 )}
                 style={{
                     shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
+                    shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.18,
                     shadowRadius: 8,
                     elevation: 8,
                 }}>
-                <Ionicons name="add" size={43} color="white" />
-            </Pressable>
+                <Ionicons name="add" size={43} />
+            </Button>
         </View>
     );
 }
