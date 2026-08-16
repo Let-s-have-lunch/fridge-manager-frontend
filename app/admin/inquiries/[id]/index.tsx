@@ -17,6 +17,7 @@ import TextComponent from "@/components/common/text/TextComponent";
 import LoadingIndicator from "@/components/common/loading/LoadingIndicator";
 import ExpireBadge from "@/components/common/badge/Badge";
 import { twMerge } from "tailwind-merge";
+import Button from "@/components/common/button/Button";
 
 // Badge 타입 에러 방지를 위한 처리
 const BadgeComponent = ExpireBadge as any;
@@ -253,38 +254,33 @@ function AdminInquiryDetailPage() {
                                 onChangeText={setAnswerText}
                                 editable={!isSubmitting}
                             />
-
-                            <View className={twMerge("flex-row justify-end gap-3")}>
+                            <View className="flex-row justify-end gap-3">
                                 {inquiry.answer && (
-                                    <Pressable
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
                                         onPress={handleDeleteAnswer}
                                         disabled={isSubmitting}
-                                        className={twMerge(
-                                            "px-5 py-2.5 rounded-xl border border-error-point bg-error-bg hover:bg-error-point/10 active:opacity-85 transition-colors",
-                                        )}>
-                                        <TextComponent
-                                            className={twMerge(
-                                                "text-error-point font-bold text-xs",
-                                            )}>
-                                            답변 삭제
-                                        </TextComponent>
-                                    </Pressable>
+                                        className="rounded-xl border-error-point bg-bg-default px-5 py-2.5"
+                                        textClassName="text-error-point font-bold text-sm">
+                                        답변 삭제
+                                    </Button>
                                 )}
-                                <Pressable
+
+                                <Button
+                                    variant="contained-square"
+                                    size="small"
+                                    color="primary"
                                     onPress={handleSaveAnswer}
                                     disabled={isSubmitting}
-                                    className={twMerge(
-                                        "px-6 py-2.5 rounded-xl bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors shadow-sm",
-                                    )}>
-                                    <TextComponent
-                                        className={twMerge("text-white font-bold text-xs")}>
-                                        {isSubmitting
-                                            ? "저장 중..."
-                                            : inquiry.answer
-                                                ? "답변 수정하기"
-                                                : "답변 등록하기"}
-                                    </TextComponent>
-                                </Pressable>
+                                    className="rounded-xl px-6 py-2.5"
+                                    textClassName="text-white font-bold text-sm">
+                                    {isSubmitting
+                                        ? "저장 중..."
+                                        : inquiry.answer
+                                          ? "답변 수정"
+                                          : "답변 등록"}
+                                </Button>
                             </View>
                         </View>
                     </View>

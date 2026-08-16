@@ -15,7 +15,7 @@ function AdminAsideDesktop() {
         <View
             className={twMerge(
                 "w-[250px] h-full flex-col justify-between",
-                "bg-bg-subtle border-r border-divider",
+                "bg-bg-default border-r border-divider",
             )}>
             {/* 상단 영역 */}
             <View>
@@ -26,10 +26,10 @@ function AdminAsideDesktop() {
                     className={twMerge(
                         "flex-row h-20 items-center",
                         "border-b border-divider",
-                        "bg-bg-subtle",
+                        "bg-bg-default",
                     )}>
                     <Pressable>
-                        <TextComponent className={twMerge("text-xl font-bold")}>
+                        <TextComponent className={twMerge("text-xl font-bold text-text-default")}>
                             <Ionicons
                                 name={"shield-half"}
                                 size={22}
@@ -52,18 +52,18 @@ function AdminAsideDesktop() {
                                     className={twMerge(
                                         "flex-row items-center gap-3 px-4 py-3.5",
                                         "rounded-xl transition-all",
-                                        isActive ? "bg-primary-main" : "hover:bg-bg-subtle",
+                                        "hover:bg-bg-subtle",
                                     )}>
                                     <Feather
                                         name={item.icon as any}
                                         size={18}
-                                        className={isActive ? "text-white" : "text-text-secondary"}
+                                        className="text-text-secondary"
                                     />
 
                                     <TextComponent
                                         className={twMerge(
                                             "font-bold",
-                                            isActive ? "text-white" : "text-text-default",
+                                         "text-text-default",
                                         )}>
                                         {item.label}
                                     </TextComponent>
@@ -78,7 +78,7 @@ function AdminAsideDesktop() {
             <View
                 className={twMerge(
                     "p-4 m-4",
-                    "border border-divider",
+                    "border border-primary-main",
                     "rounded-2xl",
                     "bg-bg-default",
                 )}>
@@ -93,7 +93,7 @@ function AdminAsideDesktop() {
                     </View>
 
                     <View>
-                        <TextComponent className="text-sm font-bold">
+                        <TextComponent className="text-sm font-bold text-text-default">
                             {user?.nickname}
                         </TextComponent>
 
@@ -103,7 +103,7 @@ function AdminAsideDesktop() {
                     </View>
                 </View>
 
-                <Button fullWidth={true} onPress={logout} variant={"outlined"}>
+                <Button fullWidth={true} onPress={logout} variant={"outlined"} size={"small"}>
                     로그아웃
                 </Button>
             </View>

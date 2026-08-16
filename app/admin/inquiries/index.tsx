@@ -58,20 +58,20 @@ function AdminInquiryListPage() {
             />
 
             {/* 테이블 헤더 (웹 환경 대응) */}
-            <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-primary-main rounded-t-xl">
-                <TextComponent className="w-16 font-bold text-primary-contrast text-center">
+            <View className="hidden md:flex flex-row items-center px-4 py-3 border border-divider border-b-0 bg-bg-default rounded-t-xl">
+                <TextComponent className="w-16 font-bold text-text-default text-center">
                     ID
                 </TextComponent>
-                <TextComponent className="flex-1 font-bold text-primary-contrast px-4">
+                <TextComponent className="flex-1 font-bold text-text-default px-4">
                     제목
                 </TextComponent>
-                <TextComponent className="w-32 font-bold text-primary-contrast text-center">
+                <TextComponent className="w-32 font-bold text-text-default text-center">
                     작성일
                 </TextComponent>
-                <TextComponent className="w-28 font-bold text-primary-contrast text-center">
+                <TextComponent className="w-28 font-bold text-text-default text-center">
                     작성자
                 </TextComponent>
-                <TextComponent className="w-28 font-bold text-primary-contrast text-center">
+                <TextComponent className="w-28 font-bold text-text-default text-center">
                     상태
                 </TextComponent>
             </View>

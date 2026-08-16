@@ -15,6 +15,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import TextComponent from "@/components/common/text/TextComponent";
 import Title from "@/components/common/title/Title";
+import Button from "@/components/common/button/Button";
 
 function AdminNoticeDetailPage() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -221,20 +222,26 @@ function AdminNoticeDetailPage() {
                         </>
                     ) : (
                         <>
-                            <Pressable
-                                onPress={handleDelete}
-                                className="px-5 py-3 rounded-xl border border-error-point bg-error-bg hover:bg-error-point/10 active:opacity-85 transition-colors">
-                                <TextComponent className="font-bold text-error-point text-xs">
+                            <View className="flex-row gap-3">
+                                <Button
+                                    variant="outlined"
+                                    size="small"
+                                    onPress={handleDelete}
+                                    className="rounded-xl border-error-point bg-bg-default px-4 py-2"
+                                    textClassName="text-sm font-bold text-error-point">
                                     삭제
-                                </TextComponent>
-                            </Pressable>
-                            <Pressable
-                                onPress={() => setIsEditing(true)}
-                                className="px-5 py-3 rounded-xl bg-primary-main hover:bg-primary-point active:opacity-85 transition-colors">
-                                <TextComponent className="font-bold text-white text-xs">
+                                </Button>
+
+                                <Button
+                                    variant="contained-square"
+                                    size="small"
+                                    color="primary"
+                                    onPress={() => setIsEditing(true)}
+                                    className="rounded-xl px-5 py-3"
+                                    textClassName="text-sm font-bold text-white">
                                     수정
-                                </TextComponent>
-                            </Pressable>
+                                </Button>
+                            </View>
                         </>
                     )}
                 </View>
