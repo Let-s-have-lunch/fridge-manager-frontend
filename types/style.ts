@@ -8,4 +8,5 @@ export const INPUT_SIZE_STYLE = {
     small: "text-sm px-4 py-4",
     medium: "text-lg px-5 py-5",
     large: "text-xl px-8 py-8",
+    fab: "text-lg px-4 py-4",
 };
