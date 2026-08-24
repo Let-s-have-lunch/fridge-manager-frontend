@@ -39,7 +39,6 @@ export default function MyPageScreen() {
 
     const handleLogout = async () => {
         try {
-            await userApi.logout();
             logout();
             router.replace("/");
         } catch (error) {
