@@ -40,7 +40,7 @@ export default function SelectCategoryContent({
                 <Image source={categoryIcons[item.icon]} style={styles.icon} />
             </View>
 
-            <TextComponent numberOfLines={2} className="mt-2 text-center">
+            <TextComponent numberOfLines={2} className="mt-2 text-center text-text-default">
                 {item.name}
             </TextComponent>
         </Pressable>
@@ -49,7 +49,7 @@ export default function SelectCategoryContent({
     return (
         <Pressable style={{ flex: 1 }} onPress={onClose}>
             <Pressable style={styles.container} className="bg-bg-paper" onPress={() => {}}>
-                <TextComponent className="mb-6 text-center text-[18px] font-bold">
+                <TextComponent className="mb-6 text-text-default text-center text-[18px] font-bold">
                     카테고리 선택
                 </TextComponent>
 
@@ -59,7 +59,7 @@ export default function SelectCategoryContent({
                     renderItem={renderCategoryItem}
                     numColumns={3}
                     columnWrapperStyle={styles.row}
-                    showsVerticalScrollIndicator={true}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.listContent}
                     ListFooterComponent={
                         <>
@@ -105,7 +105,7 @@ export default function SelectCategoryContent({
                                                         <View className="mt-2 flex-row items-center justify-center">
                                                             <TextComponent
                                                                 numberOfLines={1}
-                                                                className="max-w-[65px] text-center">
+                                                                className="max-w-[65px] text-center text-text-default">
                                                                 {item.name}
                                                             </TextComponent>
 

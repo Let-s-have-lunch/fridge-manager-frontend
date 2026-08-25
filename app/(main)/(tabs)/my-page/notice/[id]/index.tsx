@@ -59,8 +59,7 @@ function UserNoticeDetailPage() {
         <View className="flex-1 w-full">
             {/* 상단 타이틀 영역 (어드민과 동일) */}
             <Title
-                title="공지사항 상세"
-                description="등록된 공지사항의 상세 내용입니다."
+                title="공지사항"
                 showBackButton={true}
                 onBackPress={() => router.back()}
                 className="h-auto pb-4 mb-6"

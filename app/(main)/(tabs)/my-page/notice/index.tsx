@@ -172,7 +172,7 @@ function UserNoticePage() {
                                                 "font-semibold",
                                                 "transition-all",
                                                 "hover:text-primary-main",
-                                                "text-[14px] md:text-base", // 🛠️ [수정] 모바일에서 제목 크기 조절
+                                                "text-text-default text-[16px] md:text-base", // 🛠️ [수정] 모바일에서 제목 크기 조절
                                             ])}
                                             numberOfLines={1}>
                                             {item.title}
