@@ -40,7 +40,7 @@ export default function SelectCategoryContent({
                 <Image source={categoryIcons[item.icon]} style={styles.icon} />
             </View>
 
-            <TextComponent numberOfLines={2} className="mt-2 text-center">
+            <TextComponent numberOfLines={2} className="mt-2 text-center text-text-default">
                 {item.name}
             </TextComponent>
         </Pressable>
@@ -105,7 +105,7 @@ export default function SelectCategoryContent({
                                                         <View className="mt-2 flex-row items-center justify-center">
                                                             <TextComponent
                                                                 numberOfLines={1}
-                                                                className="max-w-[65px] text-center">
+                                                                className="max-w-[65px] text-center text-text-default">
                                                                 {item.name}
                                                             </TextComponent>
 

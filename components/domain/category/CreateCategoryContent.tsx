@@ -54,14 +54,15 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
         };
 
         if (Platform.OS === "web") {
-            // 웹 환경일 때 window.confirm 사용
             if (window.confirm(`"${category.name}" 카테고리를 삭제하시겠어요?`)) {
                 await executeDelete();
             }
         } else {
-            // 모바일(iOS, Android) 환경일 때 Alert.alert 사용
             Alert.alert("카테고리 삭제", `"${category.name}" 카테고리를 삭제하시겠어요?`, [
-                { text: "취소", style: "cancel" },
+                {
+                    text: "취소",
+                    style: "cancel",
+                },
                 {
                     text: "삭제",
                     style: "destructive",
@@ -72,13 +73,14 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
             ]);
         }
     };
+
     return (
-        <View className="px-6 pt-6 pb-8">
+        <View className="bg-bg-default px-6 pt-6 pb-8 dark:bg-[#2C2928]">
             <Title
                 title={mode === "create" ? "카테고리 추가" : "카테고리 수정"}
                 forceCenter
                 className="mb-6"
-                textClassName="text-2xl leading-8 text-text-default"
+                textClassName="text-2xl leading-8 text-text-default dark:text-white"
             />
 
             <InputGroup label="카테고리 이름" className="mb-2">
@@ -91,8 +93,11 @@ export default function CreateCategoryContent({ mode, category, onClose, onCompl
             </InputGroup>
 
             <View className="mb-5 items-end">
-                <TextComponent className="text-sm text-text-subtle">{name.length}/10</TextComponent>
+                <TextComponent className="text-sm text-text-subtle dark:text-[#B8B1AD]">
+                    {name.length}/10
+                </TextComponent>
             </View>
+
             <View className="mt-2 flex-row gap-3">
                 {mode === "edit" ? (
                     <>

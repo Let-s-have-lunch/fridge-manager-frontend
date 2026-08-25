@@ -95,7 +95,10 @@ export default function FridgeDropdown({
                             {/* 냉장고 설정 버튼 */}
                             <Pressable
                                 className="flex-row items-center justify-between px-4 py-3 active:bg-bg-subtle"
-                                onPress={onOpenSetting}>
+                                onPress={() => {
+                                    console.log("냉장고 설정 Pressable 클릭");
+                                    onOpenSetting();
+                                }}>
                                 <TextComponent className="text-[15px] font-semibold text-text-default">
                                     냉장고 설정
                                 </TextComponent>
