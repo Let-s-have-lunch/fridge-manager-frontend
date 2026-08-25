@@ -18,6 +18,7 @@ import Button from "@/components/common/button/Button";
 import Input from "@/components/common/input/Input";
 import ErrorMessage from "@/components/common/label/ErrorMessage";
 import DropdownOverlay from "@/components/common/input/DropdownOverlay";
+import { Ionicons } from "@expo/vector-icons";
 
 // 카테고리 컴포넌트 및 기타
 import CreateCategoryContent from "@/components/domain/category/CreateCategoryContent";
@@ -94,19 +95,28 @@ export default function ProductFormModal({ visible, onClose, initialData, onRefr
                                     render={({ field: { value } }) => (
                                         <InputGroup label="카테고리">
                                             <Pressable onPress={() => setScreen("selectCategory")}>
-                                                <Input
-                                                    value={
-                                                        categories.find(c => c.id === value)
-                                                            ?.name || ""
-                                                    }
-                                                    editable={false}
-                                                    pointerEvents="none"
-                                                />
+                                                <View className="relative">
+                                                    <Input
+                                                        value={
+                                                            categories.find(c => c.id === value)
+                                                                ?.name || ""
+                                                        }
+                                                        editable={false}
+                                                        pointerEvents="none"
+                                                    />
+
+                                                    <View className="absolute right-4 top-0 bottom-0 justify-center">
+                                                        <Ionicons
+                                                            name="chevron-forward"
+                                                            size={20}
+                                                            color="#777777"
+                                                        />
+                                                    </View>
+                                                </View>
                                             </Pressable>
                                         </InputGroup>
                                     )}
                                 />
-
                                 {/* 2. 제품명 */}
                                 <Controller
                                     control={control}

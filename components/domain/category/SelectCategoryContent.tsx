@@ -59,7 +59,7 @@ export default function SelectCategoryContent({
                     renderItem={renderCategoryItem}
                     numColumns={3}
                     columnWrapperStyle={styles.row}
-                    showsVerticalScrollIndicator={true}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.listContent}
                     ListFooterComponent={
                         <>
