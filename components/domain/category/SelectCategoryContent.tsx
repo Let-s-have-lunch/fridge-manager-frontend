@@ -49,7 +49,7 @@ export default function SelectCategoryContent({
     return (
         <Pressable style={{ flex: 1 }} onPress={onClose}>
             <Pressable style={styles.container} className="bg-bg-paper" onPress={() => {}}>
-                <TextComponent className="mb-6 text-center text-[18px] font-bold">
+                <TextComponent className="mb-6 text-text-default text-center text-[18px] font-bold">
                     카테고리 선택
                 </TextComponent>
 
