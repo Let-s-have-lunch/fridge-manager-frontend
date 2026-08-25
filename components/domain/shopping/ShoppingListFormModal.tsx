@@ -65,13 +65,10 @@ export default function ShoppingListFormModal({
     }, [visible, initialData, reset]);
 
     const onSubmit = async (data: ShoppingListFormInputType) => {
-        const [year, month, day] = targetDate.split("-").map(Number);
-
-        const finalDate = new Date(year, month - 1, day, 0, 0, 0, 0);
-
+        // 💡 targetDate("YYYY-MM-DD")를 그대로 넘겨줍니다.
         const payload = {
             memo: data.memo,
-            date: finalDate.toISOString(),
+            date: targetDate,
         };
 
         try {
