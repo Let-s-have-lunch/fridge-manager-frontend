@@ -66,7 +66,7 @@ export default function EditProfilePage() {
                 const month = birthdate.slice(4, 6);
                 const day = birthdate.slice(6, 8);
 
-                formattedBirthdate = `${year}-${month}-${day}T00:00:00Z`;
+                formattedBirthdate = `${year}-${month}-${day}`;
             } else {
                 formattedBirthdate = undefined;
             }
