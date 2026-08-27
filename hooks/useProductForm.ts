@@ -65,17 +65,32 @@ export function useProductForm(
                 const formattedDate = initialData.expirationDate
                     ? initialData.expirationDate.substring(0, 10).replace(/-/g, "")
                     : "";
+
+                // 💡 category.id 또는 categoryId 둘 다 대응 가능하도록 추출
+                const targetCategoryId =
+                    initialData.category?.id ?? (initialData as any).categoryId ?? 1;
+
                 formMethods.reset({
                     ...initialData,
+                    categoryId: targetCategoryId, // 👈 폼 값에 categoryId 명시적 주입
                     memo: initialData.memo || "",
                     price: initialData.price ?? ("" as any),
                     expirationDate: formattedDate,
                 });
             } else {
-                formMethods.reset(); // 기본값으로 초기화
+                formMethods.reset({
+                    name: "",
+                    memo: "",
+                    categoryId: 1,
+                    storageType: "REFRIGERATED",
+                    quantity: 1,
+                    unit: "EA",
+                    price: 0,
+                    expirationDate: "",
+                    status: "STORED",
+                });
             }
         } else {
-            // 모달 닫힐 때 상태 청소
             setActiveDropdown(null);
             setDropdownLayout(null);
             setScreen("form");
