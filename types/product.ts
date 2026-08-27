@@ -39,7 +39,7 @@ export interface Product {
     expirationDate: string;
     status: StatusType;
     fridgeId: number;   // 👈 냉장고 ID 컬럼 추가!
-    categoryId: number; // 👈 카테고리 ID 컬럼 추가!
+    categoryId?: number; // 👈 카테고리 ID 컬럼 추가!
 }
 
 export type ProductCategory = Pick<Category, "id" | "name" | "icon">;
