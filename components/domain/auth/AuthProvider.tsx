@@ -29,7 +29,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
                 console.error("토큰 검증 실패:", error);
 
                 logout();
-                router.replace("/auth/login");
             } finally {
                 setIsAuthChecked(true);
             }
