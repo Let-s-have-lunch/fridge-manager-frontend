@@ -1,0 +1,14 @@
+services:
+  fridge-frontend:
+    image: dvpsky/fridge-frontend:latest
+    container_name: fridge-frontend
+    restart: always
+    ports:
+      - "3002:3000"
+    networks:
+      app-network:
+        ipv4_address: 172.20.0.32
+
+networks:
+  app-network:
+    external: true
