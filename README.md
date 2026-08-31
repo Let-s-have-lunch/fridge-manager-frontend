@@ -71,7 +71,7 @@
 프로젝트 디렉토리로 이동하여 의존성 패키지를 설치합니다.
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Environment Variables
@@ -86,10 +86,10 @@ EXPO_PUBLIC_API_BASE_URL=http://localhost:8080/api
 
 ```bash
 # 기본 실행 (Expo Go QR 코드 제공)
-npm start
+pnpm start
 
 # 플랫폼별 개별 실행
-npm run android
-npm run ios
-npm run web
+pnpm run android
+pnpm run ios
+pnpm run web
 ```
