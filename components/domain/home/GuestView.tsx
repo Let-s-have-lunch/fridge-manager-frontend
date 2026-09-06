@@ -36,11 +36,11 @@ export default function GuestView() {
             {/* 3. 기능 안내 카드 (3열 배치) */}
             <View className="flex-row justify-between w-full mt-8 gap-2 md:gap-4">
                 <FeatureCard
-                    icon="notifications"
+                    icon="time-outline"
                     iconBg="#FCE1DE"
                     iconColor="#E98D82"
-                    title="유통기한 알림"
-                    desc={"다가오는 유통기한을\n미리 알려드려요."} // 💡 수정됨
+                    title="유통기한 임박제품"
+                    desc={"다가오는 유통기한을\n한눈에 확인해요."}
                 />
                 <FeatureCard
                     icon="basket"
