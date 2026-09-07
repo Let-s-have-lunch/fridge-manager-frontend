@@ -7,8 +7,8 @@ import HeaderProfile from "@/components/domain/home/header/HeaderProfile";
 import FridgeDropdown from "@/components/domain/home/header/FridgeDropdown";
 import SearchBar from "@/components/domain/home/header/SearchBar";
 import FridgeHeaderModals from "@/components/domain/home/header/FridgeHeaderModals";
-import { useFridgeHeader } from "@/hooks/useFridgeHeader"; // 👈 공통 훅
-import SortSheet from "@/components/domain/home/header/SortSheet"; // 👈 팀원이 추가한 정렬 모달
+import { useFridgeHeader } from "@/hooks/useFridgeHeader";
+import SortSheet from "@/components/domain/home/header/SortSheet";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useHomeStore } from "@/stores/home/productStore";
 
@@ -17,10 +17,8 @@ export default function MainHeader() {
     const userName = user?.nickname ?? "";
     const userId = user?.id;
 
-    // 👈 붕어빵 틀(Hook)에서 필요한 기능만 쏙 빼옵니다!
     const fridge = useFridgeHeader();
 
-    // 👇 팀원이 추가한 정렬 관련 상태 및 Ref
     const sortSheetRef = useRef<BottomSheetModal>(null);
     const sortType = useHomeStore(state => state.sortType);
     const setSortType = useHomeStore(state => state.setSortType);

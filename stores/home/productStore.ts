@@ -1,9 +1,7 @@
 import { Category } from "@/components/domain/home/CategoryTabs";
 import { Fridge } from "@/types/fridge";
 import { create } from "zustand";
-import { Product, ProductListItemType } from "@/types/product";
-
-export type CategoryFilter = "전체" | "냉장" | "냉동" | "실온";
+import { ProductListItemType } from "@/types/product";
 
 export type SortType = "EXPIRE" | "CATEGORY";
 
